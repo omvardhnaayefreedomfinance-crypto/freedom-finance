@@ -1019,4 +1019,97 @@ footer strong {
   font-size: 32px;
   display: inline-block;
   margin-right: 10px;
+}/* ===== INVESTMENT PLANS ===== */
+
+.investment-section {
+  padding: 70px 20px;
+  background: #080808;
+  color: #fff;
+  text-align: center;
+}
+
+.investment-section .section-title span {
+  color: #d4a72c;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.investment-section .section-title h2 {
+  font-size: 32px;
+  margin: 10px 0;
+}
+
+.investment-section .section-title p {
+  color: #bbb;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.investment-grid {
+  max-width: 1100px;
+  margin: 40px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.investment-card {
+  padding: 28px 20px;
+  border: 1px solid #6d5116;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #171208, #080808);
+  box-shadow: 0 8px 25px rgba(0,0,0,.4);
+}
+
+.investment-card .plan-name {
+  color: #d4a72c;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.investment-card h3 {
+  font-size: 30px;
+  margin: 15px 0 8px;
+}
+
+.investment-card p {
+  color: #ccc;
+}
+
+.investment-card strong {
+  display: block;
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(212,167,44,.12);
+  color: #f0c94d;
+}
+
+.investment-disclaimer {
+  max-width: 900px;
+  margin: 30px auto 0;
+  padding: 20px;
+  border: 1px solid #5a4518;
+  border-radius: 12px;
+  text-align: left;
+  background: #100e09;
+}
+
+.investment-disclaimer b {
+  color: #f0c94d;
+}
+
+.investment-disclaimer p {
+  color: #bbb;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .investment-section .section-title h2 {
+    font-size: 25px;
+  }
+
+  .investment-card h3 {
+    font-size: 27px;
+  }
 }
