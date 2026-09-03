@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Freedom Finance - Payment</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .payment-page {
+      max-width: 700px;
+      margin: auto;
+      padding: 40px 20px 70px;
+    }
+
+    .payment-heading {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .payment-heading h1 {
+      font-size: 40px;
+      margin: 10px 0;
+    }
+
+    .payment-heading span {
+      color: gold;
+    }
+
+    .payment-card {
+      padding: 28px;
+      border: 1px solid rgba(255,215,0,.4);
+      border-radius: 18px;
+      background: rgba(0,0,0,.45);
+    }
+
+    .payment-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .payment-row span:first-child {
+      opacity: .75;
+    }
+
+    .payment-row span:last-child {
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .payment-status {
+      margin: 25px 0;
+      padding: 18px;
+      border: 1px solid rgba(255,215,0,.35);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .payment-status strong {
+      color: gold;
+      display: block;
+      margin-top: 6px;
+    }
+
+    .utr-label {
+      display: block;
+      margin: 20px 0 8px;
+      font-weight: 700;
+    }
+
+    .utr-input {
+      width: 100%;
+      padding: 14px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 1px solid rgba(255,215,0,.35);
+      background: rgba(255,255,255,.06);
+      color: white;
+      outline: none;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 15px;
+      border: none;
+      border-radius: 9px;
+      background: linear-gradient(90deg,#c99600,#ffd700);
+      color: #000;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .demo-note {
+      margin-top: 22px;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,215,0,.2);
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 25px;
+      color: gold;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="payment-page">
+
+  <div class="payment-heading">
+
+    <p class="section-number">
+      MEMBER AREA / PAYMENT
+    </p>
+
+    <h1>
+      Payment <span>Verification</span>
+    </h1>
+
+    <p class="community-text">
+      Review your selected plan and payment status.
+    </p>
+
+  </div>
+
+
+  <div class="payment-card">
+
+    <div class="payment-row">
+      <span>Selected Plan</span>
+      <span id="planName">--</span>
+    </div>
+
+    <div class="payment-row">
+      <span>Investment Amount</span>
+      <span id="planAmount">--</span>
+    </div>
+
+    <div class="payment-row">
+      <span>Profit</span>
+      <span id="planProfit">--</span>
+    </div>
+
+    <div class="payment-row">
+      <span>Total</span>
+      <span id="planTotal">--</span>
+    </div>
+
+
+    <div class="payment-status">
+
+      PAYMENT STATUS
+
+      <strong>AWAITING VERIFICATION</strong>
+
+    </div>
+
+
+    <label class="utr-label">
+      Transaction / UTR Reference
+    </label>
+
+    <input
+      type="text"
+      id="utr"
+      class="utr-input"
+      placeholder="Enter transaction reference">
+
+
+    <button
+      class="submit-btn"
+      onclick="submitPayment()">
+
+      SUBMIT FOR VERIFICATION
+
+    </button>
+
+
+    <div class="demo-note">
+
+      This is currently a prototype verification screen.
+      No payment is processed by this page and no payment
+      account details are stored here.
+
+    </div>
+
+  </div>
+
+
+  <a
+    href="member-dashboard.html"
+    class="back-link">
+
+    ← Back to My Dashboard
+
+  </a>
+
+</div>
+
+
+<script>
+
+const planName =
+  localStorage.getItem("selectedPlan") || "--";
+
+const planAmount =
+  localStorage.getItem("selectedAmount") || "--";
+
+const planProfit =
+  localStorage.getItem("selectedProfit") || "--";
+
+const planTotal =
+  localStorage.getItem("selectedTotal") || "--";
+
+
+document.getElementById("planName").textContent =
+  planName;
+
+document.getElementById("planAmount").textContent =
+  planAmount;
+
+document.getElementById("planProfit").textContent =
+  planProfit;
+
+document.getElementById("planTotal").textContent =
+  planTotal;
+
+
+function submitPayment() {
+
+  const utr =
+    document.getElementById("utr").value.trim();
+
+  if (!utr) {
+
+    alert("Please enter your transaction reference.");
+
+    return;
+
+  }
+
+  localStorage.setItem("paymentStatus", "Pending Verification");
+  localStorage.setItem("transactionReference", utr);
+
+  alert(
+    "Payment reference submitted successfully. " +
+    "Status: Pending Verification."
+  );
+
+  window.location.href = "member-dashboard.html";
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freedom Finance - Payment</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#050505;
+  color:#fff8e7;
+  font-family:Arial, sans-serif;
+}
+
+header{
+  height:64px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#080808;
+  border-bottom:1px solid #604b18;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:800;
+  color:#ffd96a;
+}
+
+.back{
+  color:#ffd96a;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.container{
+  max-width:760px;
+  margin:auto;
+  padding:22px 15px 40px;
+}
+
+.card{
+  width:100%;
+  padding:25px;
+  margin-bottom:18px;
+  border:1px solid #735719;
+  border-radius:20px;
+  background:linear-gradient(145deg,#17130b,#090909);
+  box-shadow:0 10px 35px rgba(0,0,0,.6);
+}
+
+.title{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.title small{
+  color:#ffd96a;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.title h1{
+  margin:8px 0;
+  font-size:32px;
+}
+
+.title p{
+  color:#aaa;
+  line-height:1.5;
+}
+
+.plan-box{
+  border:1px solid #604b18;
+  border-radius:15px;
+  padding:18px;
+  margin-bottom:20px;
+  background:#0b0b0b;
+}
+
+.plan-name{
+  color:#ffd96a;
+  font-weight:bold;
+  font-size:13px;
+  letter-spacing:1px;
+}
+
+.amount{
+  font-size:30px;
+  font-weight:800;
+  margin-top:7px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.detail{
+  padding:15px;
+  background:#080808;
+  border:1px solid #443718;
+  border-radius:12px;
+}
+
+.detail span{
+  display:block;
+  color:#888;
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.detail strong{
+  color:#fff;
+  font-size:15px;
+  word-break:break-word;
+}
+
+.copy-btn{
+  margin-top:8px;
+  padding:7px 10px;
+  border:1px solid #735719;
+  border-radius:7px;
+  background:#151208;
+  color:#ffd96a;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.qr-section{
+  text-align:center;
+}
+
+.qr-box{
+  width:240px;
+  height:240px;
+  margin:20px auto;
+  padding:10px;
+  background:white;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.qr-box img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.qr-placeholder{
+  color:#555;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.upi{
+  padding:15px;
+  border:1px solid #604b18;
+  border-radius:12px;
+  background:#0b0b0b;
+}
+
+.upi span{
+  display:block;
+  color:#888;
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.upi strong{
+  color:#ffd96a;
+  font-size:17px;
+  word-break:break-word;
+}
+
+.status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:15px;
+  border-radius:12px;
+  background:#0c0c0c;
+  border:1px solid #443718;
+  margin-top:20px;
+}
+
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ffd96a;
+  box-shadow:0 0 10px #ffd96a;
+}
+
+.status-text{
+  color:#ddd;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin-top:8px;
+  border-radius:10px;
+  border:1px solid #4f401e;
+  background:#080808;
+  color:white;
+  font-size:16px;
+  outline:none;
+}
+
+input:focus{
+  border-color:#ffd96a;
+}
+
+.submit{
+  width:100%;
+  padding:15px;
+  margin-top:15px;
+  border:0;
+  border-radius:11px;
+  background:linear-gradient(135deg,#d99b16,#ffd96a);
+  color:#171107;
+  font-weight:800;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.message{
+  text-align:center;
+  color:#ffd96a;
+  margin-top:15px;
+  min-height:20px;
+}
+
+.note{
+  color:#888;
+  font-size:12px;
+  line-height:1.5;
+  text-align:center;
+  margin-top:20px;
+}
+
+@media(max-width:520px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .card{
+    padding:20px;
+  }
+
+  .title h1{
+    font-size:27px;
+  }
+
+  .qr-box{
+    width:210px;
+    height:210px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">FREEDOM FINANCE</div>
+  <a href="plan-summary.html" class="back">← BACK</a>
+</header>
+
+<div class="container">
+
+  <div class="title">
+    <small>SECURE PAYMENT</small>
+    <h1>Complete Your Payment</h1>
+    <p>
+      Review your selected plan and payment information below.
+    </p>
+  </div>
+
+  <!-- SELECTED PLAN -->
+  <div class="card">
+
+    <div class="plan-box">
+      <div class="plan-name" id="planName">SELECTED PLAN</div>
+      <div class="amount" id="planAmount">₹0</div>
+    </div>
+
+    <div class="grid">
+
+      <div class="detail">
+        <span>Plan</span>
+        <strong id="planName2">—</strong>
+      </div>
+
+      <div class="detail">
+        <span>Investment Amount</span>
+        <strong id="amount2">₹0</strong>
+      </div>
+
+      <div class="detail">
+        <span>Profit</span>
+        <strong id="profit">₹0</strong>
+      </div>
+
+      <div class="detail">
+        <span>Total</span>
+        <strong id="total">₹0</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BANK DETAILS -->
+  <div class="card">
+
+    <div class="title">
+      <small>BANK TRANSFER</small>
+      <h1 style="font-size:25px;">Bank Account Details</h1>
+    </div>
+
+    <div class="grid">
+
+      <div class="detail">
+        <span>FedralBank</span>
+        <strong id="bankName">FedralBank</strong>
+      </div>
+
+      <div class="detail">
+        <span>savings</span>
+        <strong id="accountType">savings</strong>
+      </div>
+
+      <div class="detail">
+        <span>77770127244362</span>
+        <strong id="accountNumber">77770127244362</strong>
+        <button class="copy-btn"
+          onclick="copyText('accountNumber')">
+          COPY
+        </button>
+      </div>
+
+      <div class="detail">
+        <span>FDRL0007777</span>
+        <strong id="ifsc">FDRL0007777</strong>
+        <button class="copy-btn"
+          onclick="copyText('ifsc')">
+          COPY
+        </button>
+      </div>
+
+      <div class="detail">
+        <span>AmbalaCity</span>
+        <strong id="branch">AmbalaCity</strong>
+      </div>
+
+      <div class="detail">
+        <span>Omvardhnaaye</span>
+        <strong id="holder">Omvardhnaaye</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- QR -->
+  <div class="card qr-section">
+
+    <div class="title">
+      <small>omvardhnaaye@ptyes</small>
+      <h1 style="font-size:25px;">Scan QR Code</h1>
+      <p>Scan the QR code using your UPI application.</p>
+    </div>
+
+    <div class="qr-box">
+      <img src="Assets/1542/payment-qr.png" alt="Payment QR Code">
+
+      <div class="qr-placeholder">
+        
+      </div>
+
+    </div>
+
+    <div class="upi">
+      <span>omvardhnaaye@ptyes</span>
+      <strong id="upi">omvardhnaaye@ptyes</strong>
+      <br>
+      <button class="copy-btn"
+        onclick="copyText('upi')">
+        COPY UPI ID
+      </button>
+    </div>
+
+  </div>
+
+  <!-- PAYMENT STATUS -->
+  <div class="card">
+
+    <div class="title">
+      <small>PAYMENT VERIFICATION</small>
+      <h1 style="font-size:25px;">Transaction Details</h1>
+    </div>
+
+    <label>Transaction Reference / UTR</label>
+
+    <input
+      type="text"
+      id="transactionId"
+      placeholder="Enter transaction reference">
+
+    <button class="submit" onclick="submitPayment()">
+      SUBMIT FOR VERIFICATION
+    </button>
+
+    <div class="message" id="message"></div>
+
+    <div class="status">
+      <div class="dot"></div>
+
+      <div class="status-text">
+        Payment Status:
+        <strong id="paymentStatus">Awaiting Verification</strong>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    Freedom Finance · Payment information shown for website
+    actually real/prototype purposes.
+  </div>
+
+</div>
+
+<script>
+
+/* ==============================
+   LOAD SELECTED PLAN
+============================== */
+
+const plan =
+  localStorage.getItem("selectedPlan") || "Plan A";
+
+const amount =
+  localStorage.getItem("selectedAmount") || "₹0";
+
+const profit =
+  localStorage.getItem("selectedProfit") || "₹0";
+
+const total =
+  localStorage.getItem("selectedTotal") || "₹0";
+
+
+document.getElementById("planName").textContent = plan;
+
+document.getElementById("planName2").textContent = plan;
+
+document.getElementById("planAmount").textContent = amount;
+
+document.getElementById("amount2").textContent = amount;
+
+document.getElementById("profit").textContent = profit;
+
+document.getElementById("total").textContent = total;
+
+
+/* ==============================
+   COPY FUNCTION
+============================== */
+
+function copyText(id){
+
+  const text =
+    document.getElementById(id).textContent.trim();
+
+  navigator.clipboard.writeText(text)
+    .then(function(){
+
+      alert("Copied: " + text);
+
+    })
+    .catch(function(){
+
+      alert("Copy failed. Please copy manually.");
+
+    });
+
+}
+
+
+/* ==============================
+   PAYMENT SUBMIT
+============================== */
+
+function submitPayment(){
+
+  const transaction =
+    document.getElementById("transactionId").value.trim();
+
+  const message =
+    document.getElementById("message");
+
+  if(transaction === ""){
+
+    message.textContent =
+      "Please enter transaction reference.";
+
+    return;
+  }
+
+  localStorage.setItem(
+    "transactionReference",
+    transaction
+  );
+
+  localStorage.setItem(
+    "paymentStatus",
+    "Submitted for Verification"
+  );
+
+  document.getElementById("paymentStatus").textContent =
+    "Submitted for Verification";
+
+  message.textContent =
+    "Transaction submitted successfully.";
+
+}
+
+
+/* ==============================
+   RESTORE PAYMENT STATUS
+============================== */
+
+const savedStatus =
+  localStorage.getItem("paymentStatus");
+
+if(savedStatus){
+
+  document.getElementById("paymentStatus").textContent =
+    savedStatus;
+
+}
+
+const savedTransaction =
+  localStorage.getItem("transactionReference");
+
+if(savedTransaction){
+
+  document.getElementById("transactionId").value =
+    savedTransaction;
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Freedom Finance - Plans</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#050505;
+  color:#fff8e7;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  height:64px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#080808;
+  border-bottom:1px solid #604b18;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.logo{
+  color:#ffd96a;
+  font-size:19px;
+  font-weight:800;
+}
+
+.back{
+  color:#ffd96a;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.container{
+  max-width:760px;
+  margin:auto;
+  padding:25px 15px 45px;
+}
+
+.heading{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.heading small{
+  color:#ffd96a;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.heading h1{
+  margin:8px 0;
+  font-size:34px;
+}
+
+.heading p{
+  color:#999;
+  line-height:1.5;
+}
+
+.plans{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.plan{
+  background:linear-gradient(145deg,#17130b,#090909);
+  border:1px solid #735719;
+  border-radius:18px;
+  padding:20px;
+  transition:.2s;
+}
+
+.plan:hover{
+  transform:translateY(-3px);
+  border-color:#ffd96a;
+}
+
+.plan-label{
+  color:#ffd96a;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.plan h2{
+  margin:8px 0;
+  font-size:27px;
+}
+
+.invest{
+  font-size:25px;
+  font-weight:800;
+}
+
+.profit{
+  margin-top:12px;
+  color:#ffd96a;
+  font-weight:bold;
+}
+
+.duration{
+  color:#999;
+  margin-top:7px;
+  font-size:14px;
+}
+
+.buy{
+  width:100%;
+  padding:13px;
+  margin-top:18px;
+  border:0;
+  border-radius:10px;
+  background:linear-gradient(135deg,#d99b16,#ffd96a);
+  color:#171107;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.selected{
+  display:none;
+  margin-top:22px;
+  background:linear-gradient(145deg,#17130b,#090909);
+  border:1px solid #ffd96a;
+  border-radius:20px;
+  padding:22px;
+}
+
+.selected small{
+  color:#ffd96a;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.selected h2{
+  margin:8px 0 18px;
+  font-size:28px;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.summary div{
+  padding:14px;
+  background:#080808;
+  border:1px solid #443718;
+  border-radius:11px;
+}
+
+.summary span{
+  display:block;
+  color:#888;
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.summary strong{
+  font-size:17px;
+  color:#fff;
+}
+
+.continue{
+  display:block;
+  width:100%;
+  margin-top:18px;
+  padding:15px;
+  text-align:center;
+  text-decoration:none;
+  border-radius:11px;
+  background:linear-gradient(135deg,#d99b16,#ffd96a);
+  color:#171107;
+  font-weight:800;
+}
+
+.clear{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  background:#0b0b0b;
+  border:1px solid #735719;
+  color:#ffd96a;
+  border-radius:10px;
+}
+
+.note{
+  margin-top:20px;
+  padding:15px;
+  border:1px solid #443718;
+  border-radius:12px;
+  color:#888;
+  font-size:12px;
+  line-height:1.5;
+  text-align:center;
+}
+
+@media(max-width:520px){
+
+  .plans{
+    grid-template-columns:1fr;
+  }
+
+  .heading h1{
+    font-size:28px;
+  }
+
+  .summary{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    FREEDOM FINANCE
+  </div>
+
+  <a href="member-dashboard.html" class="back">
+    ← DASHBOARD
+  </a>
+
+</header>
+
+
+<div class="container">
+
+
+  <!-- HEADING -->
+
+  <div class="heading">
+
+    <small>MEMBERSHIP PLANS</small>
+
+    <h1>Choose Your Plan</h1>
+
+    <p>
+      Select a plan to view its complete summary.
+    </p>
+
+  </div>
+
+
+  <!-- PLANS -->
+
+  <div class="plans">
+
+
+    <!-- PLAN A -->
+
+    <div class="plan">
+
+      <div class="plan-label">
+        PLAN A
+      </div>
+
+      <h2>Starter</h2>
+
+      <div class="invest">
+        ₹21,000
+      </div>
+
+      <div class="duration">
+        Duration: 1 Year
+      </div>
+
+      <div class="profit">
+        30% — ₹6,300
+      </div>
+
+      <button class="buy"
+        onclick="selectPlan(
+          'Plan A',
+          '₹21,000',
+          '₹6,300',
+          '₹27,300'
+        )">
+
+        BUY PLAN
+
+      </button>
+
+    </div>
+
+
+    <!-- PLAN B -->
+
+    <div class="plan">
+
+      <div class="plan-label">
+        PLAN B
+      </div>
+
+      <h2>Growth</h2>
+
+      <div class="invest">
+        ₹51,000
+      </div>
+
+      <div class="duration">
+        Duration: 1 Year
+      </div>
+
+      <div class="profit">
+        30% — ₹15,300
+      </div>
+
+      <button class="buy"
+        onclick="selectPlan(
+          'Plan B',
+          '₹51,000',
+          '₹15,300',
+          '₹66,300'
+        )">
+
+        BUY PLAN
+
+      </button>
+
+    </div>
+
+
+    <!-- PLAN C -->
+
+    <div class="plan">
+
+      <div class="plan-label">
+        PLAN C
+      </div>
+
+      <h2>Premium</h2>
+
+      <div class="invest">
+        ₹1,00,000
+      </div>
+
+      <div class="duration">
+        Duration: 1 Year
+      </div>
+
+      <div class="profit">
+        30% — ₹30,000
+      </div>
+
+      <button class="buy"
+        onclick="selectPlan(
+          'Plan C',
+          '₹1,00,000',
+          '₹30,000',
+          '₹1,30,000'
+        )">
+
+        BUY PLAN
+
+      </button>
+
+    </div>
+
+
+    <!-- PLAN D -->
+
+    <div class="plan">
+
+      <div class="plan-label">
+        PLAN D
+      </div>
+
+      <h2>Elite</h2>
+
+      <div class="invest">
+        ₹2,00,000
+      </div>
+
+      <div class="duration">
+        Duration: 1 Year
+      </div>
+
+      <div class="profit">
+        30% — ₹60,000
+      </div>
+
+      <button class="buy"
+        onclick="selectPlan(
+          'Plan D',
+          '₹2,00,000',
+          '₹60,000',
+          '₹2,60,000'
+        )">
+
+        BUY PLAN
+
+      </button>
+
+    </div>
+
+
+    <!-- PLAN E -->
+
+    <div class="plan">
+
+      <div class="plan-label">
+        PLAN E
+      </div>
+
+      <h2>Royal</h2>
+
+      <div class="invest">
+        ₹5,00,000
+      </div>
+
+      <div class="duration">
+        Duration: 1 Year
+      </div>
+
+      <div class="profit">
+        30% — ₹1,50,000
+      </div>
+
+      <button class="buy"
+        onclick="selectPlan(
+          'Plan E',
+          '₹5,00,000',
+          '₹1,50,000',
+          '₹6,50,000'
+        )">
+
+        BUY PLAN
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- SELECTED PLAN -->
+
+  <div class="selected" id="selectedBox">
+
+    <small>SELECTED PLAN</small>
+
+    <h2 id="selectedName">
+      Plan A
+    </h2>
+
+    <div class="summary">
+
+      <div>
+
+        <span>Investment</span>
+
+        <strong id="selectedAmount">
+          ₹0
+        </strong>
+
+      </div>
+
+      <div>
+
+        <span>Profit</span>
+
+        <strong id="selectedProfit">
+          ₹0
+        </strong>
+
+      </div>
+
+      <div>
+
+        <span>Duration</span>
+
+        <strong>
+          1 Year
+        </strong>
+
+      </div>
+
+      <div>
+
+        <span>Total</span>
+
+        <strong id="selectedTotal">
+          ₹0
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <a
+      href="plan-summary.html"
+      class="continue"
+      onclick="return continuePlan()">
+
+      CONTINUE TO PLAN SUMMARY
+
+    </a>
+
+
+    <button
+      class="clear"
+      onclick="clearPlan()">
+
+      CHANGE PLAN
+
+    </button>
+
+  </div>
+
+
+  <div class="note">
+
+    Freedom Finance · Plan information is presented
+    as part of the website prototype.
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =================================
+   SELECT PLAN
+================================= */
+
+function selectPlan(
+  name,
+  amount,
+  profit,
+  total
+){
+
+  localStorage.setItem(
+    "selectedPlan",
+    name
+  );
+
+  localStorage.setItem(
+    "selectedAmount",
+    amount
+  );
+
+  localStorage.setItem(
+    "selectedProfit",
+    profit
+  );
+
+  localStorage.setItem(
+    "selectedTotal",
+    total
+  );
+
+
+  document.getElementById(
+    "selectedName"
+  ).textContent = name;
+
+
+  document.getElementById(
+    "selectedAmount"
+  ).textContent = amount;
+
+
+  document.getElementById(
+    "selectedProfit"
+  ).textContent = profit;
+
+
+  document.getElementById(
+    "selectedTotal"
+  ).textContent = total;
+
+
+  document.getElementById(
+    "selectedBox"
+  ).style.display = "block";
+
+
+  document.getElementById(
+    "selectedBox"
+  ).scrollIntoView({
+
+    behavior:"smooth",
+
+    block:"center"
+
+  });
+
+}
+
+
+/* =================================
+   CONTINUE
+================================= */
+
+function continuePlan(){
+
+  const plan =
+    localStorage.getItem("selectedPlan");
+
+  if(!plan){
+
+    alert("Please select a plan first.");
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+
+/* =================================
+   CHANGE PLAN
+================================= */
+
+function clearPlan(){
+
+  localStorage.removeItem(
+    "selectedPlan"
+  );
+
+  localStorage.removeItem(
+    "selectedAmount"
+  );
+
+  localStorage.removeItem(
+    "selectedProfit"
+  );
+
+  localStorage.removeItem(
+    "selectedTotal"
+  );
+
+
+  document.getElementById(
+    "selectedBox"
+  ).style.display = "none";
+
+
+  window.scrollTo({
+
+    top:0,
+
+    behavior:"smooth"
+
+  });
+
+}
+
+
+/* =================================
+   RESTORE LAST SELECTED PLAN
+================================= */
+
+const savedPlan =
+  localStorage.getItem("selectedPlan");
+
+const savedAmount =
+  localStorage.getItem("selectedAmount");
+
+const savedProfit =
+  localStorage.getItem("selectedProfit");
+
+const savedTotal =
+  localStorage.getItem("selectedTotal");
+
+
+if(savedPlan){
+
+  document.getElementById(
+    "selectedBox"
+  ).style.display = "block";
+
+
+  document.getElementById(
+    "selectedName"
+  ).textContent = savedPlan;
+
+
+  document.getElementById(
+    "selectedAmount"
+  ).textContent = savedAmount || "₹0";
+
+
+  document.getElementById(
+    "selectedProfit"
+  ).textContent = savedProfit || "₹0";
+
+
+  document.getElementById(
+    "selectedTotal"
+  ).textContent = savedTotal || "₹0";
+
+}
+
+</script>
+
+</body>
+</html>

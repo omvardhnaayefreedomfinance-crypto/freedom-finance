@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Freedom Finance - Plan Summary</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .summary-page {
+      max-width: 700px;
+      margin: auto;
+      padding: 40px 20px 70px;
+    }
+
+    .summary-heading {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .summary-heading h1 {
+      font-size: 40px;
+      margin: 10px 0;
+    }
+
+    .summary-heading span {
+      color: gold;
+    }
+
+    .summary-card {
+      padding: 28px;
+      border: 1px solid rgba(255,215,0,.4);
+      border-radius: 18px;
+      background: rgba(0,0,0,.45);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .summary-row span:first-child {
+      opacity: .75;
+    }
+
+    .summary-row span:last-child {
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .profit {
+      color: gold;
+      font-size: 20px;
+    }
+
+    .total {
+      color: gold;
+      font-size: 24px;
+    }
+
+    .summary-note {
+      margin-top: 25px;
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,215,0,.25);
+      text-align: center;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .proceed-btn {
+      width: 100%;
+      margin-top: 25px;
+      padding: 15px;
+      border: none;
+      border-radius: 9px;
+      background: linear-gradient(90deg,#c99600,#ffd700);
+      color: #000;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .back-btn {
+      display: block;
+      text-align: center;
+      margin-top: 25px;
+      color: gold;
+      text-decoration: none;
+    }
+
+    @media(max-width:600px) {
+      .summary-heading h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="summary-page">
+
+  <div class="summary-heading">
+
+    <p class="section-number">
+      MEMBER AREA / PLAN SUMMARY
+    </p>
+
+    <h1>
+      Plan <span>Summary</span>
+    </h1>
+
+    <p class="community-text">
+      Review your selected plan before continuing.
+    </p>
+
+  </div>
+
+
+  <div class="summary-card">
+
+    <div class="summary-row">
+      <span>Selected Plan</span>
+      <span id="planName">Plan C</span>
+    </div>
+
+    <div class="summary-row">
+      <span>Investment Amount</span>
+      <span id="planAmount">₹1,00,000</span>
+    </div>
+
+    <div class="summary-row">
+      <span>Duration</span>
+      <span>1 Year</span>
+    </div>
+
+    <div class="summary-row">
+      <span>Profit</span>
+      <span class="profit" id="planProfit">₹30,000</span>
+    </div>
+
+    <div class="summary-row">
+      <span>Total</span>
+      <span class="total" id="planTotal">₹1,30,000</span>
+    </div>
+
+
+    <div class="summary-note">
+      Please review the selected plan and applicable
+      project terms before continuing.
+    </div>
+
+
+    
+
+  </div>
+
+
+  <a
+  href="payment.html"
+  class="proceed-btn"
+  style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">
+  PROCEED
+  </a>
+
+    ← Back to Plans
+
+  </>
+
+</div>
+
+
+<script>
+
+function proceed() {
+
+  window.location.href = "payment.html";
+
+  }
+  );
+
+}
+
+</script>
+
+</body>
+</html>

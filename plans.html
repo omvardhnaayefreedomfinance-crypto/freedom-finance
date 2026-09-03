@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Freedom Finance - Plans</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .plans-page {
+      max-width: 1100px;
+      margin: auto;
+      padding: 40px 20px 70px;
+    }
+
+    .plans-heading {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .plans-heading h1 {
+      font-size: clamp(30px, 6vw, 52px);
+      margin: 10px 0;
+    }
+
+    .plans-heading h1 span {
+      color: gold;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .plan-card {
+      padding: 28px;
+      border: 1px solid rgba(255,215,0,.35);
+      border-radius: 18px;
+      background: rgba(0,0,0,.45);
+      box-shadow: 0 10px 35px rgba(0,0,0,.3);
+    }
+
+    .plan-card.featured {
+      border-color: gold;
+      box-shadow: 0 0 28px rgba(255,215,0,.18);
+    }
+
+    .plan-name {
+      color: gold;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .plan-amount {
+      font-size: 34px;
+      font-weight: 900;
+      margin: 10px 0 20px;
+    }
+
+    .profit-box {
+      text-align: center;
+      padding: 18px;
+      margin: 18px 0;
+      border: 1px solid rgba(255,215,0,.4);
+      border-radius: 12px;
+      background: rgba(255,215,0,.06);
+    }
+
+    .profit-label {
+      font-size: 14px;
+      opacity: .8;
+    }
+
+    .profit-percent {
+      display: block;
+      color: gold;
+      font-size: 38px;
+      font-weight: 900;
+      margin: 4px 0;
+    }
+
+    .profit-amount {
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .plan-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .plan-row span:first-child {
+      opacity: .75;
+    }
+
+    .plan-row span:last-child {
+      font-weight: 800;
+    }
+
+    .total-value {
+      color: gold;
+      font-size: 20px;
+      font-weight: 900 !important;
+    }
+
+    .buy-plan-btn {
+      width: 100%;
+      margin-top: 22px;
+      padding: 15px;
+      border: none;
+      border-radius: 9px;
+      background: linear-gradient(90deg,#c99600,#ffd700);
+      color: #000;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .selected-box {
+      display: none;
+      max-width: 650px;
+      margin: 40px auto 0;
+      padding: 28px;
+      border: 1px solid gold;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .selected-box h2 {
+      color: gold;
+    }
+
+    .continue-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 18px;
+      border: 1px solid gold;
+      border-radius: 9px;
+      background: transparent;
+      color: gold;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .plan-note {
+      margin: 35px auto;
+      max-width: 800px;
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.7;
+      opacity: .8;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      color: gold;
+      text-decoration: none;
+    }
+
+    @media (max-width: 700px) {
+      .plans-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="plans-page">
+
+  <div class="plans-heading">
+
+    <p class="section-number">08 / INVESTMENT OPTIONS</p>
+
+    <h1>
+      Freedom Finance <span>Plans</span>
+    </h1>
+
+    <p class="community-text">
+      Choose the plan that matches your participation amount.
+    </p>
+
+  </div>
+
+
+  <div class="plans-grid">
+
+
+    <!-- PLAN A -->
+
+    <div class="plan-card">
+
+      <div class="plan-name">PLAN A</div>
+      <div class="plan-amount">₹21,000</div>
+
+      <div class="profit-box">
+        <div class="profit-label">PROFIT</div>
+        <span class="profit-percent">30%</span>
+        <div class="profit-amount">₹6,300</div>
+      </div>
+
+      <div class="plan-row">
+        <span>Duration</span>
+        <span>1 Year</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Investment</span>
+        <span>₹21,000</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Total</span>
+        <span class="total-value">₹27,300</span>
+      </div>
+
+      <button class="buy-plan-btn"
+        onclick="selectPlan('Plan A','₹21,000','₹6,300','₹27,300')">
+        BUY PLAN
+      </button>
+
+    </div>
+
+
+    <!-- PLAN B -->
+
+    <div class="plan-card">
+
+      <div class="plan-name">PLAN B</div>
+      <div class="plan-amount">₹51,000</div>
+
+      <div class="profit-box">
+        <div class="profit-label">PROFIT</div>
+        <span class="profit-percent">30%</span>
+        <div class="profit-amount">₹15,300</div>
+      </div>
+
+      <div class="plan-row">
+        <span>Duration</span>
+        <span>1 Year</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Investment</span>
+        <span>₹51,000</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Total</span>
+        <span class="total-value">₹66,300</span>
+      </div>
+
+      <button class="buy-plan-btn"
+        onclick="selectPlan('Plan B','₹51,000','₹15,300','₹66,300')">
+        BUY PLAN
+      </button>
+
+    </div>
+
+
+    <!-- PLAN C -->
+
+    <div class="plan-card featured">
+
+      <div class="plan-name">PLAN C</div>
+      <div class="plan-amount">₹1,00,000</div>
+
+      <div class="profit-box">
+        <div class="profit-label">PROFIT</div>
+        <span class="profit-percent">30%</span>
+        <div class="profit-amount">₹30,000</div>
+      </div>
+
+      <div class="plan-row">
+        <span>Duration</span>
+        <span>1 Year</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Investment</span>
+        <span>₹1,00,000</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Total</span>
+        <span class="total-value">₹1,30,000</span>
+      </div>
+
+      <button class="buy-plan-btn"
+        onclick="selectPlan('Plan C','₹1,00,000','₹30,000','₹1,30,000')">
+        BUY PLAN
+      </button>
+
+    </div>
+
+
+    <!-- PLAN D -->
+
+    <div class="plan-card">
+
+      <div class="plan-name">PLAN D</div>
+      <div class="plan-amount">₹2,00,000</div>
+
+      <div class="profit-box">
+        <div class="profit-label">PROFIT</div>
+        <span class="profit-percent">30%</span>
+        <div class="profit-amount">₹60,000</div>
+      </div>
+
+      <div class="plan-row">
+        <span>Duration</span>
+        <span>1 Year</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Investment</span>
+        <span>₹2,00,000</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Total</span>
+        <span class="total-value">₹2,60,000</span>
+      </div>
+
+      <button class="buy-plan-btn"
+        onclick="selectPlan('Plan D','₹2,00,000','₹60,000','₹2,60,000')">
+        BUY PLAN
+      </button>
+
+    </div>
+
+
+    <!-- PLAN E -->
+
+    <div class="plan-card">
+
+      <div class="plan-name">PLAN E</div>
+      <div class="plan-amount">₹5,00,000</div>
+
+      <div class="profit-box">
+        <div class="profit-label">PROFIT</div>
+        <span class="profit-percent">30%</span>
+        <div class="profit-amount">₹1,50,000</div>
+      </div>
+
+      <div class="plan-row">
+        <span>Duration</span>
+        <span>1 Year</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Investment</span>
+        <span>₹5,00,000</span>
+      </div>
+
+      <div class="plan-row">
+        <span>Total</span>
+        <span class="total-value">₹6,50,000</span>
+      </div>
+
+      <button class="buy-plan-btn"
+        onclick="selectPlan('Plan E','₹5,00,000','₹1,50,000','₹6,50,000')">
+        BUY PLAN
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- SELECTED PLAN -->
+
+  <div class="selected-box" id="selectedBox">
+
+    <h2>SELECTED PLAN</h2>
+
+    <p id="selectedName"></p>
+    <p>Investment: <strong id="selectedAmount"></strong></p>
+    <p>30% Profit: <strong id="selectedProfit"></strong></p>
+    <p>Total: <strong id="selectedTotal"></strong></p>
+
+    <button class="continue-btn"
+      onclick="continuePlan()">
+      CONTINUE
+    </button>
+
+  </div>
+
+
+  <div class="plan-note">
+    Plan figures are displayed according to the current
+    Freedom Finance project plan structure. Review the
+    applicable project terms and disclosures before
+    participating.
+  </div>
+
+
+  <a href="member-dashboard.html" class="back-link">
+    ← Back to My Dashboard
+  </a>
+
+</div>
+
+
+<script>
+
+function selectPlan(name, amount, profit, total) {
+
+  localStorage.setItem("selectedPlan", name);
+  localStorage.setItem("selectedAmount", amount);
+  localStorage.setItem("selectedProfit", profit);
+  localStorage.setItem("selectedTotal", total);
+
+  document.getElementById("selectedName").textContent = name;
+  document.getElementById("selectedAmount").textContent = amount;
+  document.getElementById("selectedProfit").textContent = profit;
+  document.getElementById("selectedTotal").textContent = total;
+
+  document.getElementById("selectedBox").style.display = "block";
+
+  document.getElementById("selectedBox").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+
+}
+
+
+function continuePlan() {
+
+  window.location.href = "plan-summary.html";
+
+}
+
+</script>
+
+</>
+
+</body>
+</html>

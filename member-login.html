@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Freedom Finance - Member Login</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <section class="community">
+
+    <p class="section-number">COMMUNITY / LOGIN</p>
+
+    <h2>
+      Member <span>Login</span>
+    </h2>
+
+    <p class="community-text">
+      Login to access your Freedom Finance member dashboard,
+      project updates and plan information.
+    </p>
+
+    <div class="signup-card">
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          >
+        </div>
+
+        <button type="submit" class="signup-btn">
+          MEMBER LOGIN
+        </button>
+
+      </form>
+
+      <p id="loginMessage" class="signup-message"></p>
+
+      <p class="login-text">
+        Don't have an account?
+        <a href="member-signup.html">Create Account</a>
+      </p>
+
+    </div>
+
+    <div class="back-home">
+      <a href="index.html">← Back to Freedom Finance</a>
+    </div>
+
+  </section>
+
+  <script>
+
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+        const message =
+          document.getElementById("loginMessage");
+
+        if (!email || !password) {
+
+          message.textContent =
+            "Please enter your email and password.";
+
+          return;
+        }
+
+        message.textContent =
+          "Login successful. Opening dashboard...";
+
+        setTimeout(function() {
+
+          window.location.href =
+            "./member-dashboard.html";
+
+        }, 800);
+
+      });
+
+  </script>
+
+</body>
+</html>
