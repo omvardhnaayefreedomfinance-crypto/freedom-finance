@@ -37,7 +37,318 @@ body {
 }
 
 .logo {
+  Index.html
+
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Freedom Finance</title>    <link rel="stylesheet" href="style.css">  
+</head>  <bo>    <!-- HEADER -->    <header class="header">  
+    <div class="logo">  
+      <span><img src="Assets/1542/Logo.png" alt="Freedom Finance Logo" class="site-logo"></span>  
+      <div>  
+        <strong>FREEDOM</strong>  
+        <small>FINANCE</small>  
+      </div>  
+    </div>  <input type="checkbox" id="menuToggle">
+
+<label for="menuToggle" class="menu-btn">☰</label>
+
+<nav id="menu">  
+  <a href="#home">Home</a>  
+  <a href="#about">About</a>  
+  <a href="#benefits">Benefits</a>  
+  <a href="#investment">Investment</a>  
+  <a href="#roadmap">Roadmap</a>  
+  <a href="#tokenomics">Tokenomics</a>  
+  <a href="#whitepaper">Whitepaper</a>  
+  <a href="#how-to-buy">How to Buy</a>  
+  <a href="#business-model">Business Model</a>  
+  <a href="#disclaimer">Disclaimer</a>                                        
+</nav>
+
+  </header>    <!-- HERO -->  <p>Period: 1 Year<//* ================================
+   FREEDOM FINANCE MEMBER PORTAL
+================================ */
+
+.signup-card {
+  width: 100%;
+  max-width: 520px;
+  margin: 35px auto;
+  padding: 30px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.form-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 13px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: gold;
+}
+
+.form-check {
   display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 20px 0;
+  text-align: left;
+  font-size: 14px;
+}
+
+.form-check input {
+  margin-top: 4px;
+}
+
+.signup-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #c99600, #ffd700);
+  color: #000;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.signup-btn:hover {
+  opacity: 0.9;
+}
+
+.signup-message {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.login-text {
+  margin-top: 22px;
+  text-align: center;
+}
+
+.login-text a,
+.back-home a {
+  color: gold;
+  text-decoration: none;
+}
+
+.back-home {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.community-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.community-btn {
+  display: inline-block;
+  padding: 13px 24px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #c99600, #ffd700);
+  color: #000;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.community-btn.secondary {
+  background: transparent;
+  color: gold;
+  border: 1px solid gold;
+}
+
+.community-note {
+  max-width: 650px;
+  margin: 25px auto;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.6;
+  border: 1px solid rgba(255, 215, 0, 0.25);
+}
+
+.dashboard-item {
+  padding: 18px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  text-align: left;
+}
+
+.dashboard-item h3 {
+  margin: 0 0 8px;
+  color: gold;
+  font-size: 15px;
+}
+
+.dashboard-item p {
+  margin: 0;
+}
+
+.member-link {
+  font-weight: 700;
+}p>  
+  <strong>30% Profit: ₹30,000</strong>  
+</div>  
+
+<div class="investment-card">  
+  <div class="plan-name">PLAN D</div>  
+  <h3>₹2,00,000</h3>  
+  <p>Period: 1 Year</p>  
+  <strong>30% Profit: ₹60,000</strong>  
+</div>  
+
+<div class="investment-card">  
+  <div class="plan-name">PLAN E</div>  
+  <h3>₹5,00,000</h3>  
+  <p>Period: 1 Year</p>  
+  <strong>30% Profit: ₹1,50,000</strong>  
+</div>
+
+  </div>  </section>  
+  </>    <p class="section-number">02 / INVESTMENT PLAN</p>    <h2>Our <span>Investment</span> Vision</h2>  <p class="section-number">02 / INVESTMENT PLAN</p>  
+
+<h2>Our <span>Investment</span> Vision</h2>  
+
+<div class="investment-box">  
+
+  <h3>COMMUNITY INVESTMENT FRAMEWORK</h3>  
+
+  <p>  
+    The project aims to create a structured ecosystem where  
+    participants can understand the opportunities and risks before  
+    making financial decisions.  
+  </p>  
+
+  <div class="warning">  
+    ⚠️ Digital assets involve risk. No profit or return is guaranteed.  
+  </div>  
+
+</div>
+
+</>
+</ul>
+</div>
+
+<div class="wp-card">  
+  <h3>5. Roadmap</h3>  
+  <ul>  
+    <li>Phase 1 — Project concept & community building</li>  
+    <li>Phase 2 — Website & ecosystem development</li>  
+    <li>Phase 3 — Token launch preparation</li>  
+    <li>Phase 4 — Community growth & partnerships</li>  
+    <li>Phase 5 — Future blockchain utility development</li>  
+  </ul>  
+</div>  
+
+<div class="wp-card">  
+  <h3>6. Transparency</h3>  
+  <p>  
+    Important project information, token supply, contract details,  
+    allocations and future unlocks will be communicated publicly when  
+    officially finalized.  
+  </p>  
+</div>  
+
+<div class="wp-card">  
+  <h3>7. Risk Disclaimer</h3>  
+  <p>  
+    Freedom Finance is a proposed digital asset project. Cryptocurrency  
+    markets are highly volatile and participation involves significant  
+    risk, including the possible loss of capital. Nothing on this website  
+    should be considered financial, investment or profit advice.  
+  </p>  
+</div>
+
+  </div>  
+</section>  </><
+
+  <section id="how-to-buy" class="section dark" style="display:block;">    <!-- COMMUNITY --><!-- HOW TO BUY -->  <h3>HOW TO BUY</h3>  
+
+<div class="buy-steps">  
+
+  <div class="buy-step">  
+    <b>01</b>  
+    <p>  
+      Create or open a Solana-compatible wallet such as Phantom.  
+    </p>  
+  </div>  
+
+  <div class="buy-step">  
+    <b>02</b>  
+    <p>  
+      Keep enough SOL in your wallet for the purchase and applicable  
+      network or platform fees.  
+    </p>  
+  </div>  
+  src="Assets/1542/Buisness model_01.png"  
+  alt="Freedom Finance Business Model"  
+  style="width:100%;max-width:900px;height:auto;display:block;margin:20px auto;">
+
+  </div>    <div class="burning-content">  <h3>TOKEN BURNING MECHANISM</h3>  
+
+<p>  
+  A portion of tokens may be permanently removed from the circulating  
+  supply through a transparent token-burning mechanism.  
+</p>  
+
+<p>  
+  Any token burn will follow the project's published rules and will be  
+  publicly verifiable on the Solana blockchain.  
+</p>  
+
+<div class="warning">  
+  ⚠️ Token burning does not guarantee an increase in token price or  
+  investment returns. Burn percentage, frequency and conditions will be  
+  announced transparently before implementation.  
+</div>
+
+  </div>  </section>    </body>  
+    <script src="script.js"></script>  
+</html>  
+</section>  
+    <!-- DISCLAIMER -->  
+<section id="disclaimer" class="section dark">    <p class="section-number">07 / DISCLAIMER</p>    <h2>Important <span>Disclaimer.</span></h2>    <p>  
+    Freedom Finance is a crypto project and involves market risks.  
+    Token prices can be highly volatile and no profit or return is guaranteed.  
+    Always verify official project information before participating.  
+  </p>  <img  
+src="Assets/1542/Disclaimer_08.png"  
+alt="Freedom Finance Disclaimer"  
+style="width:100%;max-width:900px;height:auto;display:block;margin:20px auto;">
+
+</section><footer>  <strong>FREEDOM FINANCE</strong>
+
+  <p>  
+    © 2026 Freedom Finance · Not Financial Advice.  
+  </p>  </footer><p class="disclaimer-ending">  
+  © 2026 Freedom Finance · Not Financial Advice.  
+</p>  : flex;
   align-items: center;
   gap: 10px;
 }
