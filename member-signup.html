@@ -126,35 +126,70 @@
 
   <script>
 
-    document
-      .getElementById("signupForm")
-      .addEventListener("submit", function(event) {
+document
+  .getElementById("signupForm")
+  .addEventListener("submit", function(event) {
 
-        event.preventDefault();
+    event.preventDefault();
 
-        const password =
-          document.getElementById("password").value;
+    const name =
+      document.getElementById("fullName").value.trim();
 
-        const confirmPassword =
-          document.getElementById("confirmPassword").value;
+    const email =
+      document.getElementById("email").value.trim();
 
-        const message =
-          document.getElementById("signupMessage");
+    const password =
+      document.getElementById("password").value;
 
-        if (password !== confirmPassword) {
+    const confirmPassword =
+      document.getElementById("confirmPassword").value;
 
-          message.textContent =
-            "Passwords do not match.";
+    const message =
+      document.getElementById("signupMessage");
 
-          return;
-        }
+    if (password !== confirmPassword) {
 
-        message.textContent =
-          "Account form submitted successfully.";
+      message.textContent =
+        "Passwords do not match.";
 
-        document.getElementById("signupForm").reset();
+      return;
+    }
 
-      });
+    /* SAVE CUSTOMER ACCOUNT */
+
+    const user = {
+      name: name,
+      email: email,
+      password: password
+    };
+
+    localStorage.setItem(
+      "ffdemo",
+      JSON.stringify(user)
+    );
+
+    /* EMPTY TRANSACTION HISTORY FOR NEW ACCOUNT */
+
+    if (!localStorage.getItem("ffTransactions")) {
+      localStorage.setItem(
+        "ffTransactions",
+        "[]"
+      );
+    }
+
+    message.textContent =
+      "Account created successfully. You can login now.";
+
+    /* GO TO LOGIN PAGE */
+
+    setTimeout(function() {
+
+      window.location.href =
+        "member-login.html";
+
+    }, 1000);
+
+  });
 
   </script>
 
