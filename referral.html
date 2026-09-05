@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Referral Program - Freedom Finance</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#080808;
+    color:#fff;
+    min-height:100vh;
+}
+
+.header{
+    background:#111;
+    border-bottom:1px solid #333;
+    padding:20px 15px;
+    text-align:center;
+}
+
+.header h1{
+    color:#f5b400;
+    font-size:25px;
+}
+
+.header p{
+    color:#aaa;
+    font-size:13px;
+    margin-top:6px;
+}
+
+.container{
+    width:94%;
+    max-width:1000px;
+    margin:25px auto;
+}
+
+.back{
+    display:inline-block;
+    text-decoration:none;
+    color:#fff;
+    background:#222;
+    border:1px solid #444;
+    padding:10px 16px;
+    border-radius:8px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#111;
+    border:1px solid #333;
+    border-radius:14px;
+    padding:22px;
+    margin-bottom:20px;
+}
+
+.card h2{
+    color:#f5b400;
+    margin-bottom:18px;
+    font-size:20px;
+}
+
+.referral-box{
+    background:#181818;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:20px;
+}
+
+.referral-box label{
+    display:block;
+    color:#aaa;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.link-row{
+    display:flex;
+    gap:10px;
+}
+
+.link-row input{
+    flex:1;
+    min-width:0;
+    background:#080808;
+    color:#fff;
+    border:1px solid #444;
+    padding:13px;
+    border-radius:8px;
+}
+
+.copy-btn{
+    background:#f5b400;
+    color:#000;
+    border:0;
+    border-radius:8px;
+    padding:0 18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.rule{
+    background:#1b1605;
+    border:1px solid #5a4600;
+    padding:16px;
+    border-radius:10px;
+    line-height:1.7;
+    color:#ddd;
+}
+
+.rule strong{
+    color:#f5b400;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:#111;
+    border:1px solid #333;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.stat span{
+    display:block;
+    color:#aaa;
+    font-size:13px;
+    margin-bottom:9px;
+}
+
+.stat strong{
+    color:#f5b400;
+    font-size:24px;
+}
+
+.table-box{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px;
+}
+
+th,
+td{
+    padding:13px 10px;
+    border-bottom:1px solid #292929;
+    text-align:left;
+    font-size:13px;
+}
+
+th{
+    color:#f5b400;
+    background:#181818;
+}
+
+td{
+    color:#ddd;
+}
+
+.approved{
+    color:#52d273;
+    font-weight:bold;
+}
+
+.pending{
+    color:#f5b400;
+    font-weight:bold;
+}
+
+.empty{
+    text-align:center;
+    padding:25px;
+    color:#888;
+}
+
+.message{
+    display:none;
+    margin-top:12px;
+    padding:10px;
+    background:#182318;
+    color:#52d273;
+    border-radius:8px;
+    text-align:center;
+}
+
+.note{
+    color:#888;
+    font-size:12px;
+    line-height:1.6;
+    margin-top:15px;
+}
+
+@media(max-width:600px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .link-row{
+        flex-direction:column;
+    }
+
+    .copy-btn{
+        padding:13px;
+    }
+
+    .container{
+        width:92%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>FREEDOM FINANCE</h1>
+    <p>Referral Program</p>
+</div>
+
+
+<div class="container">
+
+<a href="member-dashboard.html" class="back">
+    ← Back to Dashboard
+</a>
+
+
+<div class="card">
+
+    <h2>My Referral Link</h2>
+
+    <div class="referral-box">
+
+        <label>Your Referral ID</label>
+
+        <input
+            type="text"
+            id="referralId"
+            readonly
+            style="width:100%;background:#080808;color:#f5b400;border:1px solid #444;padding:13px;border-radius:8px;margin-bottom:15px;"
+        >
+
+        <label>Share this Referral Link</label>
+
+        <div class="link-row">
+
+            <input
+                type="text"
+                id="referralLink"
+                readonly
+            >
+
+            <button
+                class="copy-btn"
+                onclick="copyReferral()"
+            >
+                COPY
+            </button>
+
+        </div>
+
+        <div id="copyMessage" class="message">
+            Referral link copied successfully.
+        </div>
+
+    </div>
+
+
+    <div class="rule">
+
+        <strong>Referral Reward: 2%</strong>
+
+        <br><br>
+
+        When a person joins through your referral
+        and their qualifying investment is verified
+        and approved, you receive a referral reward
+        equal to <strong>2%</strong> of that qualifying
+        investment.
+
+        <br><br>
+
+        Example:
+
+        <br>
+
+        ₹10,000 investment → ₹200 reward
+
+        <br>
+
+        ₹25,000 investment → ₹500 reward
+
+        <br>
+
+        ₹50,000 investment → ₹1,000 reward
+
+        <br><br>
+
+        Reward is counted only after the referred
+        investment is verified/approved.
+    </div>
+
+</div>
+
+
+<div class="stats">
+
+    <div class="stat">
+        <span>Total Referrals</span>
+        <strong id="totalReferrals">0</strong>
+    </div>
+
+    <div class="stat">
+        <span>Active Referrals</span>
+        <strong id="activeReferrals">0</strong>
+    </div>
+
+    <div class="stat">
+        <span>Total Referral Reward</span>
+        <strong id="totalReward">₹0</strong>
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>Referral History</h2>
+
+    <div class="table-box">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Date</th>
+                    <th>Member</th>
+                    <th>Investment</th>
+                    <th>Reward 2%</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="referralBody"></tbody>
+
+        </table>
+
+        <div id="emptyMessage" class="empty">
+            No referral records found.
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="note">
+
+        Demo/frontend version: referral records are
+        currently stored in this browser using
+        localStorage. Real referral rewards and
+        investment verification require a secure
+        server/database.
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let currentMember =
+    JSON.parse(
+        localStorage.getItem("currentMember") || "null"
+    );
+
+
+let referralId = "";
+
+
+/* Get referral ID */
+
+if(currentMember && currentMember.myReferralId){
+
+    referralId = currentMember.myReferralId;
+
+}
+
+else if(currentMember && currentMember.referralId){
+
+    referralId = currentMember.referralId;
+
+}
+
+else{
+
+    referralId =
+        localStorage.getItem("referralId") || "";
+
+}
+
+
+/* Create referral ID if none exists */
+
+if(!referralId){
+
+    referralId =
+        "FFREF" +
+        Math.random()
+        .toString(36)
+        .substring(2,8)
+        .toUpperCase();
+
+    localStorage.setItem(
+        "referralId",
+        referralId
+    );
+
+}
+
+
+/* Display referral ID */
+
+document.getElementById("referralId").value =
+    referralId;
+
+
+/* Create referral link */
+
+const basePath =
+    window.location.href.substring(
+        0,
+        window.location.href.lastIndexOf("/") + 1
+    );
+
+
+const referralLink =
+    basePath +
+    "member-signup.html?ref=" +
+    encodeURIComponent(referralId);
+
+
+document.getElementById("referralLink").value =
+    referralLink;
+
+
+/* Copy referral */
+
+function copyReferral(){
+
+    const input =
+        document.getElementById("referralLink");
+
+    input.select();
+    input.setSelectionRange(0,99999);
+
+    navigator.clipboard.writeText(input.value)
+    .then(function(){
+
+        const msg =
+            document.getElementById("copyMessage");
+
+        msg.style.display = "block";
+
+        setTimeout(function(){
+
+            msg.style.display = "none";
+
+        },2500);
+
+    })
+    .catch(function(){
+
+        document.execCommand("copy");
+
+        const msg =
+            document.getElementById("copyMessage");
+
+        msg.textContent =
+            "Referral link copied.";
+
+        msg.style.display = "block";
+
+    });
+
+}
+
+
+/* Load referral records */
+
+let referrals =
+    JSON.parse(
+        localStorage.getItem("referrals") || "[]"
+    );
+
+
+const tbody =
+    document.getElementById("referralBody");
+
+const emptyMessage =
+    document.getElementById("emptyMessage");
+
+
+let totalReferrals = 0;
+let activeReferrals = 0;
+let totalReward = 0;
+
+
+referrals.forEach(function(item){
+
+    /*
+       Show only referrals belonging
+       to the current member when
+       referredBy is available.
+    */
+
+    if(
+        item.referredBy &&
+        item.referredBy !== referralId
+    ){
+
+        return;
+
+    }
+
+
+    totalReferrals++;
+
+
+    const investment =
+        Number(item.investment || 0);
+
+
+    const reward =
+        investment * 0.02;
+
+
+    const status =
+        item.status || "Pending";
+
+
+    if(
+        status.toLowerCase() === "approved"
+    ){
+
+        activeReferrals++;
+
+        totalReward += reward;
+
+    }
+
+
+    const row =
+        document.createElement("tr");
+
+
+    let statusClass =
+        status.toLowerCase();
+
+
+    row.innerHTML = `
+
+        <td>
+            ${item.date || item.createdAt || "—"}
+        </td>
+
+        <td>
+            ${item.memberName ||
+              item.member ||
+              item.email ||
+              "Member"}
+        </td>
+
+        <td>
+            ₹${investment.toLocaleString("en-IN")}
+        </td>
+
+        <td>
+            ₹${reward.toLocaleString("en-IN")}
+        </td>
+
+        <td class="${statusClass}">
+            ${status}
+        </td>
+
+    `;
+
+
+    tbody.appendChild(row);
+
+});
+
+
+if(totalReferrals === 0){
+
+    emptyMessage.style.display = "block";
+
+}
+
+else{
+
+    emptyMessage.style.display = "none";
+
+}
+
+
+/* Summary */
+
+document.getElementById("totalReferrals")
+    .textContent = totalReferrals;
+
+
+document.getElementById("activeReferrals")
+    .textContent = activeReferrals;
+
+
+document.getElementById("totalReward")
+    .textContent =
+        "₹" +
+        totalReward.toLocaleString("en-IN");
+
+</script>
+
+</body>
+  </html>
