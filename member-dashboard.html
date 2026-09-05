@@ -3,703 +3,463 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Freedom Finance - Dashboard</title>
+
+<title>Member Dashboard - Freedom Finance</title>
 
 <style>
 *{
-  box-sizing:border-box;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
 }
 
 body{
-  margin:0;
-  background:#050505;
-  color:#fff8e7;
-  font-family:Arial,sans-serif;
+    background:#080808;
+    color:#fff;
+    min-height:100vh;
 }
 
-header{
-  height:64px;
-  padding:0 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:#080808;
-  border-bottom:1px solid #604b18;
-  position:sticky;
-  top:0;
-  z-index:10;
+.header{
+    background:#111;
+    border-bottom:1px solid #333;
+    padding:18px 15px;
+    text-align:center;
 }
 
-.logo{
-  color:#ffd96a;
-  font-size:19px;
-  font-weight:800;
+.header h1{
+    color:#f5b400;
+    font-size:25px;
 }
 
-.logout{
-  color:#ffd96a;
-  text-decoration:none;
-  font-size:14px;
+.header p{
+    color:#aaa;
+    font-size:13px;
+    margin-top:5px;
 }
 
 .container{
-  max-width:760px;
-  margin:auto;
-  padding:25px 15px 45px;
+    width:94%;
+    max-width:1100px;
+    margin:25px auto;
 }
 
 .welcome{
-  margin-bottom:20px;
+    background:#111;
+    border:1px solid #333;
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:20px;
 }
 
-.welcome small,
-.card-title{
-  color:#ffd96a;
-  font-weight:800;
-  letter-spacing:1px;
-}
-
-.welcome h1{
-  margin:8px 0;
-  font-size:32px;
+.welcome h2{
+    color:#f5b400;
+    margin-bottom:8px;
 }
 
 .welcome p{
-  color:#999;
+    color:#aaa;
+    font-size:14px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.stat{
+    background:#111;
+    border:1px solid #333;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+
+.stat span{
+    display:block;
+    color:#aaa;
+    font-size:13px;
+    margin-bottom:9px;
+}
+
+.stat strong{
+    color:#f5b400;
+    font-size:23px;
 }
 
 .card{
-  background:linear-gradient(145deg,#17130b,#090909);
-  border:1px solid #735719;
-  border-radius:20px;
-  padding:22px;
-  margin-bottom:18px;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
+    background:#111;
+    border:1px solid #333;
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:20px;
 }
 
 .card-title{
-  font-size:13px;
-  margin-bottom:17px;
+    color:#f5b400;
+    font-size:19px;
+    font-weight:bold;
+    margin-bottom:18px;
 }
 
-.member{
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.avatar{
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#d99b16,#ffd96a);
-  color:#171107;
-  font-size:22px;
-  font-weight:800;
-}
-
-.member h2{
-  margin:0 0 5px;
-}
-
-.member p{
-  margin:0;
-  color:#999;
-  font-size:14px;
-}
-
-.plan-name{
-  font-size:28px;
-  font-weight:800;
-}
-
-.amount{
-  color:#ffd96a;
-  font-size:34px;
-  font-weight:800;
-  margin-top:6px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:20px;
-}
-
-.box{
-  background:#080808;
-  border:1px solid #443718;
-  border-radius:12px;
-  padding:15px;
-}
-
-.box span{
-  display:block;
-  color:#888;
-  font-size:12px;
-  margin-bottom:7px;
-}
-
-.box strong{
-  font-size:17px;
-}
-
-.status{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:15px;
-  border:1px solid #604b18;
-  border-radius:12px;
-  background:#0b0b0b;
-}
-
-.dot{
-  width:11px;
-  height:11px;
-  border-radius:50%;
-  background:#ffd96a;
-  box-shadow:0 0 10px #ffd96a;
-}
-
-.status strong{
-  color:#ffd96a;
-}
-
-.progress{
-  height:12px;
-  background:#292015;
-  border-radius:20px;
-  overflow:hidden;
-  margin-top:15px;
-}
-
-.progress i{
-  display:block;
-  width:30%;
-  height:100%;
-  background:#f4bd32;
-}
-
-.timeline{
-  border-left:2px solid #604b18;
-  padding-left:20px;
-  margin-left:7px;
-}
-
-.timeline-item{
-  position:relative;
-  margin-bottom:22px;
-}
-
-.timeline-item:before{
-  content:"";
-  position:absolute;
-  left:-27px;
-  top:3px;
-  width:11px;
-  height:11px;
-  border-radius:50%;
-  background:#ffd96a;
-}
-
-.timeline-item strong{
-  display:block;
-  color:#ffd96a;
-  margin-bottom:5px;
-}
-
-.timeline-item span{
-  color:#999;
-  font-size:13px;
-}
-
-.history{
-  width:100%;
-  border-collapse:collapse;
-}
-
-.history th,
-.history td{
-  padding:12px 7px;
-  border-bottom:1px solid #332b1a;
-  text-align:left;
-  font-size:13px;
-}
-
-.history th{
-  color:#ffd96a;
-}
-
-.history td{
-  color:#ddd;
-}
-
-.ref{
-  word-break:break-all;
-  color:#ffd96a !important;
+.actions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
 }
 
 .action{
-  display:block;
-  width:100%;
-  padding:15px;
-  border-radius:11px;
-  text-align:center;
-  text-decoration:none;
-  font-weight:800;
-  margin-top:10px;
+    display:block;
+    text-align:center;
+    text-decoration:none;
+    padding:15px 10px;
+    border-radius:9px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.action:hover{
+    transform:translateY(-2px);
+    opacity:.9;
 }
 
 .gold{
-  background:linear-gradient(135deg,#d99b16,#ffd96a);
-  color:#171107;
+    background:#f5b400;
+    color:#000;
 }
 
 .dark{
-  border:1px solid #735719;
-  color:#ffd96a;
-  background:#0b0b0b;
+    background:#222;
+    color:#fff;
+    border:1px solid #444;
 }
 
-.footer{
-  text-align:center;
-  color:#666;
-  font-size:12px;
-  margin-top:25px;
+.profile{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
 }
 
-@media(max-width:520px){
+.profile-item{
+    background:#181818;
+    border-radius:9px;
+    padding:14px;
+}
 
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .welcome h1{
-    font-size:27px;
-  }
-
-  .card{
-    padding:19px;
-  }
-
-  .history{
+.profile-item span{
+    display:block;
+    color:#888;
     font-size:12px;
-  }
+    margin-bottom:5px;
+}
+
+.profile-item strong{
+    color:#ddd;
+    font-size:14px;
+    word-break:break-word;
+}
+
+.logout{
+    width:100%;
+    padding:14px;
+    background:#222;
+    color:#ff6b6b;
+    border:1px solid #444;
+    border-radius:9px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.note{
+    color:#777;
+    font-size:12px;
+    line-height:1.6;
+    text-align:center;
+    margin-top:10px;
+}
+
+@media(max-width:800px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .actions{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:500px){
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+    .profile{
+        grid-template-columns:1fr;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="logo">FREEDOM FINANCE</div>
-  <a href="index.html" class="logout">LOGOUT</a>
-</header>
+<div class="header">
+    <h1>FREEDOM FINANCE</h1>
+    <p>Member Dashboard</p>
+</div>
 
 <div class="container">
 
-  <!-- MEMBER -->
-
-  <div class="welcome">
-    <small>MEMBER AREA</small>
-    <h1>Welcome, <span id="memberName">Member</span></h1>
-    <p>Your Freedom Finance dashboard</p>
-  </div>
+    <div class="welcome">
+        <h2>Welcome, <span id="memberName">Member</span> 👋</h2>
+        <p>Your Freedom Finance member dashboard</p>
+    </div>
 
 
-  <!-- MEMBER PROFILE -->
+    <div class="stats">
 
-  <div class="card">
+        <div class="stat">
+            <span>Available Balance</span>
+            <strong id="balance">₹0</strong>
+        </div>
 
-    <div class="card-title">MEMBER PROFILE</div>
+        <div class="stat">
+            <span>Total Investment</span>
+            <strong id="investment">₹0</strong>
+        </div>
 
-    <div class="member">
+        <div class="stat">
+            <span>Total Profit</span>
+            <strong id="profit">₹0</strong>
+        </div>
 
-      <div class="avatar" id="avatar">
-        M
-      </div>
-
-      <div>
-        <h2 id="profileName">Member</h2>
-        <p id="profileEmail">member@email.com</p>
-      </div>
+        <div class="stat">
+            <span>Total Withdrawal</span>
+            <strong id="withdrawal">₹0</strong>
+        </div>
 
     </div>
 
-  </div>
 
+    <div class="card">
 
-  <!-- ACTIVE PLAN -->
+        <div class="card-title">
+            QUICK ACTIONS
+        </div>
 
-  <div class="card">
+        <div class="actions">
 
-    <div class="card-title">MY ACTIVE PLAN</div>
+            <a href="plans.html" class="action gold">
+                📋 PLANS
+            </a>
 
-    <div class="plan-name" id="planName">
-      No Plan Selected
-    </div>
+            <a href="payment.html" class="action dark">
+                💳 PAYMENT PAGE
+            </a>
 
-    <div class="amount" id="amount">
-      ₹0
-    </div>
+            <a href="transactions.html" class="action gold">
+                📊 TRANSACTION HISTORY
+            </a>
 
-    <div class="grid">
+            <a href="withdraw.html" class="action dark">
+                💸 WITHDRAWAL
+            </a>
 
-      <div class="box">
-        <span>Investment Amount</span>
-        <strong id="investment">₹0</strong>
-      </div>
+            <a href="referral.html" class="action gold">
+                🤝 REFERRAL PROGRAM
+            </a>
 
-      <div class="box">
-        <span>Profit</span>
-        <strong id="profit">₹0</strong>
-      </div>
+            <a href="plan-summary.html" class="action dark">
+                📄 PLAN SUMMARY
+            </a>
 
-      <div class="box">
-        <span>Total Value</span>
-        <strong id="total">₹0</strong>
-      </div>
-
-      <div class="box">
-        <span>Duration</span>
-        <strong>1 Year</strong>
-      </div>
+        </div>
 
     </div>
 
-  </div>
 
+    <div class="card">
 
-  <!-- PLAN DATES -->
+        <div class="card-title">
+            MEMBER PROFILE
+        </div>
 
-  <div class="card">
+        <div class="profile">
 
-    <div class="card-title">PLAN TIMELINE</div>
+            <div class="profile-item">
+                <span>Member ID</span>
+                <strong id="memberId">—</strong>
+            </div>
 
-    <div class="timeline">
+            <div class="profile-item">
+                <span>Name</span>
+                <strong id="profileName">—</strong>
+            </div>
 
-      <div class="timeline-item">
-        <strong>PLAN START</strong>
-        <span id="startDate">Not Started</span>
-      </div>
+            <div class="profile-item">
+                <span>Email</span>
+                <strong id="email">—</strong>
+            </div>
 
-      <div class="timeline-item">
-        <strong>PLAN END</strong>
-        <span id="endDate">Not Available</span>
-      </div>
+            <div class="profile-item">
+                <span>Mobile</span>
+                <strong id="mobile">—</strong>
+            </div>
 
-    </div>
+            <div class="profile-item">
+                <span>Referral ID</span>
+                <strong id="referralId">—</strong>
+            </div>
 
-  </div>
+            <div class="profile-item">
+                <span>Status</span>
+                <strong id="status">Active</strong>
+            </div>
 
+            <div class="profile-item">
+                <span>Join Date</span>
+                <strong id="joinDate">—</strong>
+            </div>
 
-  <!-- PAYMENT STATUS -->
-
-  <div class="card">
-
-    <div class="card-title">PAYMENT STATUS</div>
-
-    <div class="status">
-
-      <div class="dot"></div>
-
-      <div>
-        Status:
-        <strong id="paymentStatus">
-          Awaiting Payment
-        </strong>
-      </div>
-
-    </div>
-
-    <div class="box" style="margin-top:15px;">
-
-      <span>Transaction Reference</span>
-
-      <strong class="ref" id="transaction">
-        Not Submitted
-      </strong>
+        </div>
 
     </div>
 
-  </div>
 
+    <div class="card">
 
-  <!-- PROGRESS -->
+        <button class="logout" onclick="logout()">
+            LOGOUT
+        </button>
 
-  <div class="card">
-
-    <div class="card-title">PLAN PROGRESS</div>
-
-    <div>
-      Current Progress
-      <strong style="float:right;color:#ffd96a;">30%</strong>
-    </div>
-
-    <div class="progress">
-      <i></i>
-    </div>
-
-  </div>
-
-
-  <!-- HISTORY -->
-
-  <div class="card">
-
-    <div class="card-title">INVESTMENT HISTORY</div>
-
-    <div style="overflow-x:auto;">
-
-      <table class="history">
-
-        <thead>
-          <tr>
-            <th>Plan</th>
-            <th>Amount</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-
-        <tbody id="historyBody">
-
-          <tr>
-            <td id="historyPlan">—</td>
-            <td id="historyAmount">₹0</td>
-            <td id="historyStatus">—</td>
-          </tr>
-
-        </tbody>
-
-      </table>
+        <div class="note">
+            Freedom Finance · Member Area · Demo frontend system
+        </div>
 
     </div>
-
-  </div>
-
-
-  <!-- ACTIONS -->
-
-  <div class="card">
-
-    <div class="card-title">QUICK ACTIONS</div>
-
-    <a href="plans.html" class="action gold">
-      VIEW PLANS
-    </a>
-
-    <a href="payment.html" class="action dark">
-      PAYMENT PAGE
-    </a>
-
-  </div>
-
-
-  <div class="footer">
-    Freedom Finance · Member Dashboard
-  </div>
 
 </div>
 
 
 <script>
 
-/* ==============================
-   MEMBER DATA
-============================== */
-
-let user = null;
-
-try{
-  user = JSON.parse(localStorage.getItem("ffdemo") || "null");
-}catch(e){
-  user = null;
-}
-
-if(user){
-
-  const name = user.name || "Member";
-  const email = user.email || "member@email.com";
-
-  document.getElementById("memberName")
-    .textContent = name;
-
-  document.getElementById("profileName")
-    .textContent = name;
-
-  document.getElementById("profileEmail")
-    .textContent = email;
-
-  document.getElementById("avatar")
-    .textContent = name.charAt(0).toUpperCase();
-
-}
-
-
-/* ==============================
-   PLAN DATA
-============================== */
-
-const plan =
-  localStorage.getItem("selectedPlan");
-
-const amount =
-  localStorage.getItem("selectedAmount");
-
-const profit =
-  localStorage.getItem("selectedProfit");
-
-const total =
-  localStorage.getItem("selectedTotal");
-
-const paymentStatus =
-  localStorage.getItem("paymentStatus");
-
-const transaction =
-  localStorage.getItem("transactionReference");
-
-
-if(plan){
-
-  document.getElementById("planName")
-    .textContent = plan;
-
-  document.getElementById("historyPlan")
-    .textContent = plan;
-
-}
-
-if(amount){
-
-  document.getElementById("amount")
-    .textContent = amount;
-
-  document.getElementById("investment")
-    .textContent = amount;
-
-  document.getElementById("historyAmount")
-    .textContent = amount;
-
-}
-
-if(profit){
-
-  document.getElementById("profit")
-    .textContent = profit;
-
-}
-
-if(total){
-
-  document.getElementById("total")
-    .textContent = total;
-
-}
-
-
-/* ==============================
-   PAYMENT STATUS
-============================== */
-
-if(paymentStatus){
-
-  document.getElementById("paymentStatus")
-    .textContent = paymentStatus;
-
-  document.getElementById("historyStatus")
-    .textContent = paymentStatus;
-
-}
-
-
-/* ==============================
-   TRANSACTION
-============================== */
-
-if(transaction){
-
-  document.getElementById("transaction")
-    .textContent = transaction;
-
-}
-
-
-/* ==============================
-   PLAN DATES
-============================== */
-
-const savedStart =
-  localStorage.getItem("planStartDate");
-
-const savedEnd =
-  localStorage.getItem("planEndDate");
-
-
-function formatDate(date){
-
-  return date.toLocaleDateString(
-    "en-IN",
-    {
-      day:"2-digit",
-      month:"short",
-      year:"numeric"
-    }
-  );
-
-}
-
-
-/*
-  Prototype timeline:
-  dates are created only after a plan
-  is selected. No payment verification
-  or automatic financial calculation.
-*/
-
-if(plan){
-
-  if(!savedStart){
-
-    const start = new Date();
-
-    const end = new Date(start);
-
-    end.setFullYear(
-      end.getFullYear() + 1
+const currentMember =
+    JSON.parse(
+        localStorage.getItem("currentMember") || "null"
     );
 
-    localStorage.setItem(
-      "planStartDate",
-      formatDate(start)
-    );
 
-    localStorage.setItem(
-      "planEndDate",
-      formatDate(end)
-    );
+/* Load member information */
 
-  }
+if(currentMember){
+
+    document.getElementById("memberName").textContent =
+        currentMember.name || "Member";
+
+    document.getElementById("profileName").textContent =
+        currentMember.name || "—";
+
+    document.getElementById("memberId").textContent =
+        currentMember.memberId ||
+        currentMember.id ||
+        "—";
+
+    document.getElementById("email").textContent =
+        currentMember.email || "—";
+
+    document.getElementById("mobile").textContent =
+        currentMember.mobile || "—";
+
+    document.getElementById("referralId").textContent =
+        currentMember.myReferralId ||
+        currentMember.referralId ||
+        "—";
+
+    document.getElementById("status").textContent =
+        currentMember.status || "Active";
+
+    document.getElementById("joinDate").textContent =
+        currentMember.joinDate ||
+        currentMember.createdAt ||
+        "—";
 
 }
 
 
-document.getElementById("startDate")
-  .textContent =
-  localStorage.getItem("planStartDate")
-  || "Not Started";
+/* Balance */
+
+let balance =
+    Number(
+        localStorage.getItem("availableBalance") ||
+        (currentMember && currentMember.availableBalance) ||
+        0
+    );
 
 
-document.getElementById("endDate")
-  .textContent =
-  localStorage.getItem("planEndDate")
-  || "Not Available";
+/* Investment */
+
+let investment =
+    Number(
+        currentMember &&
+        (
+            currentMember.totalInvestment ||
+            currentMember.investment
+        ) || 0
+    );
+
+
+/* Profit */
+
+let profit =
+    Number(
+        currentMember &&
+        currentMember.profit || 0
+    );
+
+
+/* Withdrawal */
+
+let withdrawal =
+    Number(
+        currentMember &&
+        currentMember.totalWithdrawal || 0
+    );
+
+
+document.getElementById("balance").textContent =
+    "₹" + balance.toLocaleString("en-IN");
+
+document.getElementById("investment").textContent =
+    "₹" + investment.toLocaleString("en-IN");
+
+document.getElementById("profit").textContent =
+    "₹" + profit.toLocaleString("en-IN");
+
+document.getElementById("withdrawal").textContent =
+    "₹" + withdrawal.toLocaleString("en-IN");
+
+
+/* Logout */
+
+function logout(){
+
+    localStorage.removeItem("memberLoggedIn");
+    localStorage.removeItem("currentMember");
+    localStorage.removeItem("memberEmail");
+
+    window.location.href =
+        "member-login.html";
+
+}
 
 </script>
 
 </body>
-</html>
+  </html>
