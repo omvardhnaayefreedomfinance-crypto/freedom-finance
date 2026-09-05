@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Login - Freedom Finance</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#080808;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.login-box{
+    width:92%;
+    max-width:420px;
+    background:#111;
+    border:1px solid #333;
+    border-radius:16px;
+    padding:30px 24px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.logo h1{
+    color:#f5b400;
+    font-size:27px;
+}
+
+.logo p{
+    color:#888;
+    font-size:13px;
+    margin-top:6px;
+}
+
+.title{
+    color:#f5b400;
+    text-align:center;
+    font-size:20px;
+    margin-bottom:22px;
+}
+
+label{
+    display:block;
+    color:#ccc;
+    font-size:14px;
+    margin:14px 0 7px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    background:#080808;
+    color:#fff;
+    border:1px solid #444;
+    border-radius:8px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#f5b400;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:22px;
+    border:0;
+    border-radius:8px;
+    background:#f5b400;
+    color:#000;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.error{
+    display:none;
+    margin-top:15px;
+    padding:12px;
+    background:#2a1010;
+    border:1px solid #632020;
+    color:#ff6b6b;
+    border-radius:8px;
+    text-align:center;
+    font-size:13px;
+}
+
+.demo{
+    margin-top:20px;
+    padding:14px;
+    background:#181818;
+    border-radius:8px;
+    color:#888;
+    font-size:12px;
+    line-height:1.7;
+}
+
+.demo strong{
+    color:#f5b400;
+}
+
+.back{
+    display:block;
+    text-align:center;
+    margin-top:18px;
+    color:#aaa;
+    text-decoration:none;
+    font-size:13px;
+}
+
+.back:hover{
+    color:#f5b400;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="logo">
+        <h1>FREEDOM FINANCE</h1>
+        <p>Admin Control Panel</p>
+    </div>
+
+    <div class="title">
+        ADMIN LOGIN
+    </div>
+
+    <form id="adminLoginForm">
+
+        <label for="email">
+            Admin Email
+        </label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter admin email"
+            required
+        >
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+            required
+        >
+
+        <button type="submit">
+            LOGIN TO ADMIN PANEL
+        </button>
+
+    </form>
+
+    <div id="error" class="error"></div>
+
+    <div class="demo">
+        <strong>Demo Admin Login</strong><br>
+        Email: admin@freedomfinance.com<br>
+        Password: Admin@123
+    </div>
+
+    <a href="index.html" class="back">
+        ← Back to Website
+    </a>
+
+</div>
+
+
+<script>
+
+const form =
+    document.getElementById("adminLoginForm");
+
+const error =
+    document.getElementById("error");
+
+
+form.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const email =
+        document.getElementById("email")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const password =
+        document.getElementById("password")
+        .value;
+
+
+    if(
+        email === "admin@freedomfinance.com" &&
+        password === "Admin@123"
+    ){
+
+        localStorage.setItem(
+            "adminLoggedIn",
+            "true"
+        );
+
+        localStorage.setItem(
+            "adminEmail",
+            email
+        );
+
+        window.location.href =
+            "admin-dashboard.html";
+
+    }
+
+    else{
+
+        error.textContent =
+            "Invalid admin email or password.";
+
+        error.style.display = "block";
+
+    }
+
+});
+
+</script>
+
+</body>
+  </html>
