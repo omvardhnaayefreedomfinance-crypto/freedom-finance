@@ -446,3 +446,147 @@ document.getElementById("signupForm").addEventListener("submit", function(e){
 
 </body>
           </html>
+/* SAVE CUSTOMER ACCOUNT + ADMIN MEMBER RECORD */
+
+const mobile =
+    document.getElementById("mobile").value.trim();
+
+let members = [];
+
+try {
+    members =
+        JSON.parse(localStorage.getItem("members")) || [];
+} catch (error) {
+    members = [];
+}
+
+
+/* CHECK DUPLICATE EMAIL */
+
+const existingMember = members.find(function(member) {
+    return String(member.email || "").toLowerCase() ===
+           email.toLowerCase();
+});
+
+if (existingMember) {
+
+    message.textContent =
+        "An account with this email already exists.";
+
+    return;
+}
+
+
+/* CREATE MEMBER ID */
+
+const memberId =
+    "FF" + Date.now().toString().slice(-8);
+
+
+/* CREATE REFERRAL ID */
+
+const myReferralId =
+    "FFREF" +
+    Math.random()
+    .toString(36)
+    .substring(2, 8)
+    .toUpperCase();
+
+
+/* CURRENT DATE */
+
+const now =
+    new Date().toISOString();
+
+
+/* MEMBER RECORD */
+
+const newMember = {
+
+    id: memberId,
+
+    memberId: memberId,
+
+    name: name,
+
+    email: email,
+
+    mobile: mobile,
+
+    password: password,
+
+    referralId: "",
+
+    referredBy: "",
+
+    myReferralId: myReferralId,
+
+    status: "Active",
+
+    investment: 0,
+
+    totalInvestment: 0,
+
+    profit: 0,
+
+    availableBalance: 0,
+
+    totalWithdrawal: 0,
+
+    createdAt: now,
+
+    joinDate: now
+
+};
+
+
+/* ADD MEMBER */
+
+members.push(newMember);
+
+
+/* SAVE MEMBERS */
+
+localStorage.setItem(
+    "members",
+    JSON.stringify(members)
+);
+
+
+/* SAVE CURRENT MEMBER */
+
+localStorage.setItem(
+    "currentMember",
+    JSON.stringify(newMember)
+);
+
+
+/* SAVE LOGIN INFO */
+
+localStorage.setItem(
+    "memberEmail",
+    email
+);
+
+localStorage.setItem(
+    "memberLoggedIn",
+    "true"
+);
+
+
+/* OLD LOGIN SYSTEM - KEEP COMPATIBILITY */
+
+const user = {
+
+    name: name,
+
+    email: email,
+
+    password: password
+
+};
+
+localStorage.setItem(
+    "ffdemo",
+    JSON.stringify(user)
+);
