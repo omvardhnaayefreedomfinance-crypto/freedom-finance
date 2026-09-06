@@ -11,7 +11,7 @@
     box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 body{
@@ -106,16 +106,18 @@ body{
 }
 
 .menu button{
-    background:#151e2d;
+    background:#111827;
     color:#fff;
-    border:1px solid #303b4f;
-    padding:13px 8px;
+    border:1px solid #273244;
+    padding:12px 8px;
     border-radius:8px;
     cursor:pointer;
+    font-weight:bold;
 }
 
 .menu button:hover{
-    background:#202b3d;
+    border-color:#f5b942;
+    color:#f5b942;
 }
 
 .section{
@@ -123,29 +125,13 @@ body{
     border:1px solid #273244;
     border-radius:12px;
     padding:20px;
-    margin-bottom:25px;
-}
-
-.section-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
-    gap:10px;
+    margin-bottom:20px;
 }
 
 .section h2{
     font-size:20px;
-}
-
-.refresh{
-    background:#f5b942;
-    color:#000;
-    border:0;
-    padding:9px 14px;
-    border-radius:7px;
-    cursor:pointer;
-    font-weight:bold;
+    margin-bottom:15px;
+    color:#f5b942;
 }
 
 .search{
@@ -153,63 +139,64 @@ body{
     padding:12px;
     background:#080b12;
     color:#fff;
-    border:1px solid #374151;
+    border:1px solid #273244;
     border-radius:7px;
     margin-bottom:15px;
 }
 
 .table-wrap{
-    width:100%;
     overflow-x:auto;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:800px;
+    min-width:700px;
+}
+
+th,td{
+    padding:12px 10px;
+    border-bottom:1px solid #273244;
+    text-align:left;
+    font-size:13px;
 }
 
 th{
-    background:#1a2434;
     color:#f5b942;
-    text-align:left;
-    padding:12px;
-    font-size:13px;
+    background:#0d1420;
 }
 
 td{
-    padding:12px;
-    border-bottom:1px solid #273244;
-    font-size:13px;
+    color:#e5e7eb;
 }
 
 .empty{
     text-align:center;
-    padding:25px;
     color:#9ca3af;
+    padding:25px;
 }
 
 .badge{
+    display:inline-block;
     padding:5px 9px;
     border-radius:20px;
     font-size:11px;
     font-weight:bold;
-    display:inline-block;
 }
 
 .active{
-    background:#064e3b;
-    color:#6ee7b7;
+    background:#14532d;
+    color:#86efac;
 }
 
 .pending{
-    background:#78350f;
-    color:#fcd34d;
+    background:#713f12;
+    color:#fde68a;
 }
 
 .approved{
-    background:#064e3b;
-    color:#6ee7b7;
+    background:#14532d;
+    color:#86efac;
 }
 
 .rejected{
@@ -217,11 +204,15 @@ td{
     color:#fca5a5;
 }
 
-.footer{
-    text-align:center;
-    color:#6b7280;
-    padding:25px;
-    font-size:12px;
+.refresh{
+    background:#2563eb;
+    color:#fff;
+    border:0;
+    padding:10px 15px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+    margin-bottom:15px;
 }
 
 @media(max-width:900px){
@@ -235,16 +226,16 @@ td{
 }
 
 @media(max-width:600px){
-    .container{
-        padding:12px;
-    }
-
     .header{
-        padding:15px;
+        padding:14px;
     }
 
     .logo{
         font-size:18px;
+    }
+
+    .container{
+        padding:12px;
     }
 
     .stats{
@@ -257,11 +248,15 @@ td{
     }
 
     .stat-value{
-        font-size:21px;
+        font-size:20px;
     }
 
     .menu{
         grid-template-columns:1fr 1fr;
+    }
+
+    .menu button{
+        font-size:12px;
     }
 
     .title h1{
@@ -276,24 +271,28 @@ td{
 <header class="header">
 
     <div>
-        <div class="logo">⚡ FREEDOM FINANCE</div>
-        <div class="admin-text">Admin Control Panel</div>
+        <div class="logo">FREEDOM FINANCE</div>
+        <div class="admin-text">
+            Admin Dashboard
+        </div>
     </div>
 
-    <button class="logout" onclick="logoutAdmin()">Logout</button>
+    <button class="logout" onclick="logoutAdmin()">
+        LOGOUT
+    </button>
 
 </header>
 
 
-<div class="container">
+<main class="container">
 
     <div class="title">
         <h1>Admin Dashboard</h1>
-        <p>Community & platform management panel</p>
+        <p>Manage members, investments, payments, withdrawals and referrals.</p>
     </div>
 
 
-    <!-- STATS -->
+    <!-- ================= STATS ================= -->
 
     <div class="stats">
 
@@ -313,64 +312,61 @@ td{
         </div>
 
         <div class="stat">
-            <div class="stat-title">Withdrawals</div>
+            <div class="stat-title">Total Withdrawals</div>
             <div class="stat-value" id="totalWithdrawals">₹0</div>
         </div>
+
     </div>
 
 
-    <!-- MENU -->
+    <!-- ================= MENU ================= -->
 
     <div class="menu">
 
-        <button onclick="scrollToSection('members')">
-            👥 Members
+        <button onclick="showSection('membersSection')">
+            MEMBERS
         </button>
 
-        <button onclick="scrollToSection('investments')">
-            💰 Investments
+        <button onclick="showSection('investmentSection')">
+            INVESTMENTS
         </button>
 
-        <button onclick="scrollToSection('payments')">
-            💳 Payments
+        <button onclick="showSection('paymentSection')">
+            PAYMENTS
         </button>
 
-        <button onclick="scrollToSection('withdrawals')">
-            📤 Withdrawals
+        <button onclick="showSection('withdrawalSection')">
+            WITHDRAWALS
         </button>
 
-        <button onclick="scrollToSection('referrals')">
-            🤝 Referrals
+        <button onclick="showSection('referralSection')">
+            REFERRALS
         </button>
 
-        <button onclick="scrollToSection('transactions')">
-            📊 Transactions
+        <button onclick="showSection('transactionSection')">
+            TRANSACTIONS
         </button>
 
     </div>
 
 
-    <!-- MEMBERS -->
+    <!-- ================= MEMBERS ================= -->
 
-    <div class="section" id="members">
+    <section class="section" id="membersSection">
 
-        <div class="section-header">
-
-            <h2>👥 All Members</h2>
-
-            <button class="refresh" onclick="loadAllData()">
-                Refresh
-            </button>
-
-        </div>
+        <h2>Members</h2>
 
         <input
             type="text"
             id="memberSearch"
             class="search"
-            placeholder="Search name, email, mobile or member ID..."
-            onkeyup="searchMembers()"
+            placeholder="Search by name, email or Member ID..."
+            oninput="renderMembers()"
         >
+
+        <button class="refresh" onclick="loadDashboard()">
+            ↻ Refresh Data
+        </button>
 
         <div class="table-wrap">
 
@@ -382,31 +378,27 @@ td{
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-                        <th>Referral ID</th>
-                        <th>Investment</th>
                         <th>Status</th>
+                        <th>Investment</th>
+                        <th>Profit</th>
                         <th>Join Date</th>
                     </tr>
                 </thead>
 
-                <tbody id="membersTable"></tbody>
+                <tbody id="membersBody"></tbody>
 
             </table>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- INVESTMENTS -->
+    <!-- ================= INVESTMENTS ================= -->
 
-    <div class="section" id="investments">
+    <section class="section" id="investmentSection">
 
-        <div class="section-header">
-
-            <h2>💰 Investment Records</h2>
-
-        </div>
+        <h2>Investments</h2>
 
         <div class="table-wrap">
 
@@ -414,32 +406,29 @@ td{
 
                 <thead>
                     <tr>
-                        <th>Member</th>
-                        <th>Email</th>
+                        <th>Member ID</th>
+                        <th>Name</th>
+                        <th>Plan</th>
                         <th>Investment</th>
                         <th>Profit</th>
-                        <th>Balance</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
 
-                <tbody id="investmentTable"></tbody>
+                <tbody id="investmentBody"></tbody>
 
             </table>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- PAYMENTS -->
+    <!-- ================= PAYMENTS ================= -->
 
-    <div class="section" id="payments">
+    <section class="section" id="paymentSection">
 
-        <div class="section-header">
-
-            <h2>💳 Payment Records</h2>
-
-        </div>
+        <h2>Payments</h2>
 
         <div class="table-wrap">
 
@@ -447,33 +436,29 @@ td{
 
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Member</th>
-                        <th>Amount</th>
-                        <th>Method</th>
                         <th>Reference</th>
+                        <th>Member</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Date</th>
                         <th>Status</th>
                     </tr>
                 </thead>
 
-                <tbody id="paymentTable"></tbody>
+                <tbody id="paymentBody"></tbody>
 
             </table>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- WITHDRAWALS -->
+    <!-- ================= WITHDRAWALS ================= -->
 
-    <div class="section" id="withdrawals">
+    <section class="section" id="withdrawalSection">
 
-        <div class="section-header">
-
-            <h2>📤 Withdrawal Requests</h2>
-
-        </div>
+        <h2>Withdrawals</h2>
 
         <div class="table-wrap">
 
@@ -481,33 +466,29 @@ td{
 
                 <thead>
                     <tr>
-                        <th>Date</th>
+                        <th>Reference</th>
                         <th>Member</th>
                         <th>Amount</th>
                         <th>Method</th>
-                        <th>Details</th>
+                        <th>Date</th>
                         <th>Status</th>
                     </tr>
                 </thead>
 
-                <tbody id="withdrawalTable"></tbody>
+                <tbody id="withdrawalBody"></tbody>
 
             </table>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- REFERRALS -->
+    <!-- ================= REFERRALS ================= -->
 
-    <div class="section" id="referrals">
+    <section class="section" id="referralSection">
 
-        <div class="section-header">
-
-            <h2>🤝 Referral Records</h2>
-
-        </div>
+        <h2>Referrals</h2>
 
         <div class="table-wrap">
 
@@ -516,31 +497,28 @@ td{
                 <thead>
                     <tr>
                         <th>Referral ID</th>
-                        <th>Referred Member</th>
+                        <th>Member</th>
+                        <th>Referred By</th>
                         <th>Investment</th>
                         <th>Reward 2%</th>
                         <th>Status</th>
                     </tr>
                 </thead>
 
-                <tbody id="referralTable"></tbody>
+                <tbody id="referralBody"></tbody>
 
             </table>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- TRANSACTIONS -->
+    <!-- ================= TRANSACTIONS ================= -->
 
-    <div class="section" id="transactions">
+    <section class="section" id="transactionSection">
 
-        <div class="section-header">
-
-            <h2>📊 Transaction History</h2>
-
-        </div>
+        <h2>Transactions</h2>
 
         <div class="table-wrap">
 
@@ -548,65 +526,55 @@ td{
 
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Amount</th>
                         <th>Reference</th>
+                        <th>Type</th>
+                        <th>Member</th>
+                        <th>Amount</th>
+                        <th>Date</th>
                         <th>Status</th>
                     </tr>
                 </thead>
 
-                <tbody id="transactionTable"></tbody>
+                <tbody id="transactionBody"></tbody>
 
             </table>
 
         </div>
 
-    </div>
+    </section>
 
-
-</div>
-
-
-<div class="footer">
-    © 2026 Freedom Finance · Admin Panel · Demo/Frontend Version
-</div>
+</main>
 
 
 <script>
 
-/* =========================
-   ADMIN SECURITY
-========================= */
+/* =====================================================
+   ADMIN LOGIN CHECK
+===================================================== */
 
 if(localStorage.getItem("adminLoggedIn") !== "true"){
+
     window.location.href = "admin-login.html";
+
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
-
-function logoutAdmin(){
-
-    localStorage.removeItem("adminLoggedIn");
-    localStorage.removeItem("adminEmail");
-
-    window.location.href = "admin-login.html";
-}
-
-
-/* =========================
-   HELPERS
-========================= */
+/* =====================================================
+   HELPER
+===================================================== */
 
 function getData(key){
 
     try{
-        return JSON.parse(localStorage.getItem(key)) || [];
-    }catch(e){
+
+        return JSON.parse(
+            localStorage.getItem(key)
+        ) || [];
+
+    }catch(error){
+
         return [];
+
     }
 
 }
@@ -614,547 +582,455 @@ function getData(key){
 
 function money(value){
 
-    let amount = Number(value) || 0;
+    return "₹" +
+        Number(value || 0).toLocaleString("en-IN");
 
-    return "₹" + amount.toLocaleString("en-IN");
 }
 
 
-function dateFormat(value){
+function showSection(id){
 
-    if(!value){
-        return "-";
-    }
+    const section =
+        document.getElementById(id);
 
-    try{
+    if(section){
 
-        return new Date(value).toLocaleDateString("en-IN");
-
-    }catch(e){
-
-        return value;
+        section.scrollIntoView({
+            behavior:"smooth"
+        });
 
     }
 
 }
 
 
-/* =========================
-   LOAD DASHBOARD
-========================= */
+/* =====================================================
+   MEMBERS
+===================================================== */
 
-function loadAllData(){
+function renderMembers(){
 
-    let members = getData("members");
+    const members =
+        getData("members");
 
-    let withdrawals = getData("withdrawals");
+    const search =
+        document
+        .getElementById("memberSearch")
+        .value
+        .toLowerCase()
+        .trim();
 
-    let transactions = getData("transactions");
+    const body =
+        document.getElementById("membersBody");
 
-    let referrals = getData("referrals");
+    const filtered =
+        members.filter(function(member){
 
-    let payments = getData("payments");
+            return (
 
+                String(member.memberId || "")
+                .toLowerCase()
+                .includes(search)
 
-    /* MEMBERS */
+                ||
 
-    document.getElementById("totalMembers").textContent =
-        members.length;
+                String(member.name || "")
+                .toLowerCase()
+                .includes(search)
 
+                ||
 
-    let active = members.filter(function(member){
+                String(member.email || "")
+                .toLowerCase()
+                .includes(search)
 
-        return String(member.status || "").toLowerCase() === "active";
+            );
 
-    }).length;
-
-
-    document.getElementById("activeMembers").textContent =
-        active;
-
-
-    /* TOTAL INVESTMENT */
-
-    let totalInvestment = members.reduce(function(total, member){
-
-        return total +
-        Number(
-            member.totalInvestment ||
-            member.investment ||
-            0
-        );
-
-    },0);
+        });
 
 
-    document.getElementById("totalInvestment").textContent =
-        money(totalInvestment);
+    if(filtered.length === 0){
 
-
-    /* TOTAL WITHDRAWAL */
-
-    let totalWithdrawals = withdrawals.reduce(function(total, item){
-
-        return total + Number(item.amount || 0);
-
-    },0);
-
-
-    document.getElementById("totalWithdrawals").textContent =
-        money(totalWithdrawals);
-
-
-    loadMembers(members);
-
-    loadInvestments(members);
-
-    loadPayments(payments);
-
-    loadWithdrawals(withdrawals);
-
-    loadReferrals(referrals);
-
-    loadTransactions(transactions);
-
-}
-
-
-/* =========================
-   MEMBERS TABLE
-========================= */
-
-function loadMembers(members){
-
-    let table = document.getElementById("membersTable");
-
-    table.innerHTML = "";
-
-
-    if(members.length === 0){
-
-        table.innerHTML =
-        '<tr><td colspan="8" class="empty">No members found</td></tr>';
+        body.innerHTML =
+            '<tr><td colspan="8" class="empty">No members found.</td></tr>';
 
         return;
+
     }
 
 
-    members.forEach(function(member){
+    body.innerHTML =
+        filtered.map(function(member){
 
-        let investment =
-            member.totalInvestment ||
-            member.investment ||
-            0;
+            return `
+                <tr>
 
+                    <td>
+                        ${member.memberId || "-"}
+                    </td>
 
-        let status =
-            member.status || "Active";
+                    <td>
+                        ${member.name || "-"}
+                    </td>
 
+                    <td>
+                        ${member.email || "-"}
+                    </td>
 
-        table.innerHTML += `
+                    <td>
+                        ${member.mobile || "-"}
+                    </td>
 
-        <tr>
+                    <td>
+                        <span class="badge active">
+                            ${member.status || "Active"}
+                        </span>
+                    </td>
 
-            <td>${member.memberId || member.id || "-"}</td>
+                    <td>
+                        ${money(
+                            member.totalInvestment ||
+                            member.investment
+                        )}
+                    </td>
 
-            <td>${member.name || "-"}</td>
+                    <td>
+                        ${money(member.profit)}
+                    </td>
 
-            <td>${member.email || "-"}</td>
+                    <td>
+                        ${member.joinDate || "-"}
+                    </td>
 
-            <td>${member.mobile || "-"}</td>
+                </tr>
+            `;
 
-            <td>${member.myReferralId || member.referralId || "-"}</td>
-
-            <td>${money(investment)}</td>
-
-            <td>
-                <span class="badge active">
-                    ${status}
-                </span>
-            </td>
-
-            <td>${dateFormat(member.joinDate || member.createdAt)}</td>
-
-        </tr>
-
-        `;
-
-    });
+        }).join("");
 
 }
 
 
-/* =========================
+/* =====================================================
    INVESTMENTS
-========================= */
+===================================================== */
 
-function loadInvestments(members){
+function renderInvestments(){
 
-    let table =
-        document.getElementById("investmentTable");
+    const members =
+        getData("members");
 
-    table.innerHTML = "";
-
-
-    let investedMembers = members.filter(function(member){
-
-        return Number(
-            member.totalInvestment ||
-            member.investment ||
-            0
-        ) > 0;
-
-    });
+    const body =
+        document.getElementById("investmentBody");
 
 
-    if(investedMembers.length === 0){
+    const invested =
+        members.filter(function(member){
 
-        table.innerHTML =
-        '<tr><td colspan="5" class="empty">No investment records found</td></tr>';
-
-        return;
-    }
-
-
-    investedMembers.forEach(function(member){
-
-        let investment =
-            Number(
+            return Number(
                 member.totalInvestment ||
                 member.investment ||
                 0
-            );
+            ) > 0;
+
+        });
 
 
-        let profit =
-            Number(member.profit || 0);
+    if(invested.length === 0){
+
+        body.innerHTML =
+            '<tr><td colspan="6" class="empty">No investments found.</td></tr>';
+
+        return;
+
+    }
 
 
-        let balance =
-            Number(member.availableBalance || 0);
+    body.innerHTML =
+        invested.map(function(member){
 
+            return `
+                <tr>
 
-        table.innerHTML += `
+                    <td>${member.memberId || "-"}</td>
 
-        <tr>
+                    <td>${member.name || "-"}</td>
 
-            <td>${member.name || "-"}</td>
+                    <td>${member.planName || member.plan || "-"}</td>
 
-            <td>${member.email || "-"}</td>
+                    <td>
+                        ${money(
+                            member.totalInvestment ||
+                            member.investment
+                        )}
+                    </td>
 
-            <td>${money(investment)}</td>
+                    <td>
+                        ${money(member.profit)}
+                    </td>
 
-            <td>${money(profit)}</td>
+                    <td>
+                        <span class="badge approved">
+                            ${member.status || "Active"}
+                        </span>
+                    </td>
 
-            <td>${money(balance)}</td>
+                </tr>
+            `;
 
-        </tr>
-
-        `;
-
-    });
+        }).join("");
 
 }
 
 
-/* =========================
+/* =====================================================
    PAYMENTS
-========================= */
+===================================================== */
 
-function loadPayments(payments){
+function renderPayments(){
 
-    let table =
-        document.getElementById("paymentTable");
+    const payments =
+        getData("payments");
 
-    table.innerHTML = "";
+    const body =
+        document.getElementById("paymentBody");
 
 
     if(payments.length === 0){
 
-        table.innerHTML =
-        '<tr><td colspan="6" class="empty">No payment records found</td></tr>';
+        body.innerHTML =
+            '<tr><td colspan="6" class="empty">No payments found.</td></tr>';
 
         return;
+
     }
 
 
-    payments.forEach(function(payment){
+    body.innerHTML =
+        payments.map(function(payment){
 
-        table.innerHTML += `
+            return `
+                <tr>
 
-        <tr>
+                    <td>
+                        ${payment.reference ||
+                         payment.ref ||
+                         payment.id ||
+                         "-"}
+                    </td>
 
-            <td>
-                ${dateFormat(
-                    payment.date ||
-                    payment.createdAt
-                )}
-            </td>
+                    <td>
+                        ${payment.memberId ||
+                         payment.email ||
+                         payment.name ||
+                         "-"}
+                    </td>
 
-            <td>
-                ${payment.memberName ||
-                  payment.name ||
-                  payment.email ||
-                  "-"}
-            </td>
+                    <td>
+                        ${money(payment.amount)}
+                    </td>
 
-            <td>
-                ${money(payment.amount)}
-            </td>
+                    <td>
+                        ${payment.method || "-"}
+                    </td>
 
-            <td>
-                ${payment.method || "-"}
-            </td>
+                    <td>
+                        ${payment.date ||
+                         payment.createdAt ||
+                         "-"}
+                    </td>
 
-            <td>
-                ${payment.reference ||
-                  payment.ref ||
-                  "-"}
-            </td>
+                    <td>
+                        <span class="badge pending">
+                            ${payment.status || "Pending"}
+                        </span>
+                    </td>
 
-            <td>
-                <span class="badge ${String(payment.status || "Pending").toLowerCase()}">
-                    ${payment.status || "Pending"}
-                </span>
-            </td>
+                </tr>
+            `;
 
-        </tr>
-
-        `;
-
-    });
+        }).join("");
 
 }
 
 
-/* =========================
+/* =====================================================
    WITHDRAWALS
-========================= */
+===================================================== */
 
-function loadWithdrawals(withdrawals){
+function renderWithdrawals(){
 
-    let table =
-        document.getElementById("withdrawalTable");
+    const withdrawals =
+        getData("withdrawals");
 
-    table.innerHTML = "";
+    const body =
+        document.getElementById("withdrawalBody");
 
 
     if(withdrawals.length === 0){
 
-        table.innerHTML =
-        '<tr><td colspan="6" class="empty">No withdrawal requests found</td></tr>';
+        body.innerHTML =
+            '<tr><td colspan="6" class="empty">No withdrawals found.</td></tr>';
 
         return;
+
     }
 
 
-    withdrawals.forEach(function(item){
+    body.innerHTML =
+        withdrawals.map(function(item){
 
-        table.innerHTML += `
+            const status =
+                item.status || "Pending";
 
-        <tr>
+            let statusClass =
+                "pending";
 
-            <td>
-                ${dateFormat(
-                    item.date ||
-                    item.createdAt
-                )}
-            </td>
+            if(
+                status.toLowerCase() ===
+                "approved"
+            ){
 
-            <td>
-                ${item.memberName ||
-                  item.name ||
-                  item.email ||
-                  "-"}
-            </td>
+                statusClass = "approved";
 
-            <td>
-                ${money(item.amount)}
-            </td>
+            }
 
-            <td>
-                ${item.method || "-"}
-            </td>
+            if(
+                status.toLowerCase() ===
+                "rejected"
+            ){
 
-            <td>
-                ${item.details ||
-                  item.account ||
-                  item.upi ||
-                  "-"}
-            </td>
+                statusClass = "rejected";
 
-            <td>
-                <span class="badge ${String(item.status || "Pending").toLowerCase()}">
-                    ${item.status || "Pending"}
-                </span>
-            </td>
+            }
 
-        </tr>
 
-        `;
+            return `
+                <tr>
 
-    });
+                    <td>
+                        ${item.reference ||
+                         item.ref ||
+                         item.id ||
+                         "-"}
+                    </td>
+
+                    <td>
+                        ${item.memberId ||
+                         item.email ||
+                         item.name ||
+                         "-"}
+                    </td>
+
+                    <td>
+                        ${money(item.amount)}
+                    </td>
+
+                    <td>
+                        ${item.method || "-"}
+                    </td>
+
+                    <td>
+                        ${item.date ||
+                         item.createdAt ||
+                         "-"}
+                    </td>
+
+                    <td>
+                        <span class="badge ${statusClass}">
+                            ${status}
+                        </span>
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
 
 }
 
 
-/* =========================
+/* =====================================================
    REFERRALS
-========================= */
+===================================================== */
 
-function loadReferrals(referrals){
+function renderReferrals(){
 
-    let table =
-        document.getElementById("referralTable");
+    const referrals =
+        getData("referrals");
 
-    table.innerHTML = "";
+    const body =
+        document.getElementById("referralBody");
 
 
     if(referrals.length === 0){
 
-        table.innerHTML =
-        '<tr><td colspan="5" class="empty">No referral records found</td></tr>';
+        body.innerHTML =
+            '<tr><td colspan="6" class="empty">No referrals found.</td></tr>';
 
         return;
+
     }
 
 
-    referrals.forEach(function(item){
+    body.innerHTML =
+        referrals.map(function(ref){
 
-        let investment =
-            Number(item.investment || 0);
+            const investment =
+                Number(ref.investment || 0);
+
+            const reward =
+                Number(
+                    ref.reward ||
+                    investment * 0.02
+                );
 
 
-        let reward =
-            investment * 0.02;
+            return `
+                <tr>
 
+                    <td>
+                        ${ref.referralId ||
+                         ref.myReferralId ||
+                         ref.id ||
+                         "-"}
+                    </td>
 
-        table.innerHTML += `
+                    <td>
+                        ${ref.memberId ||
+                         ref.email ||
+                         ref.name ||
+                         "-"}
+                    </td>
 
-        <tr>
+                    <td>
+                        ${ref.referredBy || "-"}
+                    </td>
 
-            <td>
-                ${item.referralId ||
-                  item.referrerId ||
-                  "-"}
-            </td>
+                    <td>
+                        ${money(investment)}
+                    </td>
 
-            <td>
-                ${item.referredName ||
-                  item.name ||
-                  item.email ||
-                  "-"}
-            </td>
+                    <td>
+                        ${money(reward)}
+                    </td>
 
-            <td>
-                ${money(investment)}
-            </td>
+                    <td>
+                        <span class="badge ${
+                            ref.status === "Approved"
+                            ? "approved"
+                            : "pending"
+                        }">
+                            ${ref.status || "Pending"}
+                        </span>
+                    </td>
 
-            <td>
-                ${money(reward)}
-            </td>
+                </tr>
+            `;
 
-            <td>
-
-                <span class="badge ${String(item.status || "Pending").toLowerCase()}">
-
-                    ${item.status || "Pending"}
-
-                </span>
-
-            </td>
-
-        </tr>
-
-        `;
-
-    });
+        }).join("");
 
 }
 
 
-/* =========================
-   TRANSACTIONS
-========================= */
-
-function loadTransactions(transactions){
-
-    let table =
-        document.getElementById("transactionTable");
-
-    table.innerHTML = "";
-
-
-    if(transactions.length === 0){
-
-        table.innerHTML =
-        '<tr><td colspan="5" class="empty">No transactions found</td></tr>';
-
-        return;
-    }
-
-
-    transactions.forEach(function(item){
-
-        table.innerHTML += `
-
-        <tr>
-
-            <td>
-                ${dateFormat(
-                    item.date ||
-                    item.createdAt
-                )}
-            </td>
-
-            <td>
-                ${item.type || "-"}
-            </td>
-
-            <td>
-                ${money(item.amount)}
-            </td>
-
-            <td>
-                ${item.reference ||
-                  item.ref ||
-                  "-"}
-            </td>
-
-            <td>
-
-                <span class="badge ${String(item.status || "Pending").toLowerCase()}">
-
-                    ${item.status || "Pending"}
-
-                </span>
-
-            </td>
-
-        </tr>
-
-        `;
-
-    });
-
-}
-
-
-/* =========================
-   MEMBER SEARCH
-========================= */
-
-function searchMembers(){
-
-    let search =
-        document.getElementById("memberSearch")
-        .value
-        .toLowerCase();
-
-
-    let members = getData("members");
-
-
-    let filtered = members.filter(function(member){
-
-      
+/* =====================================================
+   TRANSAC
