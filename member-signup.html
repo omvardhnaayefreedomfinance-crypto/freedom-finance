@@ -1,197 +1,448 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Freedom Finance - Sign Up</title>
+<title>Freedom Finance - Create Account</title>
 
-  <link rel="stylesheet" href="style.css">
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:#080b12;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:480px;
+    background:#111827;
+    border:1px solid #293548;
+    border-radius:15px;
+    padding:28px;
+    box-shadow:0 10px 35px rgba(0,0,0,.4);
+}
+
+.logo{
+    text-align:center;
+    color:#f5b942;
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#9ca3af;
+    font-size:13px;
+    margin-bottom:25px;
+}
+
+label{
+    display:block;
+    margin:14px 0 7px;
+    font-size:13px;
+    color:#d1d5db;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border-radius:8px;
+    border:1px solid #374151;
+    background:#080b12;
+    color:#fff;
+    outline:none;
+}
+
+input:focus{
+    border-color:#f5b942;
+}
+
+button{
+    width:100%;
+    margin-top:22px;
+    padding:14px;
+    border:0;
+    border-radius:8px;
+    background:#f5b942;
+    color:#000;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.message{
+    text-align:center;
+    margin-top:15px;
+    font-size:13px;
+    min-height:18px;
+}
+
+.login{
+    text-align:center;
+    margin-top:20px;
+    color:#9ca3af;
+    font-size:13px;
+}
+
+.login a{
+    color:#f5b942;
+    text-decoration:none;
+}
+
+.note{
+    margin-top:18px;
+    padding:12px;
+    border-radius:8px;
+    background:#172033;
+    color:#9ca3af;
+    font-size:11px;
+    line-height:1.5;
+    text-align:center;
+}
+</style>
 </head>
 
 <body>
 
-  <section class="community">
+<div class="container">
 
-    <p class="section-number">COMMUNITY / SIGN UP</p>
+    <div class="logo">⚡ FREEDOM FINANCE</div>
 
-    <h2>
-      Create Your <span>Account</span>
-    </h2>
+    <div class="subtitle">
+        Create your community member account
+    </div>
 
-    <p class="community-text">
-      Join the Freedom Finance community and create your personal member account.
-    </p>
+    <form id="signupForm">
 
-    <div class="signup-card">
-
-      <form id="signupForm">
-
-        <div class="form-group">
-          <label for="fullName">Full Name</label>
-
-          <input
+        <label for="name">Full Name</label>
+        <input
             type="text"
-            id="fullName"
-            name="fullName"
+            id="name"
             placeholder="Enter your full name"
             required
-          >
-        </div>
+        >
 
-        <div class="form-group">
-          <label for="email">Email Address</label>
-
-          <input
+        <label for="email">Email Address</label>
+        <input
             type="email"
             id="email"
-            name="email"
             placeholder="Enter your email"
             required
-          >
-        </div>
+        >
 
-        <div class="form-group">
-          <label for="mobile">Mobile Number</label>
-
-          <input
+        <label for="mobile">Mobile Number</label>
+        <input
             type="tel"
             id="mobile"
-            name="mobile"
-            placeholder="Enter your mobile number"
+            placeholder="Enter mobile number"
             required
-          >
-        </div>
+        >
 
-        <div class="form-group">
-          <label for="password">Create Password</label>
-
-          <input
+        <label for="password">Password</label>
+        <input
             type="password"
             id="password"
-            name="password"
-            placeholder="Create a password"
-            minlength="6"
+            placeholder="Minimum 6 characters"
             required
-          >
-        </div>
+        >
 
-        <div class="form-group">
-          <label for="confirmPassword">Confirm Password</label>
-
-          <input
+        <label for="confirmPassword">Confirm Password</label>
+        <input
             type="password"
             id="confirmPassword"
-            name="confirmPassword"
             placeholder="Confirm your password"
-            minlength="6"
             required
-          >
-        </div>
+        >
 
-        <div class="form-check">
+        <label for="referralId">Referral ID (Optional)</label>
+        <input
+            type="text"
+            id="referralId"
+            placeholder="Enter referral ID"
+        >
 
-          <input
-            type="checkbox"
-            id="terms"
-            required
-          >
-
-          <label for="terms">
-            I agree to the Freedom Finance terms and community rules.
-          </label>
-
-        </div>
-
-        <button type="submit" class="signup-btn">
-          CREATE ACCOUNT
+        <button type="submit">
+            CREATE ACCOUNT
         </button>
 
-      </form>
+    </form>
 
-      <p id="signupMessage" class="signup-message"></p>
+    <div id="message" class="message"></div>
 
-      <p class="login-text">
+    <div class="login">
         Already have an account?
-        <a href="member-login.html">Login</a>
-      </p>
-
+        <a href="member-login.html">Member Login</a>
     </div>
 
-    <div class="back-home">
-      <a href="index.html">← Back to Freedom Finance</a>
+    <div class="note">
+        Freedom Finance community demo portal.
+        Account data is stored locally in this frontend demo.
     </div>
 
-  </section>
+</div>
 
-  <script>
 
-document
-  .getElementById("signupForm")
-  .addEventListener("submit", function(event) {
+<script>
 
-    event.preventDefault();
+document.getElementById("signupForm").addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const message = document.getElementById("message");
 
     const name =
-      document.getElementById("fullName").value.trim();
+        document.getElementById("name").value.trim();
 
     const email =
-      document.getElementById("email").value.trim();
+        document.getElementById("email").value.trim().toLowerCase();
+
+    const mobile =
+        document.getElementById("mobile").value.trim();
 
     const password =
-      document.getElementById("password").value;
+        document.getElementById("password").value;
 
     const confirmPassword =
-      document.getElementById("confirmPassword").value;
+        document.getElementById("confirmPassword").value;
 
-    const message =
-      document.getElementById("signupMessage");
+    const referralId =
+        document.getElementById("referralId").value.trim();
 
-    if (password !== confirmPassword) {
 
-      message.textContent =
-        "Passwords do not match.";
+    /* PASSWORD CHECK */
 
-      return;
+    if(password.length < 6){
+
+        message.style.color = "#f87171";
+        message.textContent =
+            "Password must be at least 6 characters.";
+
+        return;
     }
 
-    /* SAVE CUSTOMER ACCOUNT */
 
-    const user = {
-      name: name,
-      email: email,
-      password: password
+    if(password !== confirmPassword){
+
+        message.style.color = "#f87171";
+        message.textContent =
+            "Passwords do not match.";
+
+        return;
+    }
+
+
+    /* GET EXISTING MEMBERS */
+
+    let members = [];
+
+    try{
+
+        members =
+            JSON.parse(localStorage.getItem("members")) || [];
+
+    }catch(error){
+
+        members = [];
+
+    }
+
+
+    /* DUPLICATE EMAIL */
+
+    const alreadyExists = members.some(function(member){
+
+        return String(member.email || "").toLowerCase() === email;
+
+    });
+
+
+    if(alreadyExists){
+
+        message.style.color = "#f87171";
+        message.textContent =
+            "An account with this email already exists.";
+
+        return;
+    }
+
+
+    /* MEMBER ID */
+
+    const memberId =
+        "FF" + Date.now().toString().slice(-8);
+
+
+    /* REFERRAL ID */
+
+    const myReferralId =
+        "FFREF" +
+        Math.random()
+        .toString(36)
+        .substring(2,8)
+        .toUpperCase();
+
+
+    /* DATE */
+
+    const now =
+        new Date().toISOString();
+
+
+    /* NEW MEMBER */
+
+    const newMember = {
+
+        id: memberId,
+
+        memberId: memberId,
+
+        name: name,
+
+        email: email,
+
+        mobile: mobile,
+
+        password: password,
+
+        referralId: referralId,
+
+        referredBy: referralId,
+
+        myReferralId: myReferralId,
+
+        status: "Active",
+
+        investment: 0,
+
+        totalInvestment: 0,
+
+        profit: 0,
+
+        availableBalance: 0,
+
+        totalWithdrawal: 0,
+
+        createdAt: now,
+
+        joinDate: now
+
     };
 
+
+    /* SAVE MEMBER */
+
+    members.push(newMember);
+
     localStorage.setItem(
-      "ffdemo",
-      JSON.stringify(user)
+        "members",
+        JSON.stringify(members)
     );
 
-    /* EMPTY TRANSACTION HISTORY FOR NEW ACCOUNT */
 
-    if (!localStorage.getItem("ffTransactions")) {
-      localStorage.setItem(
-        "ffTransactions",
-        "[]"
-      );
+    /* CURRENT MEMBER */
+
+    localStorage.setItem(
+        "currentMember",
+        JSON.stringify(newMember)
+    );
+
+    localStorage.setItem(
+        "memberEmail",
+        email
+    );
+
+    localStorage.setItem(
+        "memberLoggedIn",
+        "true"
+    );
+
+
+    /* REFERRAL RECORD */
+
+    if(referralId){
+
+        let referrals = [];
+
+        try{
+
+            referrals =
+                JSON.parse(
+                    localStorage.getItem("referrals")
+                ) || [];
+
+        }catch(error){
+
+            referrals = [];
+
+        }
+
+
+        referrals.push({
+
+            referralId: referralId,
+
+            referredMemberId: memberId,
+
+            referredName: name,
+
+            referredEmail: email,
+
+            investment: 0,
+
+            reward: 0,
+
+            status: "Pending",
+
+            createdAt: now
+
+        });
+
+
+        localStorage.setItem(
+            "referrals",
+            JSON.stringify(referrals)
+        );
+
     }
 
+
+    /* SUCCESS */
+
+    message.style.color = "#6ee7b7";
+
     message.textContent =
-      "Account created successfully. You can login now.";
+        "Account created successfully!";
 
-    /* GO TO LOGIN PAGE */
 
-    setTimeout(function() {
+    /* REDIRECT */
 
-      window.location.href =
-        "member-login.html";
+    setTimeout(function(){
 
-    }, 1000);
+        window.location.href =
+            "member-dashboard.html";
 
-  });
+    },1000);
 
-  </script>
+});
+
+</script>
 
 </body>
-</html>
+          </html>
