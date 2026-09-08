@@ -1423,4 +1423,156 @@ footer strong {
   .investment-card h3 {
     font-size: 27px;
   }
+}/* =========================================
+   GREEN OM GRID / MEMBER INFORMATION
+========================================= */
+
+.green-om-section {
+  padding: 70px 20px;
+  background: #071b12;
+  text-align: center;
+  overflow: hidden;
 }
+
+.green-om-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.green-om-section .section-number {
+  color: #39ff88;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.green-om-section h2 {
+  margin: 12px 0 15px;
+  font-size: 36px;
+  color: #ffffff;
+}
+
+.green-om-section h2 span {
+  color: #39ff88;
+}
+
+.green-om-text {
+  max-width: 650px;
+  margin: 0 auto 35px;
+  color: #c8d8cf;
+  line-height: 1.7;
+}
+
+/* 3 x 3 GRID */
+
+.om-grid {
+  width: 330px;
+  max-width: 90vw;
+  aspect-ratio: 1 / 1;
+  margin: 35px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 3px solid #39ff88;
+  background: #0b2b1b;
+  box-shadow: 0 0 30px rgba(57, 255, 136, 0.18);
+}
+
+.om-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #39ff88;
+  color: #39ff88;
+  font-size: 32px;
+  font-weight: 800;
+  min-width: 0;
+}
+
+.om-center {
+  background: #39ff88;
+  color: #071b12;
+}
+
+.om-center span {
+  font-size: 48px;
+  font-weight: 900;
+}
+
+/* CONTACT BOX */
+
+.member-contact {
+  margin: 40px auto 0;
+  padding: 30px 20px;
+  max-width: 650px;
+  border: 1px solid rgba(57, 255, 136, 0.45);
+  border-radius: 16px;
+  background: rgba(57, 255, 136, 0.05);
+}
+
+.member-contact h3 {
+  margin-bottom: 10px;
+  color: #39ff88;
+  font-size: 24px;
+}
+
+.member-contact p {
+  color: #c8d8cf;
+  margin-bottom: 22px;
+}
+
+.contact-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.contact-btn {
+  display: inline-block;
+  padding: 13px 22px;
+  border-radius: 8px;
+  background: #39ff88;
+  color: #071b12;
+  text-decoration: none;
+  font-weight: 800;
+  transition: 0.3s ease;
+}
+
+.contact-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(57, 255, 136, 0.25);
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .green-om-section {
+    padding: 50px 15px;
+  }
+
+  .green-om-section h2 {
+    font-size: 28px;
+  }
+
+  .om-grid {
+    width: 280px;
+  }
+
+  .om-cell {
+    font-size: 26px;
+  }
+
+  .om-center span {
+    font-size: 40px;
+  }
+
+  .contact-buttons {
+    flex-direction: column;
+  }
+
+  .contact-btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  }
