@@ -317,16 +317,28 @@
           "FF" + memberNumber;
 
 
-        /* =========================
-           REFERRAL ID
-        ========================= */
+      /* =========================
+   REFERRAL SYSTEM
+========================= */
 
-        const myReferralId =
-          "REF" +
-          Math.random()
-            .toString(36)
-            .substring(2, 8)
-            .toUpperCase();
+// New member ka apna referral ID
+const myReferralId =
+  "REF" +
+  Math.random()
+    .toString(36)
+    .substring(2, 8)
+    .toUpperCase();
+
+// URL se referral/reference ID lena
+const urlParams =
+  new URLSearchParams(window.location.search);
+
+const incomingReferral =
+  (urlParams.get("ref") || "").trim().toUpperCase();
+
+// Agar referral link se nahi aaya to Direct
+const referredBy =
+  incomingReferral || "Direct";
 
 
         /* =========================
@@ -408,19 +420,23 @@
 
         const oldUser = {
 
-          name: name,
+  name: name,
 
-          email: email,
+  email: email,
 
-          mobile: mobile,
+  mobile: mobile,
 
-          password: password,
+  password: password,
 
-          memberId: memberId,
+  memberId: memberId,
 
-          myReferralId: myReferralId
+  myReferralId: myReferralId,
 
-        };
+  referralId: referredBy,
+
+  referredBy: referredBy
+
+};
 
         localStorage.setItem(
           "ffdemo",
