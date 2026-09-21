@@ -1428,7 +1428,7 @@ footer strong {
    MEMBER SUPPORT & INFORMATION
 ========================================= */
 
-.member-info-section {
+member-info-section {
   padding: 80px 20px;
   background: #071b12;
   text-align: center;
@@ -1648,5 +1648,5 @@ footer strong {
   }
 
   }
-
+  
   
