@@ -639,13 +639,66 @@
           WhatsApp · +91 8168173066
         </a>
 
-  </div>
-        
-    </div>
+  <div class="member-help-grid">
+
+  <!-- SUPPORT -->
+  <button class="member-help-card" data-help="support">
+    <span class="help-icon">☎</span>
+    <h3>Support</h3>
+    <p>General member assistance</p>
+    <span class="help-more">View Details →</span>
+  </button>
+
+  <!-- INVESTMENT INFO -->
+  <button class="member-help-card" data-help="investment">
+    <span class="help-icon">₹</span>
+    <h3>Investment Info</h3>
+    <p>Investment related information</p>
+    <span class="help-more">View Details →</span>
+  </button>
+
+  <!-- WITHDRAWAL -->
+  <button class="member-help-card" data-help="withdrawal">
+    <span class="help-icon">↗</span>
+    <h3>Withdrawals</h3>
+    <p>Withdrawal related assistance</p>
+    <span class="help-more">View Details →</span>
+  </button>
+
+  <!-- TECHNICAL -->
+  <button class="member-help-card" data-help="technical">
+    <span class="help-icon">⚙</span>
+    <h3>Technical Help</h3>
+    <p>Website and technical support</p>
+    <span class="help-more">View Details →</span>
+  </button>
 
   </div>
 
-    </section>
+  </section>
+        <!-- =========================================
+     MEMBER HELP POPUP
+========================================= -->
+
+<dialog id="memberHelpDialog" class="member-help-dialog">
+
+  <div class="member-help-popup">
+
+    <button type="button"
+            id="closeMemberHelp"
+            class="member-help-close">
+      ×
+    </button>
+
+    <div id="memberHelpIcon" class="popup-icon">☎</div>
+
+    <h2 id="memberHelpTitle">Support</h2>
+
+    <div id="memberHelpContent"></div>
+
+  </div>
+
+  </dialog>
   <footer>
 
   <strong>FREEDOM FINANCE</strong>
