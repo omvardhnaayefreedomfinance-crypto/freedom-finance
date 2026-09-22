@@ -1647,6 +1647,275 @@ member-info-section {
     height: 260px;
   }
 
+  }/* =========================================
+   MEMBER HELP - 4 OPTION CARDS
+========================================= */
+
+.member-help-grid {
+  width: 100%;
+  max-width: 1100px;
+  margin: 35px auto 0;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.member-help-card {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 100%;
+  min-height: 170px;
+
+  padding: 22px 18px;
+
+  text-align: left;
+
+  background: #071b12;
+  border: 1px solid rgba(57, 255, 136, 0.28);
+  border-radius: 12px;
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  font-family: inherit;
+}
+
+.member-help-card:hover {
+  transform: translateY(-5px);
+
+  border-color: #39ff88;
+
+  box-shadow:
+    0 8px 25px rgba(57,255,136,.15);
+
+  background: #092519;
+}
+
+.help-icon {
+  display: block;
+
+  color: #39ff88;
+
+  font-size: 25px;
+
+  margin-bottom: 15px;
+}
+
+.member-help-card h3 {
+  margin: 0 0 8px;
+
+  color: #ffffff;
+
+  font-size: 17px;
+}
+
+.member-help-card p {
+  margin: 0 0 15px;
+
+  color: #aebdb5;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+.help-more {
+  color: #39ff88;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   MEMBER HELP POPUP
+========================================= */
+
+.member-help-dialog {
+  width: min(92%, 620px);
+
+  padding: 0;
+
+  border: 1px solid #39ff88;
+
+  border-radius: 18px;
+
+  background: #06170f;
+
+  color: #ffffff;
+
+  box-shadow:
+    0 0 35px rgba(57,255,136,.20);
+}
+
+.member-help-dialog::backdrop {
+  background: rgba(0,0,0,.78);
+}
+
+.member-help-popup {
+  position: relative;
+
+  padding: 35px 28px 30px;
+}
+
+.member-help-close {
+  position: absolute;
+
+  top: 12px;
+  right: 15px;
+
+  width: 36px;
+  height: 36px;
+
+  border: 1px solid rgba(57,255,136,.35);
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #39ff88;
+
+  font-size: 25px;
+
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.member-help-close:hover {
+  background: #39ff88;
+  color: #06170f;
+}
+
+.popup-icon {
+  color: #39ff88;
+
+  font-size: 38px;
+
+  margin-bottom: 8px;
+}
+
+.member-help-popup h2 {
+  margin: 0 0 20px;
+
+  color: #39ff88;
+
+  font-size: 28px;
+}
+
+.help-content-box {
+  padding: 18px;
+
+  margin-bottom: 15px;
+
+  border: 1px solid rgba(57,255,136,.20);
+
+  border-radius: 10px;
+
+  background: rgba(57,255,136,.04);
+}
+
+.help-content-box h4 {
+  margin: 0 0 8px;
+
+  color: #ffffff;
+
+  font-size: 16px;
+}
+
+.help-content-box p {
+  margin: 0;
+
+  color: #b9c9c0;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+.help-list {
+  margin: 10px 0 0;
+
+  padding-left: 20px;
+
+  color: #c7d5cd;
+
+  line-height: 1.8;
+
+  font-size: 14px;
+}
+
+.help-whatsapp {
+  display: inline-block;
+
+  margin-top: 8px;
+
+  padding: 12px 18px;
+
+  border-radius: 7px;
+
+  background: #39ff88;
+
+  color: #06170f;
+
+  text-decoration: none;
+
+  font-weight: 800;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 800px) {
+
+  .member-help-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 500px) {
+
+  .member-help-grid {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+  }
+
+  .member-help-card {
+    min-height: 155px;
+
+    padding: 17px 14px;
+  }
+
+  .member-help-card h3 {
+    font-size: 15px;
+  }
+
+  .member-help-card p {
+    font-size: 12px;
+  }
+
+  .help-more {
+    font-size: 11px;
+  }
+
+  .member-help-popup {
+    padding: 30px 18px 25px;
+  }
+
+  .member-help-popup h2 {
+    font-size: 24px;
+  }
+
   }
   
   
