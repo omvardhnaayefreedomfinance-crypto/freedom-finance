@@ -261,7 +261,7 @@ button,a{cursor:pointer}
     </a>
 
     <a class="menu-card" href="referral.html">
-      <strong>Referral</strong>
+      <strong id="status">Active</strong>
       <span>Open referral information.</span>
     </a>
 
@@ -287,11 +287,18 @@ button,a{cursor:pointer}
     }
   }
 
-  const member = readMember();
+  const memberStatus = document.getElementById("status");
+
+if (memberStatus) {
+  memberStatus.textContent =
+    currentMember && currentMember.status
+      ? currentMember.status
+      : "Active";
+}
 
   /*
-    This is a local demo dashboard, not secure authentication.
-    No balance is increased from a submitted payment reference.
+    This is your real dashboard, secure authentication.
+    balance is increased from a submitted payment after 1 year
   */
 
   const name = member.name || member.fullName || "Member";
