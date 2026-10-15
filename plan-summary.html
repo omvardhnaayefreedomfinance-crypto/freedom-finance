@@ -1,192 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freedom Finance - Plan Summary</title>
 
-  <title>Freedom Finance - Plan Summary</title>
+<style>
+* {
+  box-sizing: border-box;
+}
 
-  <link rel="stylesheet" href="style.css">
+body {
+  margin: 0;
+  padding: 20px;
+  background: #050505;
+  color: #fff8e7;
+  font-family: Arial, sans-serif;
+}
 
-  <style>
-    .summary-page {
-      max-width: 700px;
-      margin: auto;
-      padding: 40px 20px 70px;
-    }
+.container {
+  max-width: 600px;
+  margin: 35px auto;
+}
 
-    .summary-heading {
-      text-align: center;
-      margin-bottom: 35px;
-    }
+.card {
+  padding: 25px;
+  border: 1px solid #735719;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #17130b, #090909);
+}
 
-    .summary-heading h1 {
-      font-size: 40px;
-      margin: 10px 0;
-    }
+h1 {
+  color: #ffd96a;
+  text-align: center;
+}
 
-    .summary-heading span {
-      color: gold;
-    }
+.subtitle {
+  text-align: center;
+  color: #aaa;
+  line-height: 1.6;
+}
 
-    .summary-card {
-      padding: 28px;
-      border: 1px solid rgba(255,215,0,.4);
-      border-radius: 18px;
-      background: rgba(0,0,0,.45);
-    }
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid #443718;
+}
 
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(255,255,255,.1);
-    }
+.row span:first-child {
+  color: #aaa;
+}
 
-    .summary-row span:first-child {
-      opacity: .75;
-    }
+.row strong {
+  text-align: right;
+  overflow-wrap: anywhere;
+}
 
-    .summary-row span:last-child {
-      font-weight: 800;
-      text-align: right;
-    }
+.total {
+  color: #ffd96a;
+  font-size: 20px;
+}
 
-    .profit {
-      color: gold;
-      font-size: 20px;
-    }
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 18px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d99b16, #ffd96a);
+  color: #171107;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .total {
-      color: gold;
-      font-size: 24px;
-    }
+.back {
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+  color: #ffd96a;
+  text-decoration: none;
+}
 
-    .summary-note {
-      margin-top: 25px;
-      padding: 16px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,215,0,.25);
-      text-align: center;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    .proceed-btn {
-      width: 100%;
-      margin-top: 25px;
-      padding: 15px;
-      border: none;
-      border-radius: 9px;
-      background: linear-gradient(90deg,#c99600,#ffd700);
-      color: #000;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .back-btn {
-      display: block;
-      text-align: center;
-      margin-top: 25px;
-      color: gold;
-      text-decoration: none;
-    }
-
-    @media(max-width:600px) {
-      .summary-heading h1 {
-        font-size: 32px;
-      }
-    }
-  </style>
+.message {
+  color: #ffd96a;
+  text-align: center;
+  line-height: 1.5;
+}
+</style>
 </head>
 
 <body>
 
-<div class="summary-page">
+<div class="container">
+  <div class="card">
+    <h1>PLAN SUMMARY</h1>
 
-  <div class="summary-heading">
-
-    <p class="section-number">
-      MEMBER AREA / PLAN SUMMARY
+    <p class="subtitle">
+      Review your selected plan before proceeding.
     </p>
 
-    <h1>
-      Plan <span>Summary</span>
-    </h1>
-
-    <p class="community-text">
-      Review your selected plan before continuing.
-    </p>
-
-  </div>
-
-
-  <div class="summary-card">
-
-    <div class="summary-row">
+    <div class="row">
       <span>Selected Plan</span>
-      <span id="planName">Plan C</span>
+      <strong id="planName">—</strong>
     </div>
 
-    <div class="summary-row">
+    <div class="row">
       <span>Investment Amount</span>
-      <span id="planAmount">₹1,00,000</span>
+      <strong id="planAmount">—</strong>
     </div>
 
-    <div class="summary-row">
-      <span>Duration</span>
-      <span>1 Year</span>
+    <div class="row">
+      <span>Displayed Profit Estimate</span>
+      <strong id="planProfit">—</strong>
     </div>
 
-    <div class="summary-row">
-      <span>Profit</span>
-      <span class="profit" id="planProfit">₹30,000</span>
+    <div class="row">
+      <span>Displayed Total Estimate</span>
+      <strong class="total" id="planTotal">—</strong>
     </div>
 
-    <div class="summary-row">
-      <span>Total</span>
-      <span class="total" id="planTotal">₹1,30,000</span>
-    </div>
+    <p class="subtitle">
+      Estimates are not guaranteed returns. Review the applicable
+      terms and risks before making any payment.
+    </p>
 
+    <p class="message" id="message"></p>
 
-    <div class="summary-note">
-      Please review the selected plan and applicable
-      project terms before continuing.
-    </div>
+    <button id="continueBtn" type="button">
+      CONTINUE TO PAYMENT
+    </button>
 
-
-    
-
+    <a class="back" href="plans.html">← Back to Plans</a>
   </div>
-
-
-  <a
-  href="payment.html"
-  class="proceed-btn"
-  style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">
-  PROCEED
-  </a>
-
-    ← Back to Plans
-
-  </>
-
 </div>
 
-
 <script>
+const plan = localStorage.getItem("selectedPlan");
+const amount = localStorage.getItem("selectedAmount");
+const profit = localStorage.getItem("selectedProfit");
+const total = localStorage.getItem("selectedTotal");
 
-function proceed() {
+const message = document.getElementById("message");
+const continueBtn = document.getElementById("continueBtn");
 
-  window.location.href = "payment.html";
-
-  }
-  );
-
+if (plan && amount && profit && total) {
+  document.getElementById("planName").textContent = plan;
+  document.getElementById("planAmount").textContent = amount;
+  document.getElementById("planProfit").textContent = profit;
+  document.getElementById("planTotal").textContent = total;
+} else {
+  message.textContent =
+    "Please go back to Plans and select a plan first.";
+  continueBtn.disabled = true;
+  continueBtn.style.opacity = "0.5";
 }
 
+continueBtn.addEventListener("click", function () {
+  if (!plan || !amount || !profit || !total) {
+    return;
+  }
+
+  window.location.href = "payment.html";
+});
 </script>
 
 </body>
-</html>
+  </html>
