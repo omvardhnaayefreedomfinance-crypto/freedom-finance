@@ -3,168 +3,190 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Freedom Finance - Dashboard</title>
+
+<title>Freedom Finance - Member Dashboard</title>
 
 <style>
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  background:#050505;
-  color:#fff8e7;
-  font-family:Arial,sans-serif;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
-header{
-  padding:17px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  background:#080808;
-  border-bottom:1px solid #604b18;
+body {
+    background: #050505;
+    color: #fff8e7;
 }
 
-.logo{color:#ffd96a;font-weight:900;font-size:18px}
-
-button,a{cursor:pointer}
-
-.logout{
-  padding:9px 13px;
-  background:transparent;
-  border:1px solid #ffd96a;
-  border-radius:8px;
-  color:#ffd96a;
+header {
+    background: #101010;
+    border-bottom: 1px solid #c9a227;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.container{
-  max-width:1000px;
-  margin:auto;
-  padding:25px 15px 45px;
+.logo {
+    color: #e6c45a;
+    font-size: 21px;
+    font-weight: bold;
 }
 
-.welcome h1{
-  color:#ffd96a;
-  font-size:29px;
-  margin-bottom:8px;
+.logout {
+    background: #c9a227;
+    color: #000;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.muted{color:#aaa;line-height:1.6}
-
-.profile,.balance-card,.menu-card{
-  background:linear-gradient(145deg,#17130b,#090909);
-  border:1px solid #604b18;
-  border-radius:15px;
-  padding:20px;
+.container {
+    width: 94%;
+    max-width: 1100px;
+    margin: 25px auto;
 }
 
-.profile{margin:22px 0}
-
-.profile h2{
-  margin-top:0;
-  color:#ffd96a;
+.welcome {
+    background: #111;
+    border: 1px solid #3b3216;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 22px;
 }
 
-.profile-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
+h1 {
+    color: #e6c45a;
+    font-size: 25px;
+    margin-bottom: 10px;
 }
 
-.profile-item span{
-  display:block;
-  color:#999;
-  font-size:12px;
-  margin-bottom:5px;
+h2 {
+    color: #e6c45a;
+    font-size: 21px;
+    margin-bottom: 18px;
 }
 
-.profile-item strong{
-  overflow-wrap:anywhere;
+p {
+    line-height: 1.7;
+    overflow-wrap: anywhere;
 }
 
-.section-title{
-  color:#ffd96a;
-  margin:28px 0 15px;
+.section {
+    background: #101010;
+    border: 1px solid #3b3216;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 22px;
 }
 
-.balance-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:15px;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
 }
 
-.balance-card span{
-  display:block;
-  color:#aaa;
-  font-size:13px;
+.card {
+    background: #191919;
+    border: 1px solid #39301a;
+    padding: 17px;
+    border-radius: 9px;
+    min-width: 0;
 }
 
-.balance-card strong{
-  display:block;
-  margin-top:12px;
-  font-size:25px;
-  color:#ffd96a;
-  overflow-wrap:anywhere;
+.label {
+    color: #aaa;
+    font-size: 13px;
+    margin-bottom: 9px;
 }
 
-.menu-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
+.value {
+    color: #f3d36a;
+    font-size: 18px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
 }
 
-.menu-card{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  min-height:75px;
-  padding:18px 15px;
-  background:linear-gradient(135deg,#d99b16,#ffd96a);
-  color:#171107;
-  text-decoration:none;
-  text-align:center;
-  border:2px solid #ffd96a;
-  border-radius:12px;
-  font-weight:900;
-  box-shadow:0 4px 12px rgba(255,217,106,.18);
-  transition:transform .15s,box-shadow .15s;
+.status {
+    display: inline-block;
+    padding: 7px 10px;
+    border-radius: 5px;
+    background: #4a3710;
+    color: #ffdc72;
+    font-size: 13px;
+    font-weight: bold;
 }
 
-.menu-card:active{
-  transform:scale(.97);
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 12px;
 }
 
-.menu-card strong{
-  display:block;
-  color:#171107;
-  font-size:16px;
-  font-weight:900;
-  margin-bottom:7px;
+.nav-button {
+    display: block;
+    text-align: center;
+    padding: 14px 10px;
+    background: #c9a227;
+    color: #000;
+    text-decoration: none;
+    border-radius: 7px;
+    font-weight: bold;
 }
 
-.menu-card span{
-  color:#30240b;
-  font-size:13px;
-  font-weight:700;
-  line-height:1.5;
-}
+.nav-button:hover,
+.logout:hover {
+    background: #f0d16b;
 }
 
-.notice{
-  margin-top:20px;
-  padding:15px;
-  border:1px solid #604b18;
-  border-radius:10px;
-  color:#aaa;
-  font-size:12px;
-  line-height:1.7;
+.notice {
+    color: #ccc;
+    font-size: 14px;
+    margin-top: 14px;
 }
 
-@media(max-width:520px){
-  .balance-grid,.menu-grid{grid-template-columns:1fr}
-  .profile-grid{grid-template-columns:1fr}
-  .welcome h1{font-size:25px}
+.empty {
+    color: #bbb;
+    background: #191919;
+    padding: 17px;
+    border-radius: 8px;
+    line-height: 1.7;
+}
+
+footer {
+    text-align: center;
+    padding: 25px 12px;
+    color: #888;
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 14px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .container {
+        width: 92%;
+        margin-top: 18px;
+    }
+
+    .section,
+    .welcome {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
 }
 </style>
 </head>
@@ -172,224 +194,344 @@ button,a{cursor:pointer}
 <body>
 
 <header>
-  <div class="logo">FREEDOM FINANCE</div>
-  <button class="logout" id="logoutBtn">LOGOUT</button>
+    <div class="logo">FREEDOM FINANCE</div>
+    <button class="logout" id="logoutButton" type="button">
+        Logout
+    </button>
 </header>
 
 <main class="container">
 
-  <section class="welcome">
-    <h1>Member Dashboard</h1>
-    <p class="muted">
-      Welcome, <strong id="memberName">Member</strong>.
-      Review your account information below.
-    </p>
-  </section>
+    <!-- MEMBER WELCOME -->
+    <section class="welcome">
+        <h1>Member Dashboard</h1>
+        <p>Welcome, <strong id="memberName">Member</strong></p>
+        <p>Your account and investment details are shown below.</p>
+    </section>
 
-  <section class="profile">
-    <h2>Member Profile</h2>
+    <!-- MEMBER PROFILE -->
+    <section class="section">
+        <h2>My Profile</h2>
 
-    <div class="profile-grid">
-      <div class="profile-item">
-        <span>Full Name</span>
-        <strong id="profileName">—</strong>
-      </div>
+        <div class="grid">
+            <div class="card">
+                <div class="label">Member Name</div>
+                <div class="value" id="profileName">—</div>
+            </div>
 
-      <div class="profile-item">
-        <span>Email</span>
-        <strong id="email">—</strong>
-      </div>
+            <div class="card">
+                <div class="label">Member ID</div>
+                <div class="value" id="memberId">—</div>
+            </div>
 
-      <div class="profile-item">
-        <span>Mobile</span>
-        <strong id="mobile">—</strong>
-      </div>
+            <div class="card">
+                <div class="label">Email</div>
+                <div class="value" id="memberEmail">—</div>
+            </div>
 
-      <div class="profile-item">
-        <span>Member ID</span>
-        <strong id="memberId">—</strong>
-      </div>
+            <div class="card">
+                <div class="label">Mobile Number</div>
+                <div class="value" id="memberMobile">—</div>
+            </div>
 
-      <div class="profile-item">
-        <span>Referral ID</span>
-        <strong id="referralId">—</strong>
-      </div>
+            <div class="card">
+                <div class="label">Referral ID</div>
+                <div class="value" id="referralId">—</div>
+            </div>
 
-      <div class="profile-item">
-        <span>Account Status</span>
-        <strong id="status">Active</strong>
-      </div>
-    </div>
-  </section>
+            <div class="card">
+                <div class="label">Account Status</div>
+                <div class="value" id="accountStatus">—</div>
+            </div>
+        </div>
+    </section>
 
-  <h2 class="section-title">Account Balances</h2>
+    <!-- ACCOUNT SUMMARY -->
+    <section class="section">
+        <h2>Account Summary</h2>
 
-  <section class="balance-grid">
+        <div class="grid">
+            <div class="card">
+                <div class="label">Total Investment</div>
+                <div class="value" id="totalInvestment">₹0</div>
+            </div>
 
-    <div class="balance-card">
-      <span>Available Balance</span>
-      <strong id="availableBalance">₹200000</strong>
-    </div>
+            <div class="card">
+                <div class="label">Expected Profit</div>
+                <div class="value" id="expectedProfit">₹0</div>
+            </div>
 
-    <div class="balance-card">
-      <span>Profit Balance</span>
-      <strong id="profitBalance">₹260000</strong>
-    </div>
+            <div class="card">
+                <div class="label">Expected Total Amount</div>
+                <div class="value" id="expectedTotal">₹0</div>
+            </div>
+        </div>
 
-    <div class="balance-card">
-      <span>Investment Balance</span>
-      <strong id="investmentBalance">₹200000</strong>
-    </div>
+        <p class="notice">
+            Amounts shown are based on saved investment records.
+            Expected profit is not a guaranteed return.
+        </p>
+    </section>
 
-    <div class="balance-card">
-      <span>Total Balance</span>
-      <strong id="totalBalance">₹260000</strong>
-    </div>
+    <!-- INVESTMENT DETAILS -->
+    <section class="section">
+        <h2>My Investment Details</h2>
 
-  </section>
+        <div id="investmentList">
+            <div class="empty">
+                No investment submission found for this account.
+                Select a plan and submit your payment reference first.
+            </div>
+        </div>
+    </section>
 
-  <h2 class="section-title">Member Services</h2>
+    <!-- QUICK LINKS -->
+    <section class="section">
+        <h2>Member Services</h2>
 
-  <section class="menu-grid">
+        <div class="button-grid">
+            <a class="nav-button" href="plans.html">Investment Plans</a>
 
-    <a class="menu-card" href="plans.html">
-      <strong>Investment Plans</strong>
-      <span>Review available plans.</span>
-    </a>
+            <a class="nav-button" href="plan-summary.html">Plan Summary</a>
 
-    <a class="menu-card" href="plan-summary.html">
-      <strong>Plan Summary</strong>
-      <span>Review your selected plan.</span>
-    </a>
+            <a class="nav-button" href="payment.html">Payment</a>
 
-    <a class="menu-card" href="payment.html">
-      <strong>Payment</strong>
-      <span>View payment instructions and submit a reference.</span>
-    </a>
+            <a class="nav-button" href="transactions.html">Transactions</a>
 
-    <a class="menu-card" href="transactions.html">
-      <strong>Transaction History</strong>
-      <span>View transaction submissions from this browser.</span>
-    </a>
+            <a class="nav-button" href="withdraw.html">Withdrawal</a>
 
-    <a class="menu-card" href="withdraw.html">
-      <strong>Withdrawal</strong>
-      <span>Open the withdrawal page.</span>
-    </a>
-
-    <a class="menu-card" href="referral.html">
-  <strong>Referral Program</strong>
-  <span>Open referral information.</span>
-</a>
-
-  </section>
-
-  <div class="notice">
-    This dashboard currently displays locally stored real information.
-    Balances are  confirmed financial records.  payment
-    submissions  increase investment or profit balances.
-    Secure member accounts and shared balances require a backend.
-  </div>
+            <a class="nav-button" href="referral.html">Referral</a>
+        </div>
+    </section>
 
 </main>
 
+<footer>
+    Freedom Finance | Member Dashboard
+</footer>
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+(function () {
+    "use strict";
 
-  // Member information
-  function readMember() {
-    try {
-      return JSON.parse(localStorage.getItem("currentMember") || "{}");
-    } catch (error) {
-      return {};
+    function readJSON(key, fallback) {
+        try {
+            const value = localStorage.getItem(key);
+            return value ? JSON.parse(value) : fallback;
+        } catch (error) {
+            return fallback;
+        }
     }
-  }
 
-  const member = readMember();
+    function text(value) {
+        return value === undefined || value === null || value === ""
+            ? "—"
+            : String(value);
+    }
 
-  // Member name and profile
-  const name =
-    member.name ||
-    member.fullName ||
-    member.fullname ||
-    member.username ||
-    "Member";
+    function money(value) {
+        const amount = Number(value);
+        if (!Number.isFinite(amount)) return "₹0";
 
-  document.getElementById("memberName").textContent = name;
-  document.getElementById("profileName").textContent = name;
+        return "₹" + amount.toLocaleString("en-IN", {
+            maximumFractionDigits: 2
+        });
+    }
 
-  document.getElementById("email").textContent =
-    member.email || localStorage.getItem("memberEmail") || "—";
+    function formatDate(value) {
+        if (!value) return "Pending";
 
-  document.getElementById("mobile").textContent =
-    member.mobile || member.phone || member.phoneNumber || "—";
+        const date = new Date(value);
 
-  document.getElementById("memberId").textContent =
-    member.memberId || member.id || "—";
+        if (Number.isNaN(date.getTime())) {
+            return text(value);
+        }
 
-  document.getElementById("referralId").textContent =
-    member.referralId || member.referralCode || "—";
+        return date.toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
+    }
 
-  document.getElementById("status").textContent =
-    member.status || "Registered";
+    function setText(id, value) {
+        document.getElementById(id).textContent = text(value);
+    }
 
-  // Balance calculations
-  function safeNumber(value) {
-    const number = Number(value);
-    return Number.isFinite(number) && number >= 0 ? number : 0;
-  }
+    // Read the logged-in member.
+    const member = readJSON("currentMember", null);
 
-  function rupees(value) {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 2
-    }).format(value);
-  }
+    if (!member) {
+        document.getElementById("memberName").textContent = "Member";
+        document.getElementById("investmentList").innerHTML =
+            '<div class="empty">Member profile was not found in this browser. ' +
+            'Please log in through the existing Member Login page.</div>';
+    }
 
-  const available = safeNumber(
-    localStorage.getItem("availableBalance") ??
-    member.availableBalance ??
-    0
-  );
+    const memberName = member
+        ? (member.name || member.fullName || member.fullname ||
+           member.username || "Member")
+        : "Member";
 
-  const profit = safeNumber(
-    member.profitBalance ?? member.profit ?? 0
-  );
+    const memberEmail = member
+        ? (member.email || localStorage.getItem("memberEmail") || "")
+        : (localStorage.getItem("memberEmail") || "");
 
-  const investment = safeNumber(
-    member.totalInvestment ??
-    member.investmentBalance ??
-    member.investment ??
-    0
-  );
+    const memberId = member
+        ? (member.memberId || member.id || "")
+        : "";
 
-  const total = available + profit + investment;
+    const mobile = member
+        ? (member.mobile || member.phone || member.phoneNumber || "")
+        : "";
 
-  document.getElementById("availableBalance").textContent =
-    rupees(available);
+    const referral = member
+        ? (member.referralId || member.referralCode || "")
+        : "";
 
-  document.getElementById("profitBalance").textContent =
-    rupees(profit);
+    const accountStatus = member
+        ? (member.status || "Active")
+        : "—";
 
-  document.getElementById("investmentBalance").textContent =
-    rupees(investment);
+    setText("memberName", memberName);
+    setText("profileName", memberName);
+    setText("memberId", memberId);
+    setText("memberEmail", memberEmail);
+    setText("memberMobile", mobile);
+    setText("referralId", referral);
+    setText("accountStatus", accountStatus);
 
-  document.getElementById("totalBalance").textContent =
-    rupees(total);
+    /*
+      Read payment submissions saved by payment.html.
+      Match using member ID or email where available.
+    */
+    const submissions = readJSON("paymentSubmissions", []);
 
-  // Logout
-  document.getElementById("logoutBtn").addEventListener("click", function () {
-    localStorage.removeItem("memberLoggedIn");
-    localStorage.removeItem("currentMember");
-    localStorage.removeItem("memberEmail");
+    const safeSubmissions = Array.isArray(submissions)
+        ? submissions
+        : [];
 
-    window.location.href = "member-login.html";
-  });
+    function belongsToMember(item) {
+        if (!member) return false;
 
-});
+        const savedMemberId = String(item.memberId || "").trim();
+        const savedEmail = String(item.memberEmail || "")
+            .trim().toLowerCase();
+
+        const currentId = String(memberId || "").trim();
+        const currentEmail = String(memberEmail || "")
+            .trim().toLowerCase();
+
+        if (savedMemberId && currentId) {
+            return savedMemberId === currentId;
+        }
+
+        if (savedEmail && currentEmail) {
+            return savedEmail === currentEmail;
+        }
+
+        // Do not show records that cannot be matched to this member.
+        return false;
+    }
+
+    const memberInvestments = safeSubmissions
+        .filter(belongsToMember)
+        .sort(function (a, b) {
+            return new Date(b.submittedAt || 0) -
+                   new Date(a.submittedAt || 0);
+        });
+
+    let totalInvestment = 0;
+    let expectedProfit = 0;
+    let expectedTotal = 0;
+
+    memberInvestments.forEach(function (item) {
+        const status = String(
+            item.status || item.paymentStatus || "Pending Verification"
+        ).toLowerCase();
+
+        // Only verified records are included in account totals.
+        if (status.includes("verified") && !status.includes("not verified")) {
+            totalInvestment += Number(item.amount) || 0;
+            expectedProfit += Number(item.profit) || 0;
+            expectedTotal += Number(item.total) ||
+                ((Number(item.amount) || 0) + (Number(item.profit) || 0));
+        }
+    });
+
+    setText("totalInvestment", money(totalInvestment));
+    setText("expectedProfit", money(expectedProfit));
+    setText("expectedTotal", money(expectedTotal));
+
+    const investmentList = document.getElementById("investmentList");
+
+    if (memberInvestments.length > 0) {
+        investmentList.innerHTML = "";
+
+        memberInvestments.forEach(function (item) {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.style.marginBottom = "15px";
+
+            const status = item.status ||
+                item.paymentStatus ||
+                "Pending Verification";
+
+            const fields = [
+                ["Plan", item.plan],
+                ["Investment Amount", money(item.amount)],
+                ["Expected Profit", money(item.profit)],
+                ["Expected Total", money(
+                    item.total ||
+                    ((Number(item.amount) || 0) +
+                     (Number(item.profit) || 0))
+                )],
+                ["Payment Reference ID", item.id],
+                ["Transaction Reference / UTR", item.transactionReference],
+                ["Payment Status", status],
+                ["Submission Date", formatDate(item.submittedAt)],
+                ["Joining Date", formatDate(item.joiningDate)],
+                ["Maturity Date", formatDate(item.maturityDate)]
+            ];
+
+            fields.forEach(function (field) {
+                const row = document.createElement("p");
+                row.style.marginBottom = "8px";
+
+                const label = document.createElement("strong");
+                label.style.color = "#e6c45a";
+                label.textContent = field[0] + ": ";
+
+                const value = document.createElement("span");
+                value.textContent = text(field[1]);
+
+                row.appendChild(label);
+                row.appendChild(value);
+                card.appendChild(row);
+            });
+
+            const statusBadge = document.createElement("span");
+            statusBadge.className = "status";
+            statusBadge.textContent = "Status: " + status;
+            card.appendChild(statusBadge);
+
+            investmentList.appendChild(card);
+        });
+    }
+
+    document.getElementById("logoutButton").addEventListener(
+        "click",
+        function () {
+            localStorage.removeItem("memberLoggedIn");
+            localStorage.removeItem("currentMember");
+            localStorage.removeItem("memberEmail");
+
+            window.location.href = "member-login.html";
+        }
+    );
+
+})();
 </script>
 
 </body>
-          </html>
-    
+  </html>
