@@ -60,20 +60,7 @@
 
       <p id="loginMessage" class="signup-message"></p>
 
-      <p class="login-text">
-        Don't have an account?
-        <a href="member-signup.html">Create Account</a>
-      </p>
-
-    </div>
-
-    <div class="back-home">
-      <a href="index.html">← Back to Freedom Finance</a>
-    </div>
-
-  </section>
-
-  <script>
+    <script>
 document.getElementById("loginForm").addEventListener("submit", function(event) {
   event.preventDefault();
 
@@ -81,32 +68,63 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
   const password = document.getElementById("password").value;
   const message = document.getElementById("loginMessage");
 
+  message.textContent = "";
+
   let members = [];
 
   try {
     members = JSON.parse(localStorage.getItem("members") || "[]");
+
+    if (!Array.isArray(members)) {
+      members = [];
+    }
   } catch (error) {
-    members = [];
+    message.textContent = "Member data read nahi ho raha. Please contact support.";
+    message.style.color = "red";
+    return;
   }
 
+  const member = members.find(function(item) {
+    return (
+      item &&
+      typeof item.email === "string" &&
+      item.email.trim().toLowerCase() === email &&
+      String(item.password) === password
+    );
+  });
+
+  if (!member) {
+    message.textContent =
+      "Email ya password galat hai, ya account data is browser mein nahi mila.";
+    message.style.color = "red";
+    return;
+  }
+
+  try {
+    localStorage.setItem("currentMember", JSON.stringify(member));
+    localStorage.setItem("memberEmail", member.email);
+    localStorage.setItem("memberLoggedIn", "true");
+
+    message.textContent = "Login successful. Dashboard khul raha hai...";
+    message.style.color = "green";
+
+    setTimeout(function() {
+      window.location.href = "dashboard.html";
+    }, 500);
+
+  } catch (error) {
+    message.textContent = "Login session save nahi ho saka. Browser storage check karein.";
+    message.style.color = "red";
+  }
+});
+    </script>
   const member = members.find(function(item) {
     return item.email &&
       item.email.toLowerCase() === email &&
       item.password === password;
   });
 
-  if (!member) {
-    message.textContent = "Invalid email or password. Please check your details.";
-    message.style.color = "red";
-    return;
-  }
-
-  localStorage.setItem("currentMember", JSON.stringify(member));
-  localStorage.setItem("memberEmail", member.email);
-  localStorage.setItem("memberLoggedIn", "true");
-
-  message.textContent = "Login successful. Opening dashboard...";
-  message.style.color = "green";
+  if (!me
 
   setTimeout(function() {
     window.location.href = "./dashboard.html";
