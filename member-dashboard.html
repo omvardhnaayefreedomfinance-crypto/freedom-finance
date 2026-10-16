@@ -295,93 +295,100 @@ button,a{cursor:pointer}
 </main>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
-function readMember(){const member = readMember();
-  try {
-    return JSON.parse(
-      localStorage.getItem("currentMember") || "{}"
-    );
-  } catch(error) {
-    return {};
+  // Member information
+  function readMember() {
+    try {
+      return JSON.parse(localStorage.getItem("currentMember") || "{}");
+    } catch (error) {
+      return {};
+    }
   }
-}
 
-const addressElement = document.getElementById("address");
+  const member = readMember();
 
-if (addressElement) {
-  addressElement.textContent =
-    member.address || member.fullAddress || "—";
-}
-
-const memberStatus = document.getElementById("status");
-
-if (memberStatus) {
-  memberStatus.textContent = member.status || "Active";
-}
-}
-}
-
-  /*
-    This is your real dashboard, secure authentication.
-    balance is increased from a submitted payment after 1 year
-  */
-
-  const name = member.name || member.fullName || "Member";
-  const email = member.email || localStorage.getItem("memberEmail") || "—";
-  const mobile = member.mobile || member.phone || "—";
-  const memberId = member.memberId || member.id || "—";
-  const referralId = member.referralId || member.referralCode || "—";
+  // Member name and profile
+  const name =
+    member.name ||
+    member.fullName ||
+    member.fullname ||
+    member.username ||
+    "Member";
 
   document.getElementById("memberName").textContent = name;
   document.getElementById("profileName").textContent = name;
-  document.getElementById("email").textContent = email;
-  document.getElementById("mobile").textContent = mobile;
-  document.getElementById("memberId").textContent = memberId;
-  document.getElementById("referralId").textContent = referralId;
 
-  function safeNumber(value){
-    const n = Number(value);
-    return Number.isFinite(n) && n >= 0 ? n : 0;
+  document.getElementById("email").textContent =
+    member.email || localStorage.getItem("memberEmail") || "—";
+
+  document.getElementById("mobile").textContent =
+    member.mobile || member.phone || member.phoneNumber || "—";
+
+  document.getElementById("memberId").textContent =
+    member.memberId || member.id || "—";
+
+  document.getElementById("referralId").textContent =
+    member.referralId || member.referralCode || "—";
+
+  document.getElementById("status").textContent =
+    member.status || "Registered";
+
+  // Balance calculations
+  function safeNumber(value) {
+    const number = Number(value);
+    return Number.isFinite(number) && number >= 0 ? number : 0;
   }
 
-  function rupees(value){
+  function rupees(value) {
     return new Intl.NumberFormat("en-IN", {
-      style:"currency",
-      currency:"INR",
-      maximumFractionDigits:2
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 2
     }).format(value);
   }
 
   const available = safeNumber(
     localStorage.getItem("availableBalance") ??
-    member.availableBalance ?? 0
+    member.availableBalance ??
+    0
   );
 
-  const profit = safeNumber(member.profitBalance ?? member.profit ?? 0);
+  const profit = safeNumber(
+    member.profitBalance ?? member.profit ?? 0
+  );
 
   const investment = safeNumber(
-    member.totalInvestment ?? member.investment ?? 0
+    member.totalInvestment ??
+    member.investmentBalance ??
+    member.investment ??
+    0
   );
 
-  /*
-    Total balance here is the sum of the displayed balances.
-    It is a valuation of investments or gurented a promise of returns.
-  */
   const total = available + profit + investment;
 
-  document.getElementById("availableBalance").textContent = rupees(available);
-  document.getElementById("profitBalance").textContent = rupees(profit);
-  document.getElementById("investmentBalance").textContent = rupees(investment);
-  document.getElementById("totalBalance").textContent = rupees(total);
+  document.getElementById("availableBalance").textContent =
+    rupees(available);
 
-  document.getElementById("logoutBtn").addEventListener("click", function(){
+  document.getElementById("profitBalance").textContent =
+    rupees(profit);
+
+  document.getElementById("investmentBalance").textContent =
+    rupees(investment);
+
+  document.getElementById("totalBalance").textContent =
+    rupees(total);
+
+  // Logout
+  document.getElementById("logoutBtn").addEventListener("click", function () {
     localStorage.removeItem("memberLoggedIn");
     localStorage.removeItem("currentMember");
     localStorage.removeItem("memberEmail");
+
     window.location.href = "member-login.html";
   });
 
-})();
+});
 </script>
 
 </body>
