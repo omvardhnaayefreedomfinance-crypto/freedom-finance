@@ -572,6 +572,7 @@ function selectPlan(
     "selectedTotal",
     total
   );
+localStorage.setItem("selectedDuration", "1");
 
 
   document.getElementById(
