@@ -74,43 +74,45 @@
   </section>
 
   <script>
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+  event.preventDefault();
 
-    document
-      .getElementById("loginForm")
-      .addEventListener("submit", function(event) {
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  const password = document.getElementById("password").value;
+  const message = document.getElementById("loginMessage");
 
-        event.preventDefault();
+  let members = [];
 
-        const email =
-          document.getElementById("email").value.trim();
+  try {
+    members = JSON.parse(localStorage.getItem("members") || "[]");
+  } catch (error) {
+    members = [];
+  }
 
-        const password =
-          document.getElementById("password").value;
+  const member = members.find(function(item) {
+    return item.email &&
+      item.email.toLowerCase() === email &&
+      item.password === password;
+  });
 
-        const message =
-          document.getElementById("loginMessage");
+  if (!member) {
+    message.textContent = "Invalid email or password. Please check your details.";
+    message.style.color = "red";
+    return;
+  }
 
-        if (!email || !password) {
+  localStorage.setItem("currentMember", JSON.stringify(member));
+  localStorage.setItem("memberEmail", member.email);
+  localStorage.setItem("memberLoggedIn", "true");
 
-          message.textContent =
-            "Please enter your email and password.";
+  message.textContent = "Login successful. Opening dashboard...";
+  message.style.color = "green";
 
-          return;
-        }
-
-        message.textContent =
-          "Login successful. Opening dashboard...";
-
-        setTimeout(function() {
-
-          window.location.href =
-            "./member-dashboard.html";
-
-        }, 800);
-
-      });
-
-  </script>
+  setTimeout(function() {
+    window.location.href = "./dashboard.html";
+  }, 800);
+});
+      </script>
 
 </body>
 </html>
