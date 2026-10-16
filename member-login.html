@@ -142,13 +142,12 @@
 
       });
 
-      // Show an error if the details do not match
+      // Stop if email or password is incorrect
       if (!member) {
 
         message.textContent =
           "Email ya password galat hai. Apni registration details check karein.";
 
-       window.location.href = "Members%20dashboard.html";
         message.style.color = "red";
         return;
 
@@ -192,9 +191,10 @@
 
       loginButton.disabled = true;
 
+      // Open the correct dashboard file
       setTimeout(function () {
 
-        window.location.href = "dashboard.html";
+        window.location.href = "Members%20dashboard.html";
 
       }, 700);
 
