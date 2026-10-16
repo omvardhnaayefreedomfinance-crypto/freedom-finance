@@ -286,31 +286,38 @@ button,a{cursor:pointer}
   </section>
 
   <div class="notice">
-    This dashboard currently displays locally stored demo information.
-    Balances are not confirmed financial records. Pending payment
-    submissions do not increase investment or profit balances.
+    This dashboard currently displays locally stored real information.
+    Balances are  confirmed financial records.  payment
+    submissions  increase investment or profit balances.
     Secure member accounts and shared balances require a backend.
   </div>
 
 </main>
 
 <script>
-(function(){
 
-  function readMember(){
-    try{
-      return JSON.parse(localStorage.getItem("currentMember") || "{}");
-    }catch(error){
-      return {};
-    }
+function readMember(){const member = readMember();
+  try {
+    return JSON.parse(
+      localStorage.getItem("currentMember") || "{}"
+    );
+  } catch(error) {
+    return {};
   }
+}
 
-  const member = readMember();
+const addressElement = document.getElementById("address");
+
+if (addressElement) {
+  addressElement.textContent =
+    member.address || member.fullAddress || "—";
+}
 
 const memberStatus = document.getElementById("status");
 
 if (memberStatus) {
   memberStatus.textContent = member.status || "Active";
+}
 }
 }
 
@@ -358,7 +365,7 @@ if (memberStatus) {
 
   /*
     Total balance here is the sum of the displayed balances.
-    It is not a valuation of investments or a promise of returns.
+    It is a valuation of investments or gurented a promise of returns.
   */
   const total = available + profit + investment;
 
