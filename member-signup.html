@@ -56,10 +56,16 @@
       font-weight: bold;
     }
 
+    .signup-btn:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
     .signup-message {
       margin-top: 15px;
       text-align: center;
       font-weight: 600;
+      overflow-wrap: anywhere;
     }
 
     .login-text {
@@ -91,69 +97,66 @@
 
       <form id="signupForm">
 
-        <!-- FULL NAME -->
         <div class="form-group">
           <label for="fullName">Full Name</label>
-
           <input
             type="text"
             id="fullName"
             placeholder="Enter your full name"
+            autocomplete="name"
+            maxlength="100"
             required
           >
         </div>
 
-        <!-- EMAIL -->
         <div class="form-group">
           <label for="email">Email Address</label>
-
           <input
             type="email"
             id="email"
             placeholder="Enter your email"
+            autocomplete="email"
             required
           >
         </div>
 
-        <!-- MOBILE -->
         <div class="form-group">
           <label for="mobile">Mobile Number</label>
-
           <input
             type="tel"
             id="mobile"
             placeholder="Enter your mobile number"
+            autocomplete="tel"
+            maxlength="20"
             required
           >
         </div>
 
-        <!-- PASSWORD -->
         <div class="form-group">
           <label for="password">Password</label>
-
           <input
             type="password"
             id="password"
-            placeholder="Create password"
+            placeholder="Create password (minimum 6 characters)"
+            autocomplete="new-password"
+            minlength="6"
             required
           >
         </div>
 
-        <!-- CONFIRM PASSWORD -->
         <div class="form-group">
           <label for="confirmPassword">Confirm Password</label>
-
           <input
             type="password"
             id="confirmPassword"
             placeholder="Confirm password"
+            autocomplete="new-password"
+            minlength="6"
             required
           >
         </div>
 
-        <!-- TERMS -->
         <div class="terms-group">
-
           <input
             type="checkbox"
             id="terms"
@@ -161,23 +164,22 @@
           >
 
           <label for="terms">
-            I agree to the Terms & Conditions
+            I agree to the Terms &amp; Conditions
           </label>
-
         </div>
 
-        <!-- BUTTON -->
         <button
           type="submit"
           class="signup-btn"
+          id="signupButton"
         >
           CREATE ACCOUNT
         </button>
 
-        <!-- MESSAGE -->
         <div
           id="signupMessage"
           class="signup-message"
+          aria-live="polite"
         ></div>
 
       </form>
@@ -187,10 +189,7 @@
         <a href="member-login.html">Member Login</a>
       </p>
 
-      <a
-        href="index.html"
-        class="back-home"
-      >
+      <a href="index.html" class="back-home">
         ← Back to Home
       </a>
 
@@ -198,170 +197,227 @@
 
   </section>
 
+  <script type="module">
 
-  <script>
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
-    document
-      .getElementById("signupForm")
-      .addEventListener("submit", function(event) {
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      sendEmailVerification,
+      updateProfile,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-        event.preventDefault();
-
-        /* =========================
-           GET FORM DATA
-        ========================= */
-
-        const name =
-          document
-            .getElementById("fullName")
-            .value
-            .trim();
-
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim()
-            .toLowerCase();
-
-        const mobile =
-          document
-            .getElementById("mobile")
-            .value
-            .trim();
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-        const confirmPassword =
-          document
-            .getElementById("confirmPassword")
-            .value;
-
-        const message =
-          document.getElementById("signupMessage");
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 
-        /* =========================
-           PASSWORD CHECK
-        ========================= */
+    // FIREBASE CONFIGURATION
 
-        if (password !== confirmPassword) {
-
-          message.textContent =
-            "Passwords do not match.";
-
-          message.style.color = "red";
-
-          return;
-        }
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2yn0MetKU7ntbv_JFPy5em3MmgRLBNk",
+      authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+      projectId: "omvardhnaayefreedomfinan-efaf4",
+      storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+      messagingSenderId: "552483514216",
+      appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+      measurementId: "G-6MPELL55BD"
+    };
 
 
-        /* =========================
-           GET EXISTING MEMBERS
-        ========================= */
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        let members = [];
-
-        try {
-
-          members =
-            JSON.parse(
-              localStorage.getItem("members")
-            ) || [];
-
-        } catch (error) {
-
-          members = [];
-
-        }
+    const signupForm = document.getElementById("signupForm");
+    const signupButton = document.getElementById("signupButton");
+    const signupMessage = document.getElementById("signupMessage");
 
 
-        /* =========================
-           DUPLICATE EMAIL CHECK
-        ========================= */
-
-        const existingMember =
-          members.find(function(member) {
-
-            return (
-              member.email &&
-              member.email.toLowerCase() === email
-            );
-
-          });
+    function showMessage(text, color) {
+      signupMessage.textContent = text;
+      signupMessage.style.color = color;
+    }
 
 
-        if (existingMember) {
+    function getFriendlyError(error) {
 
-          message.textContent =
-            "This email is already registered.";
+      const code = error?.code || "";
 
-          message.style.color = "red";
+      const messages = {
+        "auth/email-already-in-use":
+          "Is email se account pehle se registered hai. Member Login use karein.",
 
-          return;
-        }
+        "auth/invalid-email":
+          "Valid email address enter karein.",
+
+        "auth/weak-password":
+          "Password kamzor hai. Kam se kam 6 characters use karein.",
+
+        "auth/network-request-failed":
+          "Internet connection check karein aur dobara try karein.",
+
+        "auth/operation-not-allowed":
+          "Firebase mein Email/Password sign-in enable karein.",
+
+        "auth/too-many-requests":
+          "Bahut attempts hue hain. Thodi der baad try karein.",
+
+        "permission-denied":
+          "Database permission error. Firestore Rules aur Firebase project check karna hoga.",
+
+        "auth/unauthorized-continue-uri":
+          "Verification email ka continue URL authorized nahi hai.",
+
+        "auth/invalid-continue-uri":
+          "Verification email ka continue URL invalid hai.",
+
+        "auth/invalid-action-code":
+          "Verification link invalid ya expire ho sakta hai."
+      };
+
+      return messages[code] ||
+        "Account create karne mein problem hui. Error code: " +
+        (code || "unknown");
+    }
 
 
-        /* =========================
-           GENERATE MEMBER ID
-        ========================= */
+    signupForm.addEventListener("submit", async function(event) {
 
-        const memberNumber =
-          String(members.length + 1)
-            .padStart(5, "0");
+      event.preventDefault();
+
+      if (signupButton.disabled) return;
+
+      const name = document
+        .getElementById("fullName")
+        .value
+        .trim();
+
+      const email = document
+        .getElementById("email")
+        .value
+        .trim()
+        .toLowerCase();
+
+      const mobile = document
+        .getElementById("mobile")
+        .value
+        .trim();
+
+      const password = document
+        .getElementById("password")
+        .value;
+
+      const confirmPassword = document
+        .getElementById("confirmPassword")
+        .value;
+
+      const termsAccepted = document
+        .getElementById("terms")
+        .checked;
+
+
+      // FORM VALIDATION
+
+      if (!name || !email || !mobile) {
+        showMessage(
+          "Saari required details fill karein.",
+          "#ff6666"
+        );
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage(
+          "Password kam se kam 6 characters ka hona chahiye.",
+          "#ff6666"
+        );
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage(
+          "Passwords do not match.",
+          "#ff6666"
+        );
+        return;
+      }
+
+      if (!termsAccepted) {
+        showMessage(
+          "Please accept Terms & Conditions.",
+          "#ff6666"
+        );
+        return;
+      }
+
+
+      signupButton.disabled = true;
+
+      showMessage(
+        "Account create ho raha hai. Please wait...",
+        "#d4af37"
+      );
+
+
+      let createdUser = null;
+      let profileSaved = false;
+      let verificationSent = false;
+
+      try {
+
+        // 1. CREATE FIREBASE AUTH ACCOUNT
+
+        const credential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        createdUser = credential.user;
+
+        await updateProfile(createdUser, {
+          displayName: name
+        });
+
+
+        // 2. GENERATE MEMBER AND REFERRAL IDS
+
+        const uid = createdUser.uid;
 
         const memberId =
-          "FF" + memberNumber;
+          "FF" + uid.substring(0, 10).toUpperCase();
+
+        const myReferralId =
+          "REF" + uid.substring(0, 10).toUpperCase();
 
 
-      /* =========================
-   REFERRAL SYSTEM
-========================= */
+        // Referral is recorded for reference only.
+        // Referral rewards must be verified server-side.
 
-// New member ka apna referral ID
-const myReferralId =
-  "REF" +
-  Math.random()
-    .toString(36)
-    .substring(2, 8)
-    .toUpperCase();
+        const urlParams = new URLSearchParams(
+          window.location.search
+        );
 
-// URL se referral/reference ID lena
-const urlParams =
-  new URLSearchParams(window.location.search);
+        const incomingReferral = (
+          urlParams.get("ref") || ""
+        ).trim().toUpperCase();
 
-const incomingReferral =
-  (urlParams.get("ref") || "").trim().toUpperCase();
-
-// Agar referral link se nahi aaya to Direct
-const referredBy =
-  incomingReferral || "Direct";
+        const referredBy = incomingReferral || "Direct";
 
 
-        /* =========================
-           DATE
-        ========================= */
+        // 3. INITIAL MEMBER PROFILE
 
-        const now =
-          new Date();
+        const memberData = {
 
-        const createdAt =
-          now.toISOString();
-
-        const joinDate =
-          now.toLocaleDateString();
-
-
-        /* =========================
-           CREATE MEMBER OBJECT
-        ========================= */
-
-        const newMember = {
-
-          id: Date.now(),
+          uid: uid,
 
           memberId: memberId,
 
@@ -371,15 +427,13 @@ const referredBy =
 
           mobile: mobile,
 
-          password: password,
-
-          referralId: "",
-
-          referredBy: "",
-
           myReferralId: myReferralId,
 
-          status: "Active",
+          referredBy: referredBy,
+
+          status: "Pending Verification",
+
+          emailVerified: false,
 
           investment: 0,
 
@@ -395,151 +449,99 @@ const referredBy =
 
           planName: "",
 
-          createdAt: createdAt,
+          createdAt: serverTimestamp(),
 
-          joinDate: joinDate
+          joinDate: new Date().toISOString()
 
         };
 
 
-        /* =========================
-           SAVE MEMBER
-        ========================= */
+        // 4. SAVE PROFILE TO FIRESTORE
 
-        members.push(newMember);
+        await setDoc(
+          doc(db, "members", uid),
+          memberData
+        );
 
-        localStorage.setItem(
-          "members",
-          JSON.stringify(members)
+        profileSaved = true;
+
+
+        // 5. SEND EMAIL VERIFICATION
+
+        await sendEmailVerification(createdUser);
+
+        verificationSent = true;
+
+
+        // 6. SIGN OUT UNTIL EMAIL IS VERIFIED
+
+        await signOut(auth);
+
+
+        // 7. SUCCESS MESSAGE
+
+        signupForm.reset();
+
+        showMessage(
+          "Account create ho gaya! Aapka Member ID: " +
+          memberId +
+          ". Verification email check karein. Inbox aur Spam folder dono dekhein. Email verify karne ke baad Member Login karein.",
+          "#00cc66"
         );
 
 
-        /* =========================
-           OLD LOGIN COMPATIBILITY
-        ========================= */
+      } catch (error) {
 
-        const oldUser = {
+        console.error("Signup error:", error);
 
-  name: name,
+        if (profileSaved && !verificationSent) {
 
-  email: email,
+          showMessage(
+            "Account aur profile save ho gaye hain, lekin verification email send nahi ho saki. Login page par jaakar verification email resend karne ki koshish karein. " +
+            getFriendlyError(error),
+            "#ffcc66"
+          );
 
-  mobile: mobile,
+          if (auth.currentUser) {
+            try {
+              await signOut(auth);
+            } catch (signOutError) {
+              console.error(signOutError);
+            }
+          }
 
-  password: password,
+        } else if (createdUser && !profileSaved) {
 
-  memberId: memberId,
+          showMessage(
+            "Firebase account create ho gaya, lekin profile save nahi hui. Dobara signup karne se pehle database permission issue solve karna hoga. Error: " +
+            getFriendlyError(error),
+            "#ff6666"
+          );
 
-  myReferralId: myReferralId,
+          try {
+            await signOut(auth);
+          } catch (signOutError) {
+            console.error(signOutError);
+          }
 
-  referralId: referredBy,
+        } else {
 
-  referredBy: referredBy
-
-};
-
-        localStorage.setItem(
-          "ffdemo",
-          JSON.stringify(oldUser)
-        );
-
-
-        /* =========================
-           CURRENT MEMBER
-        ========================= */
-
-        localStorage.setItem(
-          "currentMember",
-          JSON.stringify(newMember)
-        );
-
-        localStorage.setItem(
-          "memberEmail",
-          email
-        );
-
-        localStorage.setItem(
-          "memberLoggedIn",
-          "true"
-        );
-
-
-        /* =========================
-           BALANCE INITIALIZATION
-        ========================= */
-
-        if (
-          !localStorage.getItem(
-            "availableBalance"
-          )
-        ) {
-
-          localStorage.setItem(
-            "availableBalance",
-            "0"
+          showMessage(
+            getFriendlyError(error),
+            "#ff6666"
           );
 
         }
 
+      } finally {
 
-        /* =========================
-           TRANSACTIONS INITIALIZATION
-        ========================= */
+        signupButton.disabled = false;
 
-        if (
-          !localStorage.getItem(
-            "transactions"
-          )
-        ) {
+      }
 
-          localStorage.setItem(
-            "transactions",
-            "[]"
-          );
-
-        }
-
-
-        if (
-          !localStorage.getItem(
-            "ffTransactions"
-          )
-        ) {
-
-          localStorage.setItem(
-            "ffTransactions",
-            "[]"
-          );
-
-        }
-
-
-        /* =========================
-           SUCCESS MESSAGE
-        ========================= */
-
-        message.textContent =
-          "Account created successfully! Member ID: " +
-          memberId;
-
-        message.style.color = "green";
-
-
-        /* =========================
-           REDIRECT TO LOGIN
-        ========================= */
-
-        setTimeout(function() {
-
-          window.location.href =
-            "member-login.html";
-
-        }, 1500);
-
-      });
+    });
 
   </script>
 
 </body>
   </html>
-  
