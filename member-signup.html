@@ -531,7 +531,13 @@
             "#ff6666"
           );
 
-        }
+        }showMessage(
+  "DEBUG CODE: " + (error?.code || "none") +
+  " | MESSAGE: " + (error?.message || "none") +
+  " | PROJECT: " + firebaseConfig.projectId +
+  " | HOST: " + location.hostname,
+  "#ff6666"
+);
 
       } finally {
 
