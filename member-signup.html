@@ -66,6 +66,7 @@
       text-align: center;
       font-weight: 600;
       overflow-wrap: anywhere;
+      line-height: 1.6;
     }
 
     .login-text {
@@ -82,7 +83,6 @@
 </head>
 
 <body>
-
   <section class="community">
 
     <div class="section-number">COMMUNITY</div>
@@ -157,11 +157,7 @@
         </div>
 
         <div class="terms-group">
-          <input
-            type="checkbox"
-            id="terms"
-            required
-          >
+          <input type="checkbox" id="terms" required>
 
           <label for="terms">
             I agree to the Terms &amp; Conditions
@@ -180,6 +176,7 @@
           id="signupMessage"
           class="signup-message"
           aria-live="polite"
+          role="status"
         ></div>
 
       </form>
@@ -194,11 +191,9 @@
       </a>
 
     </div>
-
   </section>
 
   <script type="module">
-
     import {
       initializeApp
     } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -218,9 +213,6 @@
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-
-    // FIREBASE CONFIGURATION
-
     const firebaseConfig = {
       apiKey: "AIzaSyD2yn0MetKU7ntbv_JFPy5em3MmgRLBNk",
       authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
@@ -231,47 +223,43 @@
       measurementId: "G-6MPELL55BD"
     };
 
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
     const signupForm = document.getElementById("signupForm");
     const signupButton = document.getElementById("signupButton");
     const signupMessage = document.getElementById("signupMessage");
 
-
-    function showMessage(text, color) {
-      signupMessage.textContent = text;
+    function showMessage(message, color = "#ff6666") {
+      signupMessage.textContent = message;
       signupMessage.style.color = color;
     }
 
+    function getErrorDetails(error) {
+      const code = error?.code || "unknown";
+      const message = error?.message || "No additional details";
 
-    function getFriendlyError(error) {
+      const friendlyMessages = {
+        "auth/api-key-not-valid":
+          "Firebase ne API key reject kar di hai. Signup code ka syntax theek hai, lekin Firebase configuration ko accept nahi kiya gaya.",
 
-      const code = error?.code || "";
+        "auth/invalid-api-key":
+          "Firebase API key invalid hai.",
 
-      const messages = {
         "auth/email-already-in-use":
-          "Is email se account pehle se registered hai. Member Login use karein.",
+          "Is email se Firebase account pehle hi bana hua hai. Member Login try karein.",
 
         "auth/invalid-email":
           "Valid email address enter karein.",
 
         "auth/weak-password":
-          "Password kamzor hai. Kam se kam 6 characters use karein.",
+          "Password kam se kam 6 characters ka hona chahiye.",
 
         "auth/network-request-failed":
-          "Internet connection check karein aur dobara try karein.",
+          "Internet connection ya network request mein problem hai.",
 
         "auth/operation-not-allowed":
-          "Firebase mein Email/Password sign-in enable karein.",
+          "Firebase Email/Password sign-in method enabled nahi hai.",
 
         "auth/too-many-requests":
-          "Bahut attempts hue hain. Thodi der baad try karein.",
-
-        "permission-denied":
-          "Database permission error. Firestore Rules aur Firebase project check karna hoga.",
+          "Bahut zyada attempts hue hain. Kuch der baad try karein.",
 
         "auth/unauthorized-continue-uri":
           "Verification email ka continue URL authorized nahi hai.",
@@ -279,102 +267,89 @@
         "auth/invalid-continue-uri":
           "Verification email ka continue URL invalid hai.",
 
-        "auth/invalid-action-code":
-          "Verification link invalid ya expire ho sakta hai."
+        "permission-denied":
+          "Firestore ne profile save karne ki permission deny ki hai.",
+
+        "unavailable":
+          "Firebase service filhaal unavailable hai. Thodi der baad try karein."
       };
 
-      return messages[code] ||
-        "Account create karne mein problem hui. Error code: " +
-        (code || "unknown");
+      return {
+        code,
+        message,
+        friendly: friendlyMessages[code] || message
+      };
     }
 
+    let firebaseReady = false;
+    let auth;
+    let db;
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+      firebaseReady = true;
+    } catch (error) {
+      console.error("Firebase initialization error:", error);
+
+      showMessage(
+        "Firebase initialize nahi hua. Error: " +
+        (error?.code || error?.message || "unknown"),
+        "#ff6666"
+      );
+    }
 
     signupForm.addEventListener("submit", async function(event) {
-
       event.preventDefault();
 
       if (signupButton.disabled) return;
 
-      const name = document
-        .getElementById("fullName")
-        .value
-        .trim();
-
-      const email = document
-        .getElementById("email")
-        .value
-        .trim()
-        .toLowerCase();
-
-      const mobile = document
-        .getElementById("mobile")
-        .value
-        .trim();
-
-      const password = document
-        .getElementById("password")
-        .value;
-
-      const confirmPassword = document
-        .getElementById("confirmPassword")
-        .value;
-
-      const termsAccepted = document
-        .getElementById("terms")
-        .checked;
-
-
-      // FORM VALIDATION
-
-      if (!name || !email || !mobile) {
+      if (!firebaseReady) {
         showMessage(
-          "Saari required details fill karein.",
+          "Firebase initialize nahi hua. Page reload karke dobara try karein.",
           "#ff6666"
         );
+        return;
+      }
+
+      const name = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const mobile = document.getElementById("mobile").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const termsAccepted = document.getElementById("terms").checked;
+
+      if (!name || !email || !mobile) {
+        showMessage("Saari required details fill karein.");
         return;
       }
 
       if (password.length < 6) {
-        showMessage(
-          "Password kam se kam 6 characters ka hona chahiye.",
-          "#ff6666"
-        );
+        showMessage("Password kam se kam 6 characters ka hona chahiye.");
         return;
       }
 
       if (password !== confirmPassword) {
-        showMessage(
-          "Passwords do not match.",
-          "#ff6666"
-        );
+        showMessage("Dono passwords match nahi karte.");
         return;
       }
 
       if (!termsAccepted) {
-        showMessage(
-          "Please accept Terms & Conditions.",
-          "#ff6666"
-        );
+        showMessage("Please accept Terms & Conditions.");
         return;
       }
 
-
       signupButton.disabled = true;
 
-      showMessage(
-        "Account create ho raha hai. Please wait...",
-        "#d4af37"
-      );
-
+      showMessage("Account create ho raha hai. Please wait...", "#d4af37");
 
       let createdUser = null;
       let profileSaved = false;
       let verificationSent = false;
 
       try {
-
-        // 1. CREATE FIREBASE AUTH ACCOUNT
-
+        // Step 1: Create Authentication account.
         const credential = await createUserWithEmailAndPassword(
           auth,
           email,
@@ -383,181 +358,119 @@
 
         createdUser = credential.user;
 
+        // Step 2: Save display name.
         await updateProfile(createdUser, {
           displayName: name
         });
 
-
-        // 2. GENERATE MEMBER AND REFERRAL IDS
-
         const uid = createdUser.uid;
+        const shortUid = uid.substring(0, 10).toUpperCase();
 
-        const memberId =
-          "FF" + uid.substring(0, 10).toUpperCase();
+        const memberId = "FF" + shortUid;
+        const myReferralId = "REF" + shortUid;
 
-        const myReferralId =
-          "REF" + uid.substring(0, 10).toUpperCase();
-
-
-        // Referral is recorded for reference only.
-        // Referral rewards must be verified server-side.
-
-        const urlParams = new URLSearchParams(
-          window.location.search
-        );
-
-        const incomingReferral = (
-          urlParams.get("ref") || ""
-        ).trim().toUpperCase();
+        const urlParams = new URLSearchParams(window.location.search);
+        const incomingReferral = (urlParams.get("ref") || "")
+          .trim()
+          .toUpperCase();
 
         const referredBy = incomingReferral || "Direct";
 
-
-        // 3. INITIAL MEMBER PROFILE
-
+        // Step 3: Save initial member profile.
         const memberData = {
-
           uid: uid,
-
           memberId: memberId,
-
           name: name,
-
           email: email,
-
           mobile: mobile,
-
           myReferralId: myReferralId,
-
           referredBy: referredBy,
-
           status: "Pending Verification",
-
           emailVerified: false,
-
           investment: 0,
-
           totalInvestment: 0,
-
           profit: 0,
-
           availableBalance: 0,
-
           totalWithdrawal: 0,
-
           plan: "",
-
           planName: "",
-
           createdAt: serverTimestamp(),
-
           joinDate: new Date().toISOString()
-
         };
 
-
-        // 4. SAVE PROFILE TO FIRESTORE
-
-        await setDoc(
-          doc(db, "members", uid),
-          memberData
-        );
-
+        await setDoc(doc(db, "members", uid), memberData);
         profileSaved = true;
 
+        // Step 4: Send verification email.
+        try {
+          await sendEmailVerification(createdUser);
+          verificationSent = true;
+        } catch (emailError) {
+          console.error("Verification email error:", emailError);
 
-        // 5. SEND EMAIL VERIFICATION
+          const emailProblem = getErrorDetails(emailError);
 
-        await sendEmailVerification(createdUser);
+          await signOut(auth).catch(() => {});
 
-        verificationSent = true;
+          showMessage(
+            "Firebase account aur member profile create ho gaye hain, lekin verification email nahi bheji ja saki. Error: " +
+            emailProblem.code + " | " + emailProblem.message +
+            ". Firebase Authentication mein account check karein.",
+            "#ffcc66"
+          );
+          return;
+        }
 
-
-        // 6. SIGN OUT UNTIL EMAIL IS VERIFIED
-
+        // Step 5: Sign out until the member chooses to log in.
         await signOut(auth);
-
-
-        // 7. SUCCESS MESSAGE
 
         signupForm.reset();
 
         showMessage(
-          "Account create ho gaya! Aapka Member ID: " +
-          memberId +
-          ". Verification email check karein. Inbox aur Spam folder dono dekhein. Email verify karne ke baad Member Login karein.",
+          "Account create ho gaya! Member ID: " + memberId +
+          ". Verification email bhej di gayi hai. Inbox aur Spam folder check karein. Email verify hone ke baad Member Login karein.",
           "#00cc66"
         );
 
-
-      }  
-    } catch (error) {
-
+      } catch (error) {
         console.error("FREEDOM FINANCE SIGNUP ERROR:", error);
 
-        const errorCode = error?.code || "unknown";
-        const errorMessage = error?.message || "No error message returned";
+        const details = getErrorDetails(error);
 
-        if (errorCode.includes("api-key-not-valid")) {
-
+        if (createdUser && !profileSaved) {
           showMessage(
-            "FIREBASE API KEY ERROR: Firebase ne API key reject kar di hai. " +
-            "Signup code request bhej raha hai, lekin Firebase usse accept nahi kar raha. " +
-            "Project: " + firebaseConfig.projectId +
-            " | Host: " + location.hostname,
+            "Firebase Authentication account create ho gaya, lekin member profile save nahi hui. Error: " +
+            details.code + " | " + details.message +
+            ". Account ko Authentication → Users mein check karein.",
             "#ff6666"
-          );
-
-        } else if (profileSaved && !verificationSent) {
-
-          showMessage(
-            "Profile save ho gayi, lekin verification email send nahi hui. " +
-            "Error: " + errorCode + " | " + errorMessage,
-            "#ffcc66"
           );
 
           if (auth.currentUser) {
-            try {
-              await signOut(auth);
-            } catch (signOutError) {
+            await signOut(auth).catch(signOutError => {
               console.error("Sign-out error:", signOutError);
-            }
+            });
           }
 
-        } else if (createdUser && !profileSaved) {
-
+        } else if (profileSaved && !verificationSent) {
           showMessage(
-            "Firebase account ban gaya, lekin member profile save nahi hui. " +
-            "Error: " + errorCode + " | " + errorMessage,
-            "#ff6666"
+            "Member profile save ho gayi, lekin verification email nahi bheji gayi. Error: " +
+            details.code + " | " + details.message,
+            "#ffcc66"
           );
 
-          try {
-            await signOut(auth);
-          } catch (signOutError) {
-            console.error("Sign-out error:", signOutError);
-          }
-
         } else {
-
           showMessage(
-            "Signup failed. Error: " + errorCode +
-            " | Details: " + errorMessage +
+            "Signup failed. Error: " + details.code +
+            " | " + details.message +
             " | Project: " + firebaseConfig.projectId,
             "#ff6666"
           );
-
         }
 
-    } finally {
-
+      } finally {
         signupButton.disabled = false;
-
       }
-
     });
-
   </script>
-
 </body>
   </html>
