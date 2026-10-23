@@ -8,6 +8,42 @@
   <title>Freedom Finance - Member Login</title>
 
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+
+    .signup-btn:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .signup-message {
+      overflow-wrap: anywhere;
+      line-height: 1.6;
+    }
+
+    .extra-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 
 <body>
@@ -30,7 +66,6 @@
       <form id="loginForm">
 
         <div class="form-group">
-
           <label for="email">Email Address</label>
 
           <input
@@ -41,11 +76,9 @@
             autocomplete="email"
             required
           >
-
         </div>
 
         <div class="form-group">
-
           <label for="password">Password</label>
 
           <input
@@ -56,10 +89,13 @@
             autocomplete="current-password"
             required
           >
-
         </div>
 
-        <button type="submit" class="signup-btn">
+        <button
+          type="submit"
+          class="signup-btn"
+          id="loginButton"
+        >
           MEMBER LOGIN
         </button>
 
@@ -70,6 +106,14 @@
         class="signup-message"
         aria-live="polite"
       ></p>
+
+      <p class="extra-link">
+        <a href="#" id="forgotPassword">Forgot Password?</a>
+      </p>
+
+      <p class="extra-link">
+        <a href="#" id="resendVerification">Resend Verification Email</a>
+      </p>
 
       <p class="login-text">
         Don't have an account?
@@ -84,126 +128,418 @@
 
   </section>
 
-  <script>
-  (function () {
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      sendEmailVerification,
+      sendPasswordResetEmail,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+
+    // SAME FIREBASE PROJECT AS SIGNUP PAGE
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2yn0MetKU7ntbv_JFPy5em3MmgRLBNk",
+      authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+      projectId: "omvardhnaayefreedomfinan-efaf4",
+      storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+      messagingSenderId: "552483514216",
+      appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+      measurementId: "G-6MPELL55BD"
+    };
+
 
     const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
     const message = document.getElementById("loginMessage");
-    const loginButton = loginForm.querySelector('button[type="submit"]');
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
 
-    loginForm.addEventListener("submit", function (event) {
+    let auth;
+    let db;
+    let initializationError = null;
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+    } catch (error) {
+      initializationError = error;
+      console.error("Firebase initialization error:", error);
+    }
+
+
+    function showMessage(text, color = "#ff6666") {
+      message.textContent = text;
+      message.style.color = color;
+    }
+
+
+    function friendlyError(error) {
+
+      const code = error?.code || "unknown";
+
+      console.error("FREEDOM FINANCE LOGIN ERROR:", error);
+
+      if (
+        code.includes("api-key-not-valid") ||
+        code.includes("invalid-api-key")
+      ) {
+        return "Firebase API key reject kar raha hai. Login request Firebase tak sahi tarah authenticate nahi ho pa rahi.";
+      }
+
+      if (
+        code === "auth/invalid-credential" ||
+        code === "auth/wrong-password" ||
+        code === "auth/user-not-found"
+      ) {
+        return "Email ya password sahi nahi hai. Dhyan rahe: Firebase signup mein use kiya gaya wahi email aur password enter karein.";
+      }
+
+      if (code === "auth/invalid-email") {
+        return "Email address ka format sahi nahi hai.";
+      }
+
+      if (code === "auth/user-disabled") {
+        return "Yeh account disabled hai. Project administrator se sampark karein.";
+      }
+
+      if (code === "auth/too-many-requests") {
+        return "Bahut login attempts hue hain. Thodi der baad dobara try karein.";
+      }
+
+      if (code === "auth/network-request-failed") {
+        return "Internet connection check karein aur dobara try karein.";
+      }
+
+      if (code === "auth/operation-not-allowed") {
+        return "Firebase mein Email/Password sign-in enabled nahi hai.";
+      }
+
+      if (code === "auth/unauthorized-domain") {
+        return "Website domain Firebase Authentication mein authorize nahi hai.";
+      }
+
+      if (code === "auth/email-not-verified") {
+        return "Email verify nahi hui. Verification email dobara bhejne ka option use karein.";
+      }
+
+      if (code === "permission-denied" ||
+          code === "firestore/permission-denied") {
+        return "Login ho gaya, lekin member profile database se read nahi ho pa rahi. Firestore Rules check karne honge.";
+      }
+
+      return "Login error: " + code +
+        " | " + (error?.message || "Unknown error");
+    }
+
+
+    // LOGIN WITH FIREBASE AUTHENTICATION
+
+    loginForm.addEventListener("submit", async function(event) {
 
       event.preventDefault();
 
-      const email = document
-        .getElementById("email")
-        .value
-        .trim()
-        .toLowerCase();
+      if (loginButton.disabled) return;
 
-      const password = document.getElementById("password").value;
-
-      message.textContent = "";
-      message.style.color = "";
-
-      let members;
-
-      // Read registered members from this browser
-      try {
-
-        members = JSON.parse(
-          localStorage.getItem("members") || "[]"
+      if (initializationError || !auth || !db) {
+        showMessage(
+          "Firebase initialize nahi hua: " +
+          (initializationError?.message || "Unknown error")
         );
-
-        if (!Array.isArray(members)) {
-          members = [];
-        }
-
-      } catch (error) {
-
-        message.textContent =
-          "Member data read nahi ho raha. Please try again.";
-
-        message.style.color = "red";
         return;
-
       }
 
-      // Find the registered member
-      const member = members.find(function (item) {
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
 
-        return (
-          item &&
-          typeof item.email === "string" &&
-          item.email.trim().toLowerCase() === email &&
-          typeof item.password === "string" &&
-          item.password === password
-        );
-
-      });
-
-      // Stop if email or password is incorrect
-      if (!member) {
-
-        message.textContent =
-          "Email ya password galat hai. Apni registration details check karein.";
-
-        message.style.color = "red";
+      if (!email || !password) {
+        showMessage("Email aur password dono enter karein.");
         return;
-
       }
-
-      // Save the current member session
-      try {
-
-        localStorage.setItem(
-          "currentMember",
-          JSON.stringify(member)
-        );
-
-        localStorage.setItem(
-          "memberEmail",
-          member.email
-        );
-
-        localStorage.setItem(
-          "memberLoggedIn",
-          "true"
-        );
-
-      } catch (error) {
-
-        localStorage.removeItem("memberLoggedIn");
-
-        message.textContent =
-          "Login session save nahi ho saka. Browser storage check karein.";
-
-        message.style.color = "red";
-        return;
-
-      }
-
-      // Login successful
-      message.textContent =
-        "Login successful! Dashboard khul raha hai...";
-
-      message.style.color = "green";
 
       loginButton.disabled = true;
 
-      // Open the correct dashboard file
-      setTimeout(function () {
+      showMessage("Firebase account verify ho raha hai...", "#d4af37");
 
-      window.location.href = "https://omvardhnaayefreedomfinance-crypto.github.io/freedom-finance/member-dashboard.html";
+      try {
 
-      }, 700);
+        // STEP 1: AUTHENTICATE EMAIL AND PASSWORD
+
+        const credential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const user = credential.user;
+
+
+        // STEP 2: CHECK EMAIL VERIFICATION
+
+        if (!user.emailVerified) {
+
+          showMessage(
+            "Password sahi hai, lekin email abhi verify nahi hui. Verification email bhejne ki koshish kar rahe hain...",
+            "#ffcc66"
+          );
+
+          try {
+
+            await sendEmailVerification(user);
+
+            showMessage(
+              "Login credentials sahi hain, lekin email verify nahi hui. Verification email dobara bhej di gayi hai. Inbox aur Spam folder check karein.",
+              "#ffcc66"
+            );
+
+          } catch (verificationError) {
+
+            console.error(
+              "Verification email error:",
+              verificationError
+            );
+
+            showMessage(
+              "Password sahi hai, lekin email verify nahi hui. Verification email send nahi ho saki. " +
+              friendlyError(verificationError),
+              "#ffcc66"
+            );
+
+          }
+
+          await signOut(auth);
+          return;
+        }
+
+
+        // STEP 3: READ MEMBER PROFILE
+
+        let memberData = {};
+
+        try {
+
+          const memberRef = doc(db, "members", user.uid);
+          const memberSnapshot = await getDoc(memberRef);
+
+          if (memberSnapshot.exists()) {
+            memberData = memberSnapshot.data();
+          } else {
+
+            console.warn(
+              "Authenticated user has no Firestore member profile:",
+              user.uid
+            );
+
+            memberData = {
+              uid: user.uid,
+              name: user.displayName || "",
+              email: user.email || email,
+              status: "Profile Pending"
+            };
+
+          }
+
+        } catch (profileError) {
+
+          console.error("Member profile read error:", profileError);
+
+          await signOut(auth);
+
+          showMessage(
+            "Email aur password sahi hain, lekin member profile database se read nahi ho rahi. " +
+            friendlyError(profileError)
+          );
+
+          return;
+        }
+
+
+        // STEP 4: STORE CURRENT MEMBER FOR EXISTING DASHBOARD
+
+        const currentMember = {
+          ...memberData,
+          uid: user.uid,
+          name: memberData.name || user.displayName || "",
+          email: user.email || email,
+          emailVerified: user.emailVerified
+        };
+
+        try {
+
+          localStorage.setItem(
+            "currentMember",
+            JSON.stringify(currentMember)
+          );
+
+          localStorage.setItem(
+            "memberEmail",
+            user.email || email
+          );
+
+          localStorage.setItem(
+            "memberLoggedIn",
+            "true"
+          );
+
+        } catch (storageError) {
+
+          console.error("Session storage error:", storageError);
+
+          await signOut(auth);
+
+          showMessage(
+            "Browser session save nahi ho saki. Browser storage enable karke dobara try karein."
+          );
+
+          return;
+        }
+
+
+        // STEP 5: OPEN MEMBER DASHBOARD
+
+        showMessage(
+          "Login successful! Dashboard khul raha hai...",
+          "#00cc66"
+        );
+
+        window.location.href = "member-dashboard.html";
+
+      } catch (error) {
+
+        showMessage(friendlyError(error));
+
+      } finally {
+
+        loginButton.disabled = false;
+
+      }
 
     });
 
-  })();
+
+    // FORGOT PASSWORD
+
+    document.getElementById("forgotPassword").addEventListener(
+      "click",
+      async function(event) {
+
+        event.preventDefault();
+
+        if (!auth) {
+          showMessage("Firebase initialize nahi hua.");
+          return;
+        }
+
+        const email = emailInput.value.trim().toLowerCase();
+
+        if (!email) {
+          showMessage(
+            "Pehle Email Address field mein apna registered email enter karein."
+          );
+          emailInput.focus();
+          return;
+        }
+
+        try {
+
+          await sendPasswordResetEmail(auth, email);
+
+          showMessage(
+            "Agar is email par account registered hai, toh password reset instructions bhej di gayi hain. Inbox aur Spam folder check karein.",
+            "#00cc66"
+          );
+
+        } catch (error) {
+
+          showMessage(friendlyError(error));
+
+        }
+
+      }
+    );
+
+
+    // RESEND VERIFICATION EMAIL
+
+    document.getElementById("resendVerification").addEventListener(
+      "click",
+      async function(event) {
+
+        event.preventDefault();
+
+        if (!auth) {
+          showMessage("Firebase initialize nahi hua.");
+          return;
+        }
+
+        const email = emailInput.value.trim().toLowerCase();
+        const password = passwordInput.value;
+
+        if (!email || !password) {
+          showMessage(
+            "Verification email bhejne ke liye registered email aur password enter karein."
+          );
+          return;
+        }
+
+        loginButton.disabled = true;
+
+        try {
+
+          const credential = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+          if (credential.user.emailVerified) {
+
+            showMessage(
+              "Aapka email pehle se verified hai. Member Login button use karein.",
+              "#00cc66"
+            );
+
+          } else {
+
+            await sendEmailVerification(credential.user);
+
+            showMessage(
+              "Verification email bhej di gayi hai. Inbox aur Spam folder check karein.",
+              "#00cc66"
+            );
+
+          }
+
+          await signOut(auth);
+
+        } catch (error) {
+
+          showMessage(friendlyError(error));
+
+        } finally {
+
+          loginButton.disabled = false;
+
+        }
+
+      }
+    );
+
   </script>
 
 </body>
-
   </html>
-  
