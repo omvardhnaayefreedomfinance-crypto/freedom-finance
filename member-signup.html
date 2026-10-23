@@ -490,15 +490,29 @@
         );
 
 
-      } catch (error) {
+      }  
+    } catch (error) {
 
-        console.error("Signup error:", error);
+        console.error("FREEDOM FINANCE SIGNUP ERROR:", error);
 
-        if (profileSaved && !verificationSent) {
+        const errorCode = error?.code || "unknown";
+        const errorMessage = error?.message || "No error message returned";
+
+        if (errorCode.includes("api-key-not-valid")) {
 
           showMessage(
-            "Account aur profile save ho gaye hain, lekin verification email send nahi ho saki. Login page par jaakar verification email resend karne ki koshish karein. " +
-            getFriendlyError(error),
+            "FIREBASE API KEY ERROR: Firebase ne API key reject kar di hai. " +
+            "Signup code request bhej raha hai, lekin Firebase usse accept nahi kar raha. " +
+            "Project: " + firebaseConfig.projectId +
+            " | Host: " + location.hostname,
+            "#ff6666"
+          );
+
+        } else if (profileSaved && !verificationSent) {
+
+          showMessage(
+            "Profile save ho gayi, lekin verification email send nahi hui. " +
+            "Error: " + errorCode + " | " + errorMessage,
             "#ffcc66"
           );
 
@@ -506,40 +520,36 @@
             try {
               await signOut(auth);
             } catch (signOutError) {
-              console.error(signOutError);
+              console.error("Sign-out error:", signOutError);
             }
           }
 
         } else if (createdUser && !profileSaved) {
 
           showMessage(
-            "Firebase account create ho gaya, lekin profile save nahi hui. Dobara signup karne se pehle database permission issue solve karna hoga. Error: " +
-            getFriendlyError(error),
+            "Firebase account ban gaya, lekin member profile save nahi hui. " +
+            "Error: " + errorCode + " | " + errorMessage,
             "#ff6666"
           );
 
           try {
             await signOut(auth);
           } catch (signOutError) {
-            console.error(signOutError);
+            console.error("Sign-out error:", signOutError);
           }
 
         } else {
 
           showMessage(
-            getFriendlyError(error),
+            "Signup failed. Error: " + errorCode +
+            " | Details: " + errorMessage +
+            " | Project: " + firebaseConfig.projectId,
             "#ff6666"
           );
 
-        }showMessage(
-  "DEBUG CODE: " + (error?.code || "none") +
-  " | MESSAGE: " + (error?.message || "none") +
-  " | PROJECT: " + firebaseConfig.projectId +
-  " | HOST: " + location.hostname,
-  "#ff6666"
-);
+        }
 
-      } finally {
+    } finally {
 
         signupButton.disabled = false;
 
