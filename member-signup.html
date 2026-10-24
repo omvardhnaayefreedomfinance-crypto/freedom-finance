@@ -350,7 +350,12 @@
 
       try {
         // Step 1: Create Authentication account.
-        const credential = await createUserWithEmailAndPassword(
+        const credential =const actionCodeSettings = {
+  url: "https://omvardhnaayefreedomfinance-crypto.github.io/freedom-finance/verify-email.html",
+  handleCodeInApp: false
+};
+
+await sendEmailVerification(createdUser, actionCodeSettings);
           auth,
           email,
           password
