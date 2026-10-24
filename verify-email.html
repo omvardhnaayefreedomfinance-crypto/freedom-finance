@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Verify Email - Freedom Finance</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .verify-card {
+      max-width: 520px;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .verify-message {
+      margin: 22px 0;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .verify-button {
+      display: inline-block;
+      margin: 10px 5px;
+      padding: 12px 22px;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .verify-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .verify-status {
+      color: #d4af37;
+    }
+
+    .verify-error {
+      color: #ff7777;
+    }
+
+    .verify-success {
+      color: #00cc66;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="community">
+
+    <p class="section-number">COMMUNITY / EMAIL VERIFICATION</p>
+
+    <h2>Verify Your <span>Email</span></h2>
+
+    <p class="community-text">
+      Complete your email verification to access your Freedom Finance account.
+    </p>
+
+    <div class="signup-card verify-card">
+
+      <p id="verifyMessage" class="verify-message verify-status"
+         aria-live="polite">
+        Checking verification link. Please wait...
+      </p>
+
+      <button
+        id="verifyButton"
+        class="signup-btn verify-button"
+        type="button"
+        hidden
+      >
+        VERIFY EMAIL
+      </button>
+
+      <p>
+        <a href="member-login.html">Go to Member Login</a>
+      </p>
+
+      <p>
+        <a href="index.html">← Back to Freedom Finance</a>
+      </p>
+
+    </div>
+  </section>
+
+  <script type="module">
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+    import {
+      getAuth,
+      applyActionCode,
+      checkActionCode
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+      authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+      projectId: "omvardhnaayefreedomfinan-efaf4",
+      storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+      messagingSenderId: "552483514216",
+      appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+      measurementId: "G-6MPELL55BD"
+    };
+
+    const message = document.getElementById("verifyMessage");
+    const verifyButton = document.getElementById("verifyButton");
+
+    function showMessage(text, type = "verify-status") {
+      message.textContent = text;
+      message.className = "verify-message " + type;
+    }
+
+    let auth;
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+    } catch (error) {
+      console.error("Firebase initialization error:", error);
+      showMessage(
+        "Firebase initialize nahi hua. Error: " +
+        (error.code || error.message || "unknown"),
+        "verify-error"
+      );
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+    const actionCode = params.get("oobCode");
+    const continueUrl = params.get("continueUrl");
+
+    async function processVerification() {
+      if (!auth) return;
+
+      if (mode !== "verifyEmail" || !actionCode) {
+        showMessage(
+          "Verification link incomplete hai. Login page se nayi verification email mangwayein.",
+          "verify-error"
+        );
+        return;
+      }
+
+      try {
+        showMessage("Verification link check ho raha hai...");
+
+        // Pehle code ki validity check karein.
+        const info = await checkActionCode(auth, actionCode);
+
+        if (info.operation !== "VERIFY_EMAIL") {
+          showMessage(
+            "Yeh email verification link nahi hai. Nayi verification email mangwayein.",
+            "verify-error"
+          );
+          return;
+        }
+
+        // Firebase par email verification complete karein.
+        await applyActionCode(auth, actionCode);
+
+        showMessage(
+          "Email successfully verified! Ab Member Login page par jaakar login karein.",
+          "verify-success"
+        );
+
+        verifyButton.hidden = false;
+        verifyButton.textContent = "GO TO MEMBER LOGIN";
+
+      } catch (error) {
+        console.error("Email verification error:", error);
+
+        const code = error?.code || "unknown";
+
+        if (
+          code === "auth/expired-action-code" ||
+          code === "auth/invalid-action-code"
+        ) {
+          showMessage(
+            "Yeh verification link expire ho chuka hai ya pehle use ho gaya hai. Member Login page par jaakar Resend Verification Email use karein.",
+            "verify-error"
+          );
+        } else if (code === "auth/invalid-api-key") {
+          showMessage(
+            "Firebase API key accept nahi hui. Verification request complete nahi ho saki.",
+            "verify-error"
+          );
+        } else {
+          showMessage(
+            "Verification complete nahi hui. Error: " +
+            code + ". Login page se nayi verification email mangwayein.",
+            "verify-error"
+          );
+        }
+
+        verifyButton.hidden = false;
+        verifyButton.textContent = "GO TO MEMBER LOGIN";
+      }
+    }
+
+    verifyButton.addEventListener("click", function() {
+      window.location.href = "member-login.html";
+    });
+
+    processVerification();
+  </script>
+</body>
+  </html>
