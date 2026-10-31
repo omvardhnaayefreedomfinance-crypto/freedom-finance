@@ -276,37 +276,60 @@ td{
         <strong id="withdrawInvestmentStatus">Awaiting Investment Details</strong>
     </p>
 
-</div><!-- MEMBER BANK DETAILS -->
-
 <div class="card">
-
     <h2>Registered Bank Details</h2>
 
-    <p style="margin-bottom:14px">
-        <span style="color:#aaa">edit Account Holder:</span>
-        <strong id="withdrawAccountHolder"> Available</strong>
-    </p>
+    <div id="savedBankDetails">
+        <p>Account Holder: <strong id="withdrawAccountHolder">—</strong></p>
+        <p>Bank Name: <strong id="withdrawBankName">—</strong></p>
+        <p>Account Number: <strong id="withdrawAccountNumber">—</strong></p>
+        <p>IFSC Code: <strong id="withdrawIFSC">—</strong></p>
+        <p>Account Type: <strong id="withdrawAccountType">—</strong></p>
+        <p>UPI ID: <strong id="withdrawUPI">—</strong></p>
+    </div>
 
-    <p style="margin-bottom:14px">
-        <span style="color:#aaa">exit Bank Name:</span>
-        <strong id="withdrawBankName"> Available</strong>
-    </p>
+    <button type="button" id="editBankButton">
+        EDIT BANK DETAILS
+    </button>
 
-    <p style="margin-bottom:14px">
-        <span style="color:#aaa">edit Account Number:</span>
-        <strong id="withdrawAccountNumber"> Available</strong>
-    </p>
+    <form id="bankForm" style="display:none;">
 
-    <p style="margin-bottom:14px">
-        <span style="color:#aaa">edit IFSC Code:</span>
-        <strong id="withdrawIFSC"> Available</strong>
-    </p>
+        <label>Account Holder Name</label>
+        <input id="bankHolder" required maxlength="100">
 
-    <p>
-        <span style="color:#aaa">edit UPI ID:</span>
-        <strong id="withdrawUPI"> Available</strong>
-    </p>
+        <label>Bank Name</label>
+        <input id="bankName" required maxlength="100">
 
+        <label>Account Number</label>
+        <input id="bankAccount" type="password"
+               inputmode="numeric" required maxlength="20">
+
+        <label>Confirm Account Number</label>
+        <input id="confirmBankAccount" type="password"
+               inputmode="numeric" required maxlength="20">
+
+        <label>IFSC Code</label>
+        <input id="bankIFSC" required maxlength="11"
+               style="text-transform:uppercase">
+
+        <label>Account Type</label>
+        <select id="bankType" required>
+            <option value="">Select Account Type</option>
+            <option value="Savings">Savings</option>
+            <option value="Current">Current</option>
+        </select>
+
+        <label>UPI ID (Optional)</label>
+        <input id="bankUPI" maxlength="100">
+
+        <button type="submit">SAVE BANK DETAILS</button>
+        <button type="button" id="cancelBankButton"
+                style="background:#333;color:white;">
+            CANCEL
+        </button>
+
+        <p id="bankMessage" class="message"></p>
+    </form>
 </div>
 
     <div class="card">
