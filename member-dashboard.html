@@ -331,116 +331,168 @@ body{
 
 </div>
 
-</div>  <script>  
-  
-const currentMember =  
-    JSON.parse(  
-        localStorage.getItem("currentMember") || "null"  
-    );  
-  
-  
-/* Load member information */  
-  
-if(currentMember){  
-  
-    document.getElementById("memberName").textContent =  
-        currentMember.name || "Member";  
-  
-    document.getElementById("profileName").textContent =  
-        currentMember.name || "—";  
-  
-    document.getElementById("memberId").textContent =  
-        currentMember.memberId ||  
-        currentMember.id ||  
-        "—";  
-  
-    document.getElementById("email").textContent =  
-        currentMember.email || "—";  
-  
-    document.getElementById("mobile").textContent =  
-        currentMember.mobile || "—";  
-  
-    document.getElementById("referralId").textContent =  
-        currentMember.myReferralId ||  
-        currentMember.referralId ||  
-        "—";  
-  
-    document.getElementById("status").textContent =  
-        currentMember.status || "Active";  
-  
-    document.getElementById("joinDate").textContent =  
-        currentMember.joinDate ||  
-        currentMember.createdAt ||  
-        "—";  
-  
-}  
-  
-  
-/* Balance */  
-  
-let balance =  
-    Number(  
-        localStorage.getItem("availableBalance") ||  
-        (currentMember && currentMember.availableBalance) ||  
-        0  
-    );  
-  
-  
-/* Investment */  
-  
-let investment =  
-    Number(  
-        currentMember &&  
-        (  
-            currentMember.totalInvestment ||  
-            currentMember.investment  
-        ) || 0  
-    );  
-  
-  
-/* Profit */  
-  
-let profit =  
-    Number(  
-        currentMember &&  
-        currentMember.profit || 0  
-    );  
-  
-  
-/* Withdrawal */  
-  
-let withdrawal =  
-    Number(  
-        currentMember &&  
-        currentMember.totalWithdrawal || 0  
-    );  
-  
-  
-document.getElementById("balance").textContent =  
-    "₹" + balance.toLocaleString("en-IN");  
-  
-document.getElementById("investment").textContent =  
-    "₹" + investment.toLocaleString("en-IN");  
-  
-document.getElementById("profit").textContent =  
-    "₹" + profit.toLocaleString("en-IN");  
-  
-document.getElementById("withdrawal").textContent =  
-    "₹" + withdrawal.toLocaleString("en-IN");  
-  
-  
-/* Logout */  
-  
-function logout(){  
-  
-    localStorage.removeItem("memberLoggedIn");  
-    localStorage.removeItem("currentMember");  
-    localStorage.removeItem("memberEmail");  
-  
-    window.location.href =  
-        "member-login.html";  
-  
-}  
-  
+</div>  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+  authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+  projectId: "omvardhnaayefreedomfinan-efaf4",
+  storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+  messagingSenderId: "552483514216",
+  appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+  measurementId: "G-6MPELL55BD"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+const money = value =>
+  "₹" + Number(value || 0).toLocaleString("en-IN");
+
+
+function showError(message) {
+  document.getElementById("memberName").textContent = "Member";
+  document.getElementById("profileName").textContent = message;
+}
+
+
+function formatDate(value) {
+  if (!value) return "—";
+
+  let date;
+
+  if (value.toDate) {
+    date = value.toDate();
+  } else {
+    date = new Date(value);
+  }
+
+  if (isNaN(date.getTime())) return "—";
+
+  return date.toLocaleDateString("en-IN");
+}
+
+
+async function loadMember(user) {
+
+  try {
+
+    if (!user.emailVerified) {
+      await signOut(auth);
+      window.location.href = "member-login.html";
+      return;
+    }
+
+    const memberRef = doc(db, "members", user.uid);
+    const memberSnap = await getDoc(memberRef);
+
+    if (!memberSnap.exists()) {
+      showError("Member profile database mein nahi mili.");
+      return;
+    }
+
+    const member = memberSnap.data();
+
+    document.getElementById("memberName").textContent =
+      member.name || "Member";
+
+    document.getElementById("profileName").textContent =
+      member.name || "—";
+
+    document.getElementById("memberId").textContent =
+      member.memberId || "—";
+
+    document.getElementById("email").textContent =
+      member.email || user.email || "—";
+
+    document.getElementById("mobile").textContent =
+      member.mobile || "—";
+
+    document.getElementById("referralId").textContent =
+      member.myReferralId || "—";
+
+    document.getElementById("status").textContent =
+      member.status || "Pending";
+
+    document.getElementById("joinDate").textContent =
+      formatDate(member.joinDate || member.createdAt);
+
+    document.getElementById("balance").textContent =
+      money(member.availableBalance);
+
+    document.getElementById("investment").textContent =
+      money(member.totalInvestment ?? member.investment);
+
+    document.getElementById("profit").textContent =
+      money(member.profit);
+
+    document.getElementById("withdrawal").textContent =
+      money(member.totalWithdrawal);
+
+    // Fresh database profile local storage mein bhi update.
+    localStorage.setItem("currentMember", JSON.stringify(member));
+
+  } catch (error) {
+
+    console.error("Dashboard error:", error);
+
+    if (error.code === "permission-denied") {
+      showError("Database permission denied. Firestore Rules check karein.");
+    } else {
+      showError("Profile load nahi hui: " + error.message);
+    }
+
+  }
+}
+
+
+// Login session check
+onAuthStateChanged(auth, user => {
+
+  if (!user) {
+    window.location.href = "member-login.html";
+    return;
+  }
+
+  loadMember(user);
+
+});
+
+
+// Logout
+window.logout = async function() {
+
+  try {
+
+    await signOut(auth);
+
+    localStorage.removeItem("memberLoggedIn");
+    localStorage.removeItem("currentMember");
+    localStorage.removeItem("memberEmail");
+
+    window.location.href = "member-login.html";
+
+  } catch (error) {
+    alert("Logout error: " + error.message);
+  }
+
+};
+
 </script>  </body>  
         </html>
