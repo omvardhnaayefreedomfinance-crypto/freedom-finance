@@ -7,91 +7,49 @@
 
 <style>
 *{box-sizing:border-box}
-
 body{
-  margin:0;
-  padding:0;
-  background:#050505;
-  color:#fff8e7;
-  font-family:Arial,sans-serif;
+  margin:0;padding:0;background:#050505;
+  color:#fff8e7;font-family:Arial,sans-serif;
 }
-
 header{
-  padding:18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:#080808;
+  padding:18px;display:flex;justify-content:space-between;
+  align-items:center;background:#080808;
   border-bottom:1px solid #604b18;
 }
-
 .logo{color:#ffd96a;font-weight:bold;font-size:20px}
 .back{color:#ffd96a;text-decoration:none}
-
 .container{max-width:700px;margin:auto;padding:22px 15px 40px}
-
 .card{
-  padding:23px;
-  margin-bottom:20px;
-  border:1px solid #735719;
-  border-radius:16px;
+  padding:23px;margin-bottom:20px;
+  border:1px solid #735719;border-radius:16px;
   background:linear-gradient(145deg,#17130b,#090909);
 }
-
 h1{font-size:27px;text-align:center;color:#ffd96a}
 .subtitle{text-align:center;color:#aaa;line-height:1.6}
-
 .row{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  padding:14px 0;
-  border-bottom:1px solid #443718;
+  display:flex;justify-content:space-between;gap:12px;
+  padding:14px 0;border-bottom:1px solid #443718;
 }
-
 .row span:first-child{color:#aaa}
 .row strong{text-align:right;overflow-wrap:anywhere}
 .gold{color:#ffd96a}
-
 input{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  border:1px solid #604b18;
-  border-radius:9px;
-  background:#080808;
-  color:white;
-  font-size:16px;
+  width:100%;padding:14px;margin-top:10px;
+  border:1px solid #604b18;border-radius:9px;
+  background:#080808;color:white;font-size:16px;
 }
-
 button{
-  width:100%;
-  padding:14px;
-  margin-top:15px;
-  border:0;
-  border-radius:9px;
+  width:100%;padding:14px;margin-top:15px;
+  border:0;border-radius:9px;
   background:linear-gradient(135deg,#d99b16,#ffd96a);
-  color:#171107;
-  font-weight:bold;
-  font-size:15px;
-  cursor:pointer;
+  color:#171107;font-weight:bold;font-size:15px;cursor:pointer;
 }
-
 button:disabled{opacity:.5;cursor:not-allowed}
-
 .secondary{
-  background:transparent;
-  border:1px solid #ffd96a;
-  color:#ffd96a;
+  background:transparent;border:1px solid #ffd96a;color:#ffd96a;
 }
-
 .message{color:#ffd96a;text-align:center;line-height:1.5}
 .note{font-size:12px;color:#999;line-height:1.6;text-align:center}
-
-@media(max-width:480px){
-  .card{padding:18px}
-  h1{font-size:23px}
-}
 </style>
 </head>
 
@@ -106,25 +64,20 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
   <div class="card">
     <h1>Payment Details</h1>
-    <p class="subtitle">
-      Review your selected plan before submitting payment information.
-    </p>
+    <p class="subtitle">Review your selected plan.</p>
 
     <div class="row">
       <span>Selected Plan</span>
       <strong id="planName">—</strong>
     </div>
-
     <div class="row">
       <span>Investment Amount</span>
       <strong id="amount">—</strong>
     </div>
-
     <div class="row">
       <span>Displayed Profit Estimate</span>
       <strong id="profit">—</strong>
     </div>
-
     <div class="row">
       <span>Displayed Total Estimate</span>
       <strong class="gold" id="total">—</strong>
@@ -134,16 +87,15 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <div class="card">
     <h1>Payment Instructions</h1>
     <p class="subtitle">
-      Use only payment details independently verified as belonging to
-      the project. Confirm the recipient and amount with your bank
-      before sending money.
+      Verify the beneficiary name and account details independently
+      with your bank before making any payment.
     </p>
-
     <p class="note">
-      The payment instructions and recipient details must be verified
-      before this page is used to collect real payments.
+      A submitted transaction reference does not confirm receipt
+      of funds or guarantee any investment return.
     </p>
-  </div>  <!-- BANK DETAILS -->
+  </div>
+
   <div class="card">
     <h1>Bank Details</h1>
 
@@ -151,40 +103,34 @@ button:disabled{opacity:.5;cursor:not-allowed}
       <span>Bank Name</span>
       <strong>Federal Bank</strong>
     </div>
-
     <div class="row">
       <span>Account Number</span>
       <strong>77770127244362</strong>
     </div>
-
     <div class="row">
       <span>IFSC Code</span>
       <strong>FDRL0007777</strong>
     </div>
-
     <div class="row">
       <span>Alternate IFSC</span>
       <strong>FDRL0000001</strong>
     </div>
-
     <div class="row">
       <span>Branch</span>
       <strong>Neo Banking – Jupiter</strong>
     </div>
-
     <div class="row">
       <span>Account Type</span>
-      <strong>current Account</strong>
+      <strong>Current Account</strong>
     </div>
-
     <div class="row">
       <span>UPI ID</span>
       <strong>omvardhnaaye@ptyes</strong>
     </div>
 
     <p class="note">
-      Please verify the beneficiary name and account details
-      with your bank before making a payment.
+      Please verify account ownership and beneficiary details
+      before transferring money.
     </p>
   </div>
 
@@ -199,11 +145,13 @@ button:disabled{opacity:.5;cursor:not-allowed}
       autocomplete="off"
       placeholder="Enter your transaction reference">
 
-    <button type="button" id="submitBtn">
-      SUBMIT FOR VERIFICATION
+    <button type="button" id="submitBtn" disabled>
+      LOADING...
     </button>
 
-    <p class="message" id="message" role="status"></p>
+    <p class="message" id="message" role="status">
+      Connecting to Firebase...
+    </p>
 
     <div class="row">
       <span>Payment Status</span>
@@ -211,8 +159,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
     </div>
 
     <p class="note">
-      Submitting a transaction reference does not confirm that payment
-      was received. Payment must be independently verified.
+      Your request will remain pending until an administrator
+      independently verifies the payment.
     </p>
 
     <button type="button" class="secondary" id="dashboardBtn">
@@ -222,103 +170,254 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 </div>
 
-<script>
-(function(){
+<script type="module">
 
-  const plan = localStorage.getItem("selectedPlan");
-  const amount = localStorage.getItem("selectedAmount");
-  const profit = localStorage.getItem("selectedProfit");
-  const total = localStorage.getItem("selectedTotal");
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
-  const planName = document.getElementById("planName");
-  const amountEl = document.getElementById("amount");
-  const profitEl = document.getElementById("profit");
-  const totalEl = document.getElementById("total");
-  const submitBtn = document.getElementById("submitBtn");
-  const message = document.getElementById("message");
-  const transactionInput = document.getElementById("transactionId");
-  const statusEl = document.getElementById("paymentStatus");
+import {
+  getAuth,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-  if(plan && amount && profit && total){
-    planName.textContent = plan;
-    amountEl.textContent = amount;
-    profitEl.textContent = profit;
-    totalEl.textContent = total;
-  } else {
-    planName.textContent = "No plan selected";
-    submitBtn.disabled = true;
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+  authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+  projectId: "omvardhnaayefreedomfinan-efaf4",
+  storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+  messagingSenderId: "552483514216",
+  appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+  measurementId: "G-6MPELL55BD"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+const plan = localStorage.getItem("selectedPlan");
+const amountRaw = localStorage.getItem("selectedAmount");
+const profitRaw = localStorage.getItem("selectedProfit");
+const totalRaw = localStorage.getItem("selectedTotal");
+
+const planNameEl = document.getElementById("planName");
+const amountEl = document.getElementById("amount");
+const profitEl = document.getElementById("profit");
+const totalEl = document.getElementById("total");
+
+const submitBtn = document.getElementById("submitBtn");
+const message = document.getElementById("message");
+const transactionInput = document.getElementById("transactionId");
+const statusEl = document.getElementById("paymentStatus");
+
+let currentUser = null;
+let memberData = null;
+let isSubmitting = false;
+let requestSubmitted = false;
+
+
+const amount = Number(
+  String(amountRaw || "").replace(/[₹,\s]/g, "")
+);
+
+const profit = Number(
+  String(profitRaw || "").replace(/[₹,\s]/g, "")
+);
+
+const total = Number(
+  String(totalRaw || "").replace(/[₹,\s]/g, "")
+);
+
+
+if(plan && amountRaw !== null && profitRaw !== null && totalRaw !== null
+   && Number.isFinite(amount) && amount > 0
+   && Number.isFinite(profit) && Number.isFinite(total)) {
+
+  planNameEl.textContent = plan;
+  amountEl.textContent = amountRaw;
+  profitEl.textContent = profitRaw;
+  totalEl.textContent = totalRaw;
+
+} else {
+
+  message.textContent =
+    "No valid plan found. Please select your plan again.";
+
+  submitBtn.textContent = "PLAN NOT FOUND";
+  submitBtn.disabled = true;
+}
+
+
+onAuthStateChanged(auth, async (user) => {
+
+  currentUser = user;
+  memberData = null;
+
+  if(!user) {
     message.textContent =
-      "Please select a plan before continuing.";
+      "Please login to your member account first.";
+
+    submitBtn.textContent = "LOGIN REQUIRED";
+    submitBtn.disabled = true;
+    return;
   }
 
-  submitBtn.addEventListener("click", function(){
+  if(!user.emailVerified) {
+    message.textContent =
+      "Please verify your email before submitting payment.";
 
-    const transaction = transactionInput.value.trim();
+    submitBtn.textContent = "EMAIL VERIFICATION REQUIRED";
+    submitBtn.disabled = true;
+    return;
+  }
 
-    if(!plan || !amount || !profit || !total){
-      message.textContent = "No valid selected plan found.";
-      return;
-    }
+  try {
 
-    if(transaction.length < 4){
+    const memberRef = doc(db, "members", user.uid);
+    const memberSnap = await getDoc(memberRef);
+
+    if(!memberSnap.exists()) {
+
       message.textContent =
-        "Please enter a valid transaction reference.";
+        "Member record not found in Firebase. Please contact admin.";
+
+      submitBtn.textContent = "MEMBER RECORD NOT FOUND";
+      submitBtn.disabled = true;
       return;
     }
 
-    /*
-      Prototype only:
-      This stores a pending submission in this browser.
-      It does not verify payment or update balances.
-    */
+    memberData = memberSnap.data();
 
-    const entry = {
-      id: "FF-" + Date.now(),
-      plan: plan,
+    if(!plan || !Number.isFinite(amount) || amount <= 0) {
+      submitBtn.textContent = "INVALID PLAN";
+      submitBtn.disabled = true;
+      return;
+    }
+
+    message.textContent =
+      "Firebase connected. You can submit your transaction reference.";
+
+    submitBtn.textContent = "SUBMIT FOR VERIFICATION";
+    submitBtn.disabled = false;
+
+  } catch(error) {
+
+    console.error("Member loading error:", error);
+
+    message.textContent =
+      "Firebase error: " + error.code + " — " + error.message;
+
+    submitBtn.textContent = "CONNECTION ERROR";
+    submitBtn.disabled = true;
+  }
+
+});
+
+
+submitBtn.addEventListener("click", async () => {
+
+  if(isSubmitting || requestSubmitted) return;
+
+  const transaction = transactionInput.value.trim();
+
+  if(!currentUser || !memberData) {
+    message.textContent = "Member login or member record is missing.";
+    return;
+  }
+
+  if(!currentUser.emailVerified) {
+    message.textContent = "Please verify your email first.";
+    return;
+  }
+
+  if(!plan || !Number.isFinite(amount) || amount <= 0) {
+    message.textContent = "Invalid selected plan or amount.";
+    return;
+  }
+
+  if(transaction.length < 4 || transaction.length > 100) {
+    message.textContent =
+      "Please enter a valid transaction reference (4–100 characters).";
+    return;
+  }
+
+  isSubmitting = true;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "SAVING REQUEST...";
+
+  try {
+
+    const requestData = {
+      uid: currentUser.uid,
+      memberId: memberData.memberId || "",
+      memberName: memberData.name || "",
+      email: currentUser.email,
+      plan: String(plan),
       amount: amount,
+      displayedProfit: profit,
+      displayedTotal: total,
       transactionReference: transaction,
       status: "Pending Verification",
-      submittedAt: new Date().toISOString()
+      submittedAt: serverTimestamp()
     };
 
-    let history = [];
-
-    try{
-      history = JSON.parse(
-        localStorage.getItem("paymentSubmissions") || "[]"
-      );
-
-      if(!Array.isArray(history)){
-        history = [];
-      }
-    } catch(error){
-      history = [];
-    }
-
-    history.push(entry);
-
-    localStorage.setItem(
-      "paymentSubmissions",
-      JSON.stringify(history)
+    const requestRef = await addDoc(
+      collection(db, "paymentRequests"),
+      requestData
     );
 
+    requestSubmitted = true;
+
     statusEl.textContent = "Pending Verification";
+
     message.textContent =
-      "Reference saved in this browser. Payment is not yet verified.";
+      "Request successfully saved in Firebase. Request ID: " +
+      requestRef.id +
+      ". Payment is awaiting independent verification.";
 
-    submitBtn.disabled = true;
     transactionInput.disabled = true;
-  });
+    submitBtn.textContent = "REQUEST SUBMITTED";
 
-  document.getElementById("dashboardBtn")
-    .addEventListener("click", function(){
-      window.location.href = "dashboard.html";
-    });
+  } catch(error) {
 
-})();
+    console.error("Payment request save error:", error);
+
+    message.textContent =
+      "SAVE FAILED: " + error.code + " — " + error.message;
+
+    submitBtn.textContent = "RETRY SUBMISSION";
+    submitBtn.disabled = false;
+
+  } finally {
+
+    isSubmitting = false;
+
+  }
+
+});
+
+
+document.getElementById("dashboardBtn")
+.addEventListener("click", () => {
+
+  window.location.href = "member-dashboard.html";
+
+});
+
 </script>
 
 </body>
-      </html>
-
-        
+  </html>
