@@ -3,1034 +3,569 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Freedom Finance - Admin Dashboard</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:#080b12;
-    color:#fff;
-}
-
-.header{
-    background:#111827;
-    padding:18px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid #273244;
-    position:sticky;
-    top:0;
-    z-index:10;
-}
-
-.logo{
-    font-size:22px;
-    font-weight:bold;
-    color:#f5b942;
-}
-
-.admin-text{
-    font-size:13px;
-    color:#9ca3af;
-    margin-top:4px;
-}
-
-.logout{
-    background:#dc2626;
-    color:#fff;
-    border:0;
-    padding:10px 15px;
-    border-radius:7px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.container{
-    max-width:1400px;
-    margin:auto;
-    padding:20px;
-}
-
-.title{
-    margin-bottom:20px;
-}
-
-.title h1{
-    font-size:27px;
-}
-
-.title p{
-    color:#9ca3af;
-    margin-top:5px;
-}
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
-    margin-bottom:25px;
-}
-
-.stat{
-    background:#111827;
-    border:1px solid #273244;
-    border-radius:12px;
-    padding:20px;
-}
-
-.stat-title{
-    color:#9ca3af;
-    font-size:14px;
-}
-
-.stat-value{
-    font-size:26px;
-    font-weight:bold;
-    margin-top:10px;
-    color:#f5b942;
-}
-
-.menu{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    gap:10px;
-    margin-bottom:25px;
-}
-
-.menu button{
-    background:#111827;
-    color:#fff;
-    border:1px solid #273244;
-    padding:12px 8px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.menu button:hover{
-    border-color:#f5b942;
-    color:#f5b942;
-}
-
-.section{
-    background:#111827;
-    border:1px solid #273244;
-    border-radius:12px;
-    padding:20px;
-    margin-bottom:20px;
-}
-
-.section h2{
-    font-size:20px;
-    margin-bottom:15px;
-    color:#f5b942;
-}
-
-.search{
-    width:100%;
-    padding:12px;
-    background:#080b12;
-    color:#fff;
-    border:1px solid #273244;
-    border-radius:7px;
-    margin-bottom:15px;
-}
-
-.table-wrap{
-    overflow-x:auto;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:700px;
-}
-
-th,td{
-    padding:12px 10px;
-    border-bottom:1px solid #273244;
-    text-align:left;
-    font-size:13px;
-}
-
-th{
-    color:#f5b942;
-    background:#0d1420;
-}
-
-td{
-    color:#e5e7eb;
-}
-
-.empty{
-    text-align:center;
-    color:#9ca3af;
-    padding:25px;
-}
-
-.badge{
-    display:inline-block;
-    padding:5px 9px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:bold;
-}
-
-.active{
-    background:#14532d;
-    color:#86efac;
-}
-
-.pending{
-    background:#713f12;
-    color:#fde68a;
-}
-
-.approved{
-    background:#14532d;
-    color:#86efac;
-}
-
-.rejected{
-    background:#7f1d1d;
-    color:#fca5a5;
-}
-
-.refresh{
-    background:#2563eb;
-    color:#fff;
-    border:0;
-    padding:10px 15px;
-    border-radius:7px;
-    cursor:pointer;
-    font-weight:bold;
-    margin-bottom:15px;
-}
-
-@media(max-width:900px){
-    .stats{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .menu{
-        grid-template-columns:repeat(3,1fr);
-    }
-}
-
-@media(max-width:600px){
-    .header{
-        padding:14px;
-    }
-
-    .logo{
-        font-size:18px;
-    }
-
-    .container{
-        padding:12px;
-    }
-
-    .stats{
-        grid-template-columns:1fr 1fr;
-        gap:10px;
-    }
-
-    .stat{
-        padding:15px;
-    }
-
-    .stat-value{
-        font-size:20px;
-    }
-
-    .menu{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .menu button{
-        font-size:12px;
-    }
-
-    .title h1{
-        font-size:23px;
-    }
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#080b12;color:#fff}
+.header{background:#111827;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #273244;position:sticky;top:0;z-index:10}
+.logo{font-size:21px;font-weight:bold;color:#f5b942}
+.admin-text{font-size:12px;color:#9ca3af;margin-top:4px}
+.logout{background:#dc2626;color:white;border:0;padding:10px 15px;border-radius:7px;cursor:pointer;font-weight:bold}
+.container{max-width:1400px;margin:auto;padding:20px}
+.title{margin-bottom:20px}
+.title h1{font-size:25px}
+.title p{color:#9ca3af;margin-top:6px;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat,.section{background:#111827;border:1px solid #273244;border-radius:12px;padding:16px}
+.stat-title{color:#9ca3af;font-size:12px}
+.stat-value{font-size:23px;font-weight:bold;margin-top:9px;color:#f5b942}
+.menu{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:20px}
+.menu button{background:#111827;color:#fff;border:1px solid #273244;padding:12px 5px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:12px}
+.menu button.active,.menu button:hover{border-color:#f5b942;color:#f5b942}
+.section{margin-bottom:18px}
+.section h2{font-size:19px;margin-bottom:15px;color:#f5b942}
+.search{width:100%;padding:12px;background:#080b12;color:#fff;border:1px solid #273244;border-radius:7px;margin-bottom:12px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:11px 9px;border-bottom:1px solid #273244;text-align:left;font-size:12px}
+th{color:#f5b942;background:#0d1420}
+td{color:#e5e7eb}
+.empty{text-align:center;color:#9ca3af;padding:22px}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:bold}
+.pending{background:#713f12;color:#fde68a}
+.approved,.active{background:#14532d;color:#86efac}
+.rejected{background:#7f1d1d;color:#fca5a5}
+.refresh,.action{border:0;padding:8px 11px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:12px;margin:3px}
+.refresh{background:#2563eb;color:#fff;margin-bottom:12px}
+.approve-btn{background:#15803d;color:#fff}
+.reject-btn{background:#b91c1c;color:#fff}
+#notice{padding:11px;margin-bottom:15px;border-radius:7px;font-size:13px;display:none;overflow-wrap:anywhere}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.menu{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:500px){.container{padding:12px}.header{padding:13px}.logo{font-size:17px}.stat{padding:13px}.stat-value{font-size:20px}.menu{grid-template-columns:repeat(2,1fr)}.menu button{font-size:11px}.title h1{font-size:22px}}
 </style>
 </head>
 
 <body>
 
 <header class="header">
-
-    <div>
-        <div class="logo">FREEDOM FINANCE</div>
-        <div class="admin-text">
-            Admin Dashboard
-        </div>
-    </div>
-
-    <button class="logout" onclick="logoutAdmin()">
-        LOGOUT
-    </button>
-
+  <div>
+    <div class="logo">FREEDOM FINANCE</div>
+    <div class="admin-text">Admin Dashboard</div>
+  </div>
+  <button class="logout" id="logoutBtn">LOGOUT</button>
 </header>
-
 
 <main class="container">
 
-    <div class="title">
-        <h1>Admin Dashboard</h1>
-        <p>Manage members, investments, payments, withdrawals and referrals.</p>
+  <div class="title">
+    <h1>Admin Dashboard</h1>
+    <p>Manage members, investments, payments, withdrawals and referrals.</p>
+  </div>
+
+  <div id="notice"></div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-title">Total Members</div>
+      <div class="stat-value" id="totalMembers">0</div>
     </div>
-
-
-    <!-- ================= STATS ================= -->
-
-    <div class="stats">
-
-        <div class="stat">
-            <div class="stat-title">Total Members</div>
-            <div class="stat-value" id="totalMembers">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-title">Active Members</div>
-            <div class="stat-value" id="activeMembers">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-title">Total Investment</div>
-            <div class="stat-value" id="totalInvestment">₹0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-title">Total Withdrawals</div>
-            <div class="stat-value" id="totalWithdrawals">₹0</div>
-        </div>
-
+    <div class="stat">
+      <div class="stat-title">Active Members</div>
+      <div class="stat-value" id="activeMembers">0</div>
     </div>
-
-
-    <!-- ================= MENU ================= -->
-
-    <div class="menu">
-
-        <button onclick="showSection('membersSection')">
-            MEMBERS
-        </button>
-
-        <button onclick="showSection('investmentSection')">
-            INVESTMENTS
-        </button>
-
-        <button onclick="showSection('paymentSection')">
-            PAYMENTS
-        </button>
-
-        <button onclick="showSection('withdrawalSection')">
-            WITHDRAWALS
-        </button>
-
-        <button onclick="showSection('referralSection')">
-            REFERRALS
-        </button>
-
-        <button onclick="showSection('transactionSection')">
-            TRANSACTIONS
-        </button>
-
+    <div class="stat">
+      <div class="stat-title">Total Investment</div>
+      <div class="stat-value" id="totalInvestment">₹0</div>
     </div>
-
-
-    <!-- ================= MEMBERS ================= -->
-
-    <section class="section" id="membersSection">
-
-        <h2>Members</h2>
-
-        <input
-            type="text"
-            id="memberSearch"
-            class="search"
-            placeholder="Search by name, email or Member ID..."
-            oninput="renderMembers()"
-        >
-
-        <button class="refresh" onclick="loadDashboard()">
-            ↻ Refresh Data
-        </button>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Member ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                        <th>Status</th>
-                        <th>Investment</th>
-                        <th>Profit</th>
-                        <th>Join Date</th>
-                    </tr>
-                </thead>
-
-                <tbody id="membersBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= INVESTMENTS ================= -->
-
-    <section class="section" id="investmentSection">
-
-        <h2>Investments</h2>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Member ID</th>
-                        <th>Name</th>
-                        <th>Plan</th>
-                        <th>Investment</th>
-                        <th>Profit</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="investmentBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= PAYMENTS ================= -->
-
-    <section class="section" id="paymentSection">
-
-        <h2>Payments</h2>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Reference</th>
-                        <th>Member</th>
-                        <th>Amount</th>
-                        <th>Method</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="paymentBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= WITHDRAWALS ================= -->
-
-    <section class="section" id="withdrawalSection">
-
-        <h2>Withdrawals</h2>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Reference</th>
-                        <th>Member</th>
-                        <th>Amount</th>
-                        <th>Method</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="withdrawalBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= REFERRALS ================= -->
-
-    <section class="section" id="referralSection">
-
-        <h2>Referrals</h2>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Referral ID</th>
-                        <th>Member</th>
-                        <th>Referred By</th>
-                        <th>Investment</th>
-                        <th>Reward 2%</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="referralBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= TRANSACTIONS ================= -->
-
-    <section class="section" id="transactionSection">
-
-        <h2>Transactions</h2>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Reference</th>
-                        <th>Type</th>
-                        <th>Member</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="transactionBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </section>
+    <div class="stat">
+      <div class="stat-title">Total Withdrawals</div>
+      <div class="stat-value" id="totalWithdrawals">₹0</div>
+    </div>
+  </div>
+
+  <div class="menu">
+    <button class="active" data-section="membersSection">MEMBERS</button>
+    <button data-section="investmentSection">INVESTMENTS</button>
+    <button data-section="paymentSection">PAYMENTS</button>
+    <button data-section="withdrawalSection">WITHDRAWALS</button>
+    <button data-section="referralSection">REFERRALS</button>
+    <button data-section="transactionSection">TRANSACTIONS</button>
+  </div>
+
+  <section class="section" id="membersSection">
+    <h2>Members</h2>
+    <input class="search" id="memberSearch" placeholder="Search by name, email or Member ID...">
+    <button class="refresh" id="refreshBtn">↻ Refresh Data</button>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Member ID</th><th>Name</th><th>Email</th><th>Mobile</th>
+          <th>Status</th><th>Investment</th><th>Profit</th><th>Join Date</th>
+        </tr></thead>
+        <tbody id="membersBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="investmentSection" hidden>
+    <h2>Investments</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Member ID</th><th>Name</th><th>Plan</th><th>Investment</th><th>Profit</th><th>Status</th>
+        </tr></thead>
+        <tbody id="investmentBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="paymentSection" hidden>
+    <h2>Payment Requests</h2>
+    <p style="color:#aaa;font-size:12px;margin-bottom:12px">
+      Approve only after confirming that the payment is actually credited to your bank account.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Request ID</th><th>Member</th><th>Plan</th><th>Amount</th>
+          <th>UTR / Reference</th><th>Date</th><th>Status</th><th>Action</th>
+        </tr></thead>
+        <tbody id="paymentBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="withdrawalSection" hidden>
+    <h2>Withdrawals</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Reference</th><th>Member</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th>
+        </tr></thead>
+        <tbody id="withdrawalBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="referralSection" hidden>
+    <h2>Referrals</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Referral ID</th><th>Member</th><th>Referred By</th><th>Investment</th><th>Reward 2%</th><th>Status</th>
+        </tr></thead>
+        <tbody id="referralBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="transactionSection" hidden>
+    <h2>Transactions</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Reference</th><th>Type</th><th>Member</th><th>Amount</th><th>Date</th><th>Status</th>
+        </tr></thead>
+        <tbody id="transactionBody"></tbody>
+      </table>
+    </div>
+  </section>
 
 </main>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
-<script>
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-/* =====================================================
-   ADMIN LOGIN CHECK
-===================================================== */
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  runTransaction,
+  increment,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-if(localStorage.getItem("adminLoggedIn") !== "true"){
+const firebaseConfig = {
+  apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+  authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+  projectId: "omvardhnaayefreedomfinan-efaf4",
+  storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+  messagingSenderId: "552483514216",
+  appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+  measurementId: "G-6MPELL55BD"
+};
 
-    window.location.href = "admin-login.html";
+const ADMIN_UID = "oQ14ElwzwMTQacne1dTIZ5DX9bQ2";
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let members = [];
+let paymentRequests = [];
+let withdrawals = [];
+let transactions = [];
+let adminReady = false;
+
+const $ = id => document.getElementById(id);
+
+function showNotice(message, isError = false) {
+  const box = $("notice");
+  box.style.display = "block";
+  box.style.background = isError ? "#451a1a" : "#142b20";
+  box.style.color = isError ? "#fecaca" : "#bbf7d0";
+  box.textContent = message;
 }
 
-
-/* =====================================================
-   HELPER
-===================================================== */
-
-function getData(key){
-
-    try{
-
-        return JSON.parse(
-            localStorage.getItem(key)
-        ) || [];
-
-    }catch(error){
-
-        return [];
-
-    }
-
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[char]);
 }
 
-
-function money(value){
-
-    return "₹" +
-        Number(value || 0).toLocaleString("en-IN");
-
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN");
 }
 
+function dateText(value) {
+  if (!value) return "-";
+  if (value.toDate) value = value.toDate();
+  const date = new Date(value);
+  return isNaN(date.getTime()) ? String(value) : date.toLocaleDateString("en-IN");
+}
 
-function showSection(id){
+function badge(status) {
+  const s = String(status || "Pending");
+  const cls = s.toLowerCase().includes("approv") || s.toLowerCase() === "active"
+    ? "approved"
+    : s.toLowerCase().includes("reject")
+      ? "rejected"
+      : "pending";
+  return `<span class="badge ${cls}">${escapeHTML(s)}</span>`;
+}
 
-    const section =
-        document.getElementById(id);
+function emptyRow(columns, message) {
+  return `<tr><td colspan="${columns}" class="empty">${escapeHTML(message)}</td></tr>`;
+}
 
-    if(section){
+function showSection(sectionId) {
+  document.querySelectorAll(".section").forEach(section => {
+    section.hidden = section.id !== sectionId;
+  });
 
-        section.scrollIntoView({
-            behavior:"smooth"
+  document.querySelectorAll(".menu button").forEach(button => {
+    button.classList.toggle("active", button.dataset.section === sectionId);
+  });
+}
+
+document.querySelectorAll(".menu button").forEach(button => {
+  button.addEventListener("click", () => showSection(button.dataset.section));
+});
+
+$("logoutBtn").addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+    window.location.replace("admin-login.html");
+  } catch (error) {
+    showNotice("Logout error: " + error.message, true);
+  }
+});
+
+function renderMembers() {
+  const search = $("memberSearch").value.toLowerCase().trim();
+
+  const filtered = members.filter(m =>
+    [m.memberId, m.name, m.email, m.mobile]
+      .some(value => String(value || "").toLowerCase().includes(search))
+  );
+
+  $("membersBody").innerHTML = filtered.length
+    ? filtered.map(m => `<tr>
+        <td>${escapeHTML(m.memberId || "-")}</td>
+        <td>${escapeHTML(m.name || "-")}</td>
+        <td>${escapeHTML(m.email || "-")}</td>
+        <td>${escapeHTML(m.mobile || "-")}</td>
+        <td>${badge(m.status || "Pending Verification")}</td>
+        <td>${money(m.totalInvestment || m.investment)}</td>
+        <td>${money(m.profit)}</td>
+        <td>${escapeHTML(dateText(m.joinDate || m.createdAt))}</td>
+      </tr>`).join("")
+    : emptyRow(8, "No members found.");
+}
+
+function renderInvestments() {
+  const list = members.filter(m => Number(m.totalInvestment || m.investment || 0) > 0);
+
+  $("investmentBody").innerHTML = list.length
+    ? list.map(m => `<tr>
+        <td>${escapeHTML(m.memberId || "-")}</td>
+        <td>${escapeHTML(m.name || "-")}</td>
+        <td>${escapeHTML(m.planName || m.plan || "-")}</td>
+        <td>${money(m.totalInvestment || m.investment)}</td>
+        <td>${money(m.profit)}</td>
+        <td>${badge(m.status)}</td>
+      </tr>`).join("")
+    : emptyRow(6, "No investments found.");
+}
+
+function renderPayments() {
+  $("paymentBody").innerHTML = paymentRequests.length
+    ? paymentRequests.map(p => {
+        const status = String(p.status || "Pending Verification");
+        const pending = status.toLowerCase().includes("pending");
+        return `<tr>
+          <td>${escapeHTML(p.id)}</td>
+          <td>${escapeHTML(p.memberName || p.email || p.uid || "-")}</td>
+          <td>${escapeHTML(p.plan || "-")}</td>
+          <td>${money(p.amount)}</td>
+          <td>${escapeHTML(p.transactionReference || "-")}</td>
+          <td>${escapeHTML(dateText(p.submittedAt))}</td>
+          <td>${badge(status)}</td>
+          <td>${pending ? `
+            <button class="action approve-btn" data-action="approve" data-id="${escapeHTML(p.id)}">Approve</button>
+            <button class="action reject-btn" data-action="reject" data-id="${escapeHTML(p.id)}">Reject</button>
+          ` : "-"}</td>
+        </tr>`;
+      }).join("")
+    : emptyRow(8, "No payment requests found.");
+}
+
+function renderWithdrawals() {
+  $("withdrawalBody").innerHTML = withdrawals.length
+    ? withdrawals.map(w => `<tr>
+        <td>${escapeHTML(w.id || w.reference || "-")}</td>
+        <td>${escapeHTML(w.memberId || w.email || w.name || w.uid || "-")}</td>
+        <td>${money(w.amount)}</td>
+        <td>${escapeHTML(w.method || "-")}</td>
+        <td>${escapeHTML(dateText(w.createdAt || w.date || w.submittedAt))}</td>
+        <td>${badge(w.status)}</td>
+      </tr>`).join("")
+    : emptyRow(6, "No withdrawal records found.");
+}
+
+function renderReferrals() {
+  const list = members.filter(m => m.referredBy && m.referredBy !== "Direct");
+
+  $("referralBody").innerHTML = list.length
+    ? list.map(m => {
+        const investment = Number(m.totalInvestment || m.investment || 0);
+        return `<tr>
+          <td>${escapeHTML(m.myReferralId || m.referralId || "-")}</td>
+          <td>${escapeHTML(m.name || m.email || "-")}</td>
+          <td>${escapeHTML(m.referredBy)}</td>
+          <td>${money(investment)}</td>
+          <td>${money(investment * 0.02)}</td>
+          <td>${badge(m.status || "Pending")}</td>
+        </tr>`;
+      }).join("")
+    : emptyRow(6, "No referrals found.");
+}
+
+function renderTransactions() {
+  $("transactionBody").innerHTML = transactions.length
+    ? transactions.map(t => `<tr>
+        <td>${escapeHTML(t.id || t.reference || "-")}</td>
+        <td>${escapeHTML(t.type || "-")}</td>
+        <td>${escapeHTML(t.memberId || t.email || t.uid || "-")}</td>
+        <td>${money(t.amount)}</td>
+        <td>${escapeHTML(dateText(t.createdAt || t.date))}</td>
+        <td>${badge(t.status)}</td>
+      </tr>`).join("")
+    : emptyRow(6, "No transaction records found.");
+}
+
+async function readCollection(name) {
+  try {
+    const snapshot = await getDocs(collection(db, name));
+    return snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+  } catch (error) {
+    console.warn("Could not read collection:", name, error);
+    return [];
+  }
+}
+
+async function loadDashboard() {
+  if (!adminReady) return;
+
+  $("refreshBtn").disabled = true;
+  $("refreshBtn").textContent = "Loading...";
+
+  try {
+    const results = await Promise.all([
+      readCollection("members"),
+      readCollection("paymentRequests"),
+      readCollection("withdrawalRequests"),
+      readCollection("transactions")
+    ]);
+
+    members = results[0];
+    paymentRequests = results[1];
+    withdrawals = results[2];
+    transactions = results[3];
+
+    $("totalMembers").textContent = members.length;
+
+    $("activeMembers").textContent = members.filter(m =>
+      String(m.status || "").toLowerCase() === "active"
+    ).length;
+
+    const totalInvestment = members.reduce((sum, m) =>
+      sum + Number(m.totalInvestment || m.investment || 0), 0
+    );
+
+    const totalWithdrawals = withdrawals
+      .filter(w => String(w.status || "").toLowerCase() === "approved")
+      .reduce((sum, w) => sum + Number(w.amount || 0), 0);
+
+    $("totalInvestment").textContent = money(totalInvestment);
+    $("totalWithdrawals").textContent = money(totalWithdrawals);
+
+    renderMembers();
+    renderInvestments();
+    renderPayments();
+    renderWithdrawals();
+    renderReferrals();
+    renderTransactions();
+
+    showNotice("Dashboard data refreshed.");
+  } catch (error) {
+    showNotice("Dashboard load error: " + error.message, true);
+  } finally {
+    $("refreshBtn").disabled = false;
+    $("refreshBtn").textContent = "↻ Refresh Data";
+  }
+}
+
+$("memberSearch").addEventListener("input", renderMembers);
+$("refreshBtn").addEventListener("click", loadDashboard);
+
+$("paymentBody").addEventListener("click", async event => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+
+  const requestId = button.dataset.id;
+  const action = button.dataset.action;
+  const request = paymentRequests.find(p => p.id === requestId);
+
+  if (!request) {
+    showNotice("Payment request not found. Refresh the dashboard.", true);
+    return;
+  }
+
+  if (action === "approve") {
+    const confirmed = confirm(
+      "Kya tumne bank statement mein is payment ka actual credit verify kar liya hai?\n\n" +
+      "Sirf UTR dekhkar approve mat karo.\n\n" +
+      "Actual bank credit confirm hai?"
+    );
+
+    if (!confirmed) return;
+  } else {
+    if (!confirm("Is payment request ko reject karna hai?")) return;
+  }
+
+  button.disabled = true;
+
+  try {
+    const requestRef = doc(db, "paymentRequests", requestId);
+
+    if (action === "reject") {
+      await runTransaction(db, async transaction => {
+        const requestSnap = await transaction.get(requestRef);
+
+        if (!requestSnap.exists()) throw new Error("Payment request no longer exists.");
+
+        const current = requestSnap.data();
+        if (!String(current.status || "").toLowerCase().includes("pending")) {
+          throw new Error("This request has already been reviewed.");
+        }
+
+        transaction.update(requestRef, {
+          status: "Rejected",
+          reviewedAt: serverTimestamp(),
+          adminNote: "Rejected by admin"
+        });
+      });
+
+      showNotice("Payment request rejected.");
+    } else {
+      const amount = Number(request.amount);
+
+      if (!Number.isFinite(amount) || amount <= 0) {
+        throw new Error("Invalid payment amount.");
+      }
+
+      if (!request.uid) {
+        throw new Error("Member UID is missing from this payment request.");
+      }
+
+      const memberRef = doc(db, "members", request.uid);
+
+      await runTransaction(db, async transaction => {
+        const requestSnap = await transaction.get(requestRef);
+        const memberSnap = await transaction.get(memberRef);
+
+        if (!requestSnap.exists()) throw new Error("Payment request no longer exists.");
+        if (!memberSnap.exists()) throw new Error("Member profile not found.");
+
+        const current = requestSnap.data();
+        if (!String(current.status || "").toLowerCase().includes("pending")) {
+          throw new Error("This request has already been reviewed.");
+        }
+
+        transaction.update(requestRef, {
+          status: "Approved",
+          reviewedAt: serverTimestamp(),
+          adminNote: "Bank credit verified by admin"
         });
 
-    }
-
-}
-
-
-/* =====================================================
-   MEMBERS
-===================================================== */
-
-function renderMembers(){
-
-    const members =
-        getData("members");
-
-    const search =
-        document
-        .getElementById("memberSearch")
-        .value
-        .toLowerCase()
-        .trim();
-
-    const body =
-        document.getElementById("membersBody");
-
-    const filtered =
-        members.filter(function(member){
-
-            return (
-
-                String(member.memberId || "")
-                .toLowerCase()
-                .includes(search)
-
-                ||
-
-                String(member.name || "")
-                .toLowerCase()
-                .includes(search)
-
-                ||
-
-                String(member.email || "")
-                .toLowerCase()
-                .includes(search)
-
-            );
-
+        transaction.update(memberRef, {
+          investment: increment(amount),
+          totalInvestment: increment(amount),
+          plan: current.plan || "",
+          planName: current.plan || "",
+          status: "Active",
+          investmentDate: serverTimestamp()
         });
+      });
 
-
-    if(filtered.length === 0){
-
-        body.innerHTML =
-            '<tr><td colspan="8" class="empty">No members found.</td></tr>';
-
-        return;
-
+      showNotice("Payment approved and member investment updated.");
     }
 
-
-    body.innerHTML =
-        filtered.map(function(member){
-
-            return `
-                <tr>
-
-                    <td>
-                        ${member.memberId || "-"}
-                    </td>
-
-                    <td>
-                        ${member.name || "-"}
-                    </td>
-
-                    <td>
-                        ${member.email || "-"}
-                    </td>
-
-                    <td>
-                        ${member.mobile || "-"}
-                    </td>
-
-                    <td>
-                        <span class="badge active">
-                            ${member.status || "Active"}
-                        </span>
-                    </td>
-
-                    <td>
-                        ${money(
-                            member.totalInvestment ||
-                            member.investment
-                        )}
-                    </td>
-
-                    <td>
-                        ${money(member.profit)}
-                    </td>
-
-                    <td>
-                        ${member.joinDate || "-"}
-                    </td>
-
-                </tr>
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   INVESTMENTS
-===================================================== */
-
-function renderInvestments(){
-
-    const members =
-        getData("members");
-
-    const body =
-        document.getElementById("investmentBody");
-
-
-    const invested =
-        members.filter(function(member){
-
-            return Number(
-                member.totalInvestment ||
-                member.investment ||
-                0
-            ) > 0;
-
-        });
-
-
-    if(invested.length === 0){
-
-        body.innerHTML =
-            '<tr><td colspan="6" class="empty">No investments found.</td></tr>';
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        invested.map(function(member){
-
-            return `
-                <tr>
-
-                    <td>${member.memberId || "-"}</td>
-
-                    <td>${member.name || "-"}</td>
-
-                    <td>${member.planName || member.plan || "-"}</td>
-
-                    <td>
-                        ${money(
-                            member.totalInvestment ||
-                            member.investment
-                        )}
-                    </td>
-
-                    <td>
-                        ${money(member.profit)}
-                    </td>
-
-                    <td>
-                        <span class="badge approved">
-                            ${member.status || "Active"}
-                        </span>
-                    </td>
-
-                </tr>
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   PAYMENTS
-===================================================== */
-
-function renderPayments(){
-
-    const payments =
-        getData("payments");
-
-    const body =
-        document.getElementById("paymentBody");
-
-
-    if(payments.length === 0){
-
-        body.innerHTML =
-            '<tr><td colspan="6" class="empty">No payments found.</td></tr>';
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        payments.map(function(payment){
-
-            return `
-                <tr>
-
-                    <td>
-                        ${payment.reference ||
-                         payment.ref ||
-                         payment.id ||
-                         "-"}
-                    </td>
-
-                    <td>
-                        ${payment.memberId ||
-                         payment.email ||
-                         payment.name ||
-                         "-"}
-                    </td>
-
-                    <td>
-                        ${money(payment.amount)}
-                    </td>
-
-                    <td>
-                        ${payment.method || "-"}
-                    </td>
-
-                    <td>
-                        ${payment.date ||
-                         payment.createdAt ||
-                         "-"}
-                    </td>
-
-                    <td>
-                        <span class="badge pending">
-                            ${payment.status || "Pending"}
-                        </span>
-                    </td>
-
-                </tr>
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   WITHDRAWALS
-===================================================== */
-
-function renderWithdrawals(){
-
-    const withdrawals =
-        getData("withdrawals");
-
-    const body =
-        document.getElementById("withdrawalBody");
-
-
-    if(withdrawals.length === 0){
-
-        body.innerHTML =
-            '<tr><td colspan="6" class="empty">No withdrawals found.</td></tr>';
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        withdrawals.map(function(item){
-
-            const status =
-                item.status || "Pending";
-
-            let statusClass =
-                "pending";
-
-            if(
-                status.toLowerCase() ===
-                "approved"
-            ){
-
-                statusClass = "approved";
-
-            }
-
-            if(
-                status.toLowerCase() ===
-                "rejected"
-            ){
-
-                statusClass = "rejected";
-
-            }
-
-
-            return `
-                <tr>
-
-                    <td>
-                        ${item.reference ||
-                         item.ref ||
-                         item.id ||
-                         "-"}
-                    </td>
-
-                    <td>
-                        ${item.memberId ||
-                         item.email ||
-                         item.name ||
-                         "-"}
-                    </td>
-
-                    <td>
-                        ${money(item.amount)}
-                    </td>
-
-                    <td>
-                        ${item.method || "-"}
-                    </td>
-
-                    <td>
-                        ${item.date ||
-                         item.createdAt ||
-                         "-"}
-                    </td>
-
-                    <td>
-                        <span class="badge ${statusClass}">
-                            ${status}
-                        </span>
-                    </td>
-
-                </tr>
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   REFERRALS
-===================================================== */
-
-function renderReferrals(){
-
-    const referrals =
-        getData("referrals");
-
-    const body =
-        document.getElementById("referralBody");
-
-
-    if(referrals.length === 0){
-
-        body.innerHTML =
-            '<tr><td colspan="6" class="empty">No referrals found.</td></tr>';
-
-        return;
-
-    }
-
-
-    body.innerHTML =
-        referrals.map(function(ref){
-
-            const investment =
-                Number(ref.investment || 0);
-
-            const reward =
-                Number(
-                    ref.reward ||
-                    investment * 0.02
-                );
-
-
-            return `
-                <tr>
-
-                    <td>
-                        ${ref.referralId ||
-                         ref.myReferralId ||
-                         ref.id ||
-                         "-"}
-                    </td>
-
-                    <td>
-                        ${ref.memberId ||
-                         ref.email ||
-                         ref.name ||
-                         "-"}
-                    </td>
-
-                    <td>
-                        ${ref.referredBy || "-"}
-                    </td>
-
-                    <td>
-                        ${money(investment)}
-                    </td>
-
-                    <td>
-                        ${money(reward)}
-                    </td>
-
-                    <td>
-                        <span class="badge ${
-                            ref.status === "Approved"
-                            ? "approved"
-                            : "pending"
-                        }">
-                            ${ref.status || "Pending"}
-                        </span>
-                    </td>
-
-                </tr>
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   TRANSAC
+    await loadDashboard();
+
+  } catch (error) {
+    showNotice("Action failed: " + error.message, true);
+    button.disabled = false;
+  }
+});
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    window.location.replace("admin-login.html");
+    return;
+  }
+
+  if (user.uid !== ADMIN_UID) {
+    await signOut(auth);
+    window.location.replace("admin-login.html");
+    return;
+  }
+
+  adminReady = true;
+  await loadDashboard();
+});
+
+showSection("membersSection");
+</script>
+
+</body>
+          </html>
