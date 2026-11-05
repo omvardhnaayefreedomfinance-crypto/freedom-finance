@@ -525,6 +525,7 @@ async function readCollection(name) {
 /* DASHBOARD LOAD */
 
 async function loadDashboard() {
+
   if (!adminReady) {
     showNotice("Admin authentication is not ready yet.", true);
     return;
@@ -535,23 +536,50 @@ async function loadDashboard() {
   loading = true;
 
   const refresh = $("refreshBtn");
-  refresh.disabled = true;
-  refresh.textContent = "Loading...";
+
+  if (refresh) {
+    refresh.disabled = true;
+    refresh.textContent = "Loading...";
+  }
 
   try {
-    const results = await Promise.all([
-      readCollection("members"),
-      readCollection("paymentRequests"),
-      readCollection("withdrawalRequests"),
-      readCollection("transactions"),
-      readCollection("investments")
-    ]);
 
-    members = results[0];
-    paymentRequests = results[1];
-    withdrawals = results[2];
-    transactions = results[3];
-    investmentRecords = results[4];
+    const collectionNames = [
+      "members",
+      "paymentRequests",
+      "withdrawalRequests",
+      "transactions",
+      "investments"
+    ];
+
+    const results = await Promise.allSettled(
+      collectionNames.map(name => readCollection(name))
+    );
+
+    const failedCollections = [];
+
+    const data = results.map((result, index) => {
+
+      if (result.status === "fulfilled") {
+        return result.value;
+      }
+
+      failedCollections.push(collectionNames[index]);
+
+      console.error(
+        "Collection loading error:",
+        collectionNames[index],
+        result.reason
+      );
+
+      return [];
+    });
+
+    members = data[0];
+    paymentRequests = data[1];
+    withdrawals = data[2];
+    transactions = data[3];
+    investmentRecords = data[4];
 
     $("totalMembers").textContent = members.length;
 
@@ -560,12 +588,18 @@ async function loadDashboard() {
     ).length;
 
     const total = investmentRecords.reduce(
-      (sum, item) => sum + (Number(item.amount) || 0), 0
+      (sum, item) => sum + (Number(item.amount) || 0),
+      0
     );
 
     const withdrawn = withdrawals
-      .filter(w => String(w.status || "").toLowerCase() === "approved")
-      .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
+      .filter(w =>
+        String(w.status || "").toLowerCase() === "approved"
+      )
+      .reduce(
+        (sum, w) => sum + (Number(w.amount) || 0),
+        0
+      );
 
     $("totalInvestment").textContent = money(total);
     $("totalWithdrawals").textContent = money(withdrawn);
@@ -577,18 +611,40 @@ async function loadDashboard() {
     renderReferrals();
     renderTransactions();
 
-    showNotice("Dashboard refreshed successfully.");
+    if (failedCollections.length > 0) {
+
+      showNotice(
+        "Some data could not load: " +
+        failedCollections.join(", "),
+        true
+      );
+
+    } else {
+
+      showNotice("Dashboard refreshed successfully.");
+
+    }
 
   } catch (error) {
-    console.error("Dashboard load error:", error);
-    showNotice("Dashboard error: " + (error.message || "Unknown error"), true);
-  } finally {
-    loading = false;
-    refresh.disabled = false;
-    refresh.textContent = "↻ Refresh Data";
-  }
-}
 
+    console.error("Dashboard load error:", error);
+
+    showNotice(
+      "Dashboard error: " + (error.message || "Unknown error"),
+      true
+    );
+
+  } finally {
+
+    loading = false;
+
+    if (refresh) {
+      refresh.disabled = false;
+      refresh.textContent = "↻ Refresh Data";
+    }
+
+  }
+  }
 $("refreshBtn").addEventListener("click", loadDashboard);
 
 
