@@ -1,182 +1,58 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Freedom Finance - Transaction History</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#050505;color:#fff8e7}
+header{
+padding:18px;display:flex;align-items:center;
+justify-content:space-between;background:#080808;
+border-bottom:1px solid #604b18
 }
-
-body {
-  margin: 0;
-  background: #050505;
-  color: #fff8e7;
-  font-family: Arial, sans-serif;
+.logo{color:#ffd96a;font-weight:800;font-size:18px}
+.back{color:#ffd96a;text-decoration:none;font-size:14px}
+.container{max-width:950px;margin:auto;padding:25px 15px 45px}
+.heading{text-align:center;margin-bottom:25px}
+.heading h1{color:#ffd96a;font-size:30px}
+.heading p{color:#aaa;line-height:1.6}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.summary-card{
+padding:20px;background:#111;border:1px solid #604b18;
+border-radius:13px
 }
-
-header {
-  padding: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #080808;
-  border-bottom: 1px solid #604b18;
+.summary-card span{display:block;color:#aaa;font-size:13px;margin-bottom:10px}
+.summary-card strong{color:#ffd96a;font-size:20px}
+.table-card{padding:18px;background:#0b0b0b;border:1px solid #604b18;border-radius:15px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:750px}
+th,td{padding:14px 12px;border-bottom:1px solid #302817;text-align:left;font-size:13px}
+th{color:#ffd96a}
+td{color:#eee}
+.status{display:inline-block;padding:6px 9px;border-radius:20px;font-size:11px;font-weight:bold}
+.pending{background:#422f0b;color:#ffd96a;border:1px solid #8a6c24}
+.active{background:#14532d;color:#86efac;border:1px solid #15803d}
+.rejected{background:#451a1a;color:#fca5a5;border:1px solid #991b1b}
+.other{background:#222;color:#ddd;border:1px solid #555}
+.empty{padding:30px 10px;color:#aaa;text-align:center;line-height:1.7}
+.buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+button{
+padding:14px;border-radius:9px;border:1px solid #ffd96a;
+background:#151208;color:#ffd96a;font-weight:bold;cursor:pointer
 }
-
-.logo {
-  color: #ffd96a;
-  font-weight: 800;
-  font-size: 18px;
-}
-
-.back {
-  color: #ffd96a;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.container {
-  max-width: 950px;
-  margin: auto;
-  padding: 25px 15px 45px;
-}
-
-.heading {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.heading h1 {
-  color: #ffd96a;
-  font-size: 30px;
-}
-
-.heading p {
-  color: #aaa;
-  line-height: 1.6;
-}
-
-.summary {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-bottom: 22px;
-}
-
-.summary-card {
-  padding: 20px;
-  background: #111;
-  border: 1px solid #604b18;
-  border-radius: 13px;
-}
-
-.summary-card span {
-  display: block;
-  color: #aaa;
-  font-size: 13px;
-  margin-bottom: 10px;
-}
-
-.summary-card strong {
-  color: #ffd96a;
-  font-size: 20px;
-}
-
-.table-card {
-  padding: 18px;
-  background: #0b0b0b;
-  border: 1px solid #604b18;
-  border-radius: 15px;
-}
-
-.table-wrap {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 650px;
-}
-
-th, td {
-  padding: 14px 12px;
-  border-bottom: 1px solid #302817;
-  text-align: left;
-  font-size: 13px;
-}
-
-th {
-  color: #ffd96a;
-}
-
-td {
-  color: #eee;
-}
-
-.status {
-  display: inline-block;
-  padding: 6px 9px;
-  border: 1px solid #8a6c24;
-  border-radius: 20px;
-  color: #ffd96a;
-  font-size: 11px;
-}
-
-.empty {
-  padding: 30px 10px;
-  color: #aaa;
-  text-align: center;
-  line-height: 1.7;
-}
-
-.buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-button {
-  padding: 14px;
-  border-radius: 9px;
-  border: 1px solid #ffd96a;
-  background: #151208;
-  color: #ffd96a;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.primary {
-  background: linear-gradient(135deg, #d99b16, #ffd96a);
-  color: #171107;
-  border: none;
-}
-
-.note {
-  margin-top: 20px;
-  text-align: center;
-  color: #888;
-  font-size: 12px;
-  line-height: 1.7;
-}
-
-@media(max-width: 500px) {
-  .summary {
-    grid-template-columns: 1fr;
-  }
-
-  .heading h1 {
-    font-size: 25px;
-  }
-
-  .buttons {
-    grid-template-columns: 1fr;
-  }
+.primary{background:linear-gradient(135deg,#d99b16,#ffd96a);color:#171107;border:none}
+button:disabled{opacity:.5}
+.note{margin-top:20px;text-align:center;color:#888;font-size:12px;line-height:1.7}
+#message{padding:12px;text-align:center;color:#ffd96a;font-size:13px;line-height:1.6}
+@media(max-width:600px){
+.summary{grid-template-columns:1fr 1fr}
+.summary-card:last-child{grid-column:1/-1}
+.heading h1{font-size:25px}
+.buttons{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -184,147 +60,279 @@ button {
 <body>
 
 <header>
-  <div class="logo">FREEDOM FINANCE</div>
-  <a href="dashboard.html" class="back">← DASHBOARD</a>
+<div class="logo">FREEDOM FINANCE</div>
+<a href="member-dashboard.html" class="back">← DASHBOARD</a>
 </header>
 
 <div class="container">
 
-  <div class="heading">
-    <h1>Transaction History</h1>
-    <p>Review transaction references submitted from this browser.</p>
-  </div>
+<div class="heading">
+<h1>Transaction History</h1>
+<p>Your payment submissions and verification status.</p>
+</div>
 
-  <div class="summary">
+<div class="summary">
+<div class="summary-card">
+<span>Total Submissions</span>
+<strong id="totalCount">0</strong>
+</div>
+<div class="summary-card">
+<span>Pending Verification</span>
+<strong id="pendingCount">0</strong>
+</div>
+<div class="summary-card">
+<span>Active / Approved</span>
+<strong id="activeCount">0</strong>
+</div>
+</div>
 
-    <div class="summary-card">
-      <span>Total Submissions</span>
-      <strong id="totalCount">0</strong>
-    </div>
+<div class="table-card">
 
-    <div class="summary-card">
-      <span>Pending Verification</span>
-      <strong id="pendingCount">0</strong>
-    </div>
+<div id="message">Connecting to Firebase...</div>
 
-  </div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Reference ID</th>
+<th>Plan</th>
+<th>Amount</th>
+<th>Transaction Reference</th>
+<th>Status</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody id="transactionRows">
+<tr><td colspan="6" class="empty">Loading transactions...</td></tr>
+</tbody>
+</table>
+</div>
 
-  <div class="table-card">
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Reference ID</th>
-            <th>Plan</th>
-            <th>Amount</th>
-            <th>Transaction Reference</th>
-            <th>Status</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-
-        <tbody id="transactionRows"></tbody>
-      </table>
-    </div>
-
-    <div class="empty" id="emptyMessage">
-      No transaction submissions found.
-    </div>
-
-  </div>
-
-  <div class="buttons">
-    <button class="primary" onclick="location.href='plans.html'">
-      VIEW PLANS
-    </button>
-
-    <button onclick="location.href='dashboard.html'">
-      BACK TO DASHBOARD
-    </button>
-  </div>
-
-  <div class="note">
-    This page displays submissions stored in this browser only.
-    A submitted reference does not mean that payment has been received
-    or verified. No investment or profit balance is updated here.
-  </div>
+<div class="empty" id="emptyMessage" style="display:none">
+No transaction submissions found.
+</div>
 
 </div>
 
-<script>
-(function() {
+<div class="buttons">
+<button class="primary" onclick="location.href='plans.html'">VIEW PLANS</button>
+<button onclick="location.href='member-dashboard.html'">BACK TO DASHBOARD</button>
+</div>
 
-  const rows = document.getElementById("transactionRows");
-  const emptyMessage = document.getElementById("emptyMessage");
+<div class="note">
+Payment submissions are displayed from Firebase.
+Pending payments become approved only after administrator verification.
+</div>
 
-  let transactions = [];
+</div>
 
-  try {
-    const saved = JSON.parse(
-      localStorage.getItem("paymentSubmissions") || "[]"
-    );
+<script type="module">
 
-    if (Array.isArray(saved)) {
-      transactions = saved;
-    }
-  } catch (error) {
-    transactions = [];
-  }
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
-  document.getElementById("totalCount").textContent =
-    transactions.length;
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-  document.getElementById("pendingCount").textContent =
-    transactions.filter(function(item) {
-      return item.status === "Pending Verification";
-    }).length;
+import {
+getFirestore,
+collection,
+query,
+where,
+getDocs
+}
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-  if (transactions.length === 0) {
-    emptyMessage.style.display = "block";
-    return;
-  }
+const firebaseConfig = {
+apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+projectId: "omvardhnaayefreedomfinan-efaf4",
+storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+messagingSenderId: "552483514216",
+appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+measurementId: "G-6MPELL55BD"
+};
 
-  emptyMessage.style.display = "none";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  transactions.slice().reverse().forEach(function(item) {
+const $ = id => document.getElementById(id);
 
-    const tr = document.createElement("tr");
+function formatDate(value){
+if(!value) return "—";
 
-    const values = [
-      item.id || "—",
-      item.plan || "—",
-      item.amount || "—",
-      item.transactionReference || "—",
-      item.status || "Pending Verification",
-      item.submittedAt
-        ? new Date(item.submittedAt).toLocaleDateString()
-        : "—"
-    ];
+let date;
 
-    values.forEach(function(value, index) {
+if(typeof value.toDate === "function"){
+date = value.toDate();
+}else{
+date = new Date(value);
+}
 
-      const td = document.createElement("td");
+if(isNaN(date.getTime())) return "—";
 
-      if (index === 4) {
-        const badge = document.createElement("span");
-        badge.className = "status";
-        badge.textContent = value;
-        td.appendChild(badge);
-      } else {
-        td.textContent = value;
-      }
+return date.toLocaleDateString("en-IN");
+}
 
-      tr.appendChild(td);
+function money(value){
+return "₹" + Number(value || 0).toLocaleString("en-IN");
+}
 
-    });
+function getStatus(item){
+return String(item.status || "Pending Verification").trim();
+}
 
-    rows.appendChild(tr);
+function statusClass(status){
+const s = status.toLowerCase();
 
-  });
+if(s === "active" || s === "approved" || s === "verified"){
+return "active";
+}
 
-})();
+if(s.includes("pending")){
+return "pending";
+}
+
+if(s === "rejected" || s === "failed"){
+return "rejected";
+}
+
+return "other";
+}
+
+function renderTransactions(records){
+
+const tbody = $("transactionRows");
+tbody.innerHTML = "";
+
+$("totalCount").textContent = records.length;
+
+$("pendingCount").textContent =
+records.filter(item => getStatus(item).toLowerCase().includes("pending")).length;
+
+$("activeCount").textContent =
+records.filter(item => {
+const s = getStatus(item).toLowerCase();
+return s === "active" || s === "approved" || s === "verified";
+}).length;
+
+if(records.length === 0){
+$("emptyMessage").style.display = "block";
+tbody.innerHTML =
+'<tr><td colspan="6" class="empty">No transaction submissions found.</td></tr>';
+return;
+}
+
+$("emptyMessage").style.display = "none";
+
+records.forEach(item => {
+
+const tr = document.createElement("tr");
+
+const values = [
+item.id || "—",
+item.plan || "—",
+money(item.amount),
+item.transactionReference || "—",
+getStatus(item),
+formatDate(item.submittedAt || item.createdAt || item.date)
+];
+
+values.forEach((value,index)=>{
+
+const td = document.createElement("td");
+
+if(index === 4){
+const badge = document.createElement("span");
+badge.className = "status " + statusClass(value);
+badge.textContent = value;
+td.appendChild(badge);
+}else{
+td.textContent = value;
+}
+
+tr.appendChild(td);
+
+});
+
+tbody.appendChild(tr);
+
+});
+
+}
+
+async function loadTransactions(user){
+
+$("message").textContent = "Loading your Firebase transactions...";
+
+try{
+
+const q = query(
+collection(db,"paymentRequests"),
+where("uid","==",user.uid)
+);
+
+const snapshot = await getDocs(q);
+
+const records = snapshot.docs.map(d=>({
+id:d.id,
+...d.data()
+}));
+
+records.sort((a,b)=>{
+
+const getTime = value => {
+if(!value) return 0;
+if(typeof value.toDate === "function") return value.toDate().getTime();
+const d = new Date(value).getTime();
+return isNaN(d) ? 0 : d;
+};
+
+return getTime(b.submittedAt || b.createdAt) -
+getTime(a.submittedAt || a.createdAt);
+
+});
+
+renderTransactions(records);
+
+$("message").textContent =
+"Transaction history loaded successfully.";
+
+}catch(error){
+
+console.error("Transaction history error:",error);
+
+$("message").textContent =
+"Firebase Error: " + error.code + " — " + error.message;
+
+$("transactionRows").innerHTML =
+'<tr><td colspan="6" class="empty">Unable to load transactions. Please try again.</td></tr>';
+
+}
+
+}
+
+onAuthStateChanged(auth,user=>{
+
+if(!user){
+window.location.replace("member-login.html");
+return;
+}
+
+if(!user.emailVerified){
+window.location.replace("member-login.html");
+return;
+}
+
+loadTransactions(user);
+
+});
+
 </script>
 
 </body>
-  </html>
+</html>
