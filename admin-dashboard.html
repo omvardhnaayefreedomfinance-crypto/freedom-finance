@@ -448,7 +448,7 @@ function renderPayments() {
 }
 
 
-/* WITHDRAWALS */
+* WITHDRAWALS */
 
 function renderWithdrawals() {
   $("withdrawalBody").innerHTML = withdrawals.length
@@ -463,7 +463,7 @@ function renderWithdrawals() {
       </tr>
     `).join("")
     : emptyRow(6, "No withdrawal records found.");
-}
+  }
 
 
 /* REFERRALS */
@@ -738,6 +738,148 @@ $("paymentBody").addEventListener("click", async event => {
     button.textContent = action === "approve" ? "Approve" : "Reject";
   }
 });
+  // WITHDRAWAL APPROVE / REJECT HANDLER
+
+const withdrawalBody = document.getElementById("withdrawalBody");
+
+if (withdrawalBody) {
+    withdrawalBody.addEventListener("click", async function(e) {
+
+        const button = e.target.closest("[data-withdraw-action]");
+
+        if (!button) return;
+
+        const action = button.dataset.withdrawAction;
+        const requestId = button.dataset.id;
+
+        if (!requestId) {
+            alert("Withdrawal request ID missing.");
+            return;
+        }
+
+        const requestRef = doc(db, "withdrawalRequests", requestId);
+
+        try {
+            button.disabled = true;
+
+            if (action === "reject") {
+
+                if (!confirm("Are you sure you want to reject this withdrawal?")) {
+                    button.disabled = false;
+                    return;
+                }
+
+                await runTransaction(db, async (transaction) => {
+
+                    const requestSnap = await transaction.get(requestRef);
+
+                    if (!requestSnap.exists()) {
+                        throw new Error("Withdrawal request not found.");
+                    }
+
+                    const request = requestSnap.data();
+
+                    if ((request.status || "").toLowerCase() !== "pending") {
+                        throw new Error("This request is already processed.");
+                    }
+
+                    transaction.update(requestRef, {
+                        status: "Rejected",
+                        reviewedAt: serverTimestamp()
+                    });
+                });
+
+                alert("Withdrawal request rejected successfully.");
+            }
+
+            else if (action === "approve") {
+
+                if (!confirm(
+                    "Confirm that the actual bank/UPI payment has been completed. Approve this withdrawal?"
+                )) {
+                    button.disabled = false;
+                    return;
+                }
+
+                const transactionRef = doc(collection(db, "transactions"));
+
+                await runTransaction(db, async (transaction) => {
+
+                    const requestSnap = await transaction.get(requestRef);
+
+                    if (!requestSnap.exists()) {
+                        throw new Error("Withdrawal request not found.");
+                    }
+
+                    const request = requestSnap.data();
+
+                    if ((request.status || "").toLowerCase() !== "pending") {
+                        throw new Error("This request is already processed.");
+                    }
+
+                    if (!request.uid) {
+                        throw new Error("Member UID is missing.");
+                    }
+
+                    const amount = Number(request.amount);
+
+                    if (!Number.isFinite(amount) || amount <= 0) {
+                        throw new Error("Invalid withdrawal amount.");
+                    }
+
+                    const memberRef = doc(db, "members", request.uid);
+                    const memberSnap = await transaction.get(memberRef);
+
+                    if (!memberSnap.exists()) {
+                        throw new Error("Member record not found.");
+                    }
+
+                    const member = memberSnap.data();
+                    const balance = Number(member.availableBalance || 0);
+
+                    if (balance < amount) {
+                        throw new Error("Insufficient available balance.");
+                    }
+
+                    transaction.update(memberRef, {
+                        availableBalance: increment(-amount),
+                        totalWithdrawal: increment(amount)
+                    });
+
+                    transaction.update(requestRef, {
+                        status: "Approved",
+                        reviewedAt: serverTimestamp(),
+                        approvedAt: serverTimestamp()
+                    });
+
+                    transaction.set(transactionRef, {
+                        uid: request.uid,
+                        memberId: request.memberId || member.memberId || "",
+                        memberName: request.memberName || member.name || member.fullName || "",
+                        type: "Withdrawal",
+                        amount: amount,
+                        reference: request.reference || requestId,
+                        status: "Approved",
+                        createdAt: serverTimestamp()
+                    });
+
+                });
+
+                alert("Withdrawal approved successfully.");
+            }
+
+            await loadDashboard();
+
+        } catch (error) {
+            console.error("Withdrawal Error:", error);
+            alert("Withdrawal Error: " + error.message);
+
+        } finally {
+            button.disabled = false;
+        }
+
+    });
+  }
 
 
 /* ADMIN AUTHENTICATION */
