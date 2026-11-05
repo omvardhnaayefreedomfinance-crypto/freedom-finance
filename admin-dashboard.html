@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -158,7 +159,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </section>
 
   <section class="section" id="withdrawalSection" hidden>
-    <h2>Withdrawals</h2>
+    <h2>Withdrawal Requests</h2>
     <div class="table-wrap">
       <table>
         <thead>
@@ -226,8 +227,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 
-/* FIREBASE CONFIG */
-
 const firebaseConfig = {
   apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
   authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
@@ -244,9 +243,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-
-/* GLOBAL STATE */
-
 const $ = id => document.getElementById(id);
 
 let members = [];
@@ -254,12 +250,9 @@ let paymentRequests = [];
 let investmentRecords = [];
 let withdrawals = [];
 let transactions = [];
-
 let adminReady = false;
 let loading = false;
 
-
-/* NOTICE */
 
 function showNotice(message, error = false) {
   const box = $("notice");
@@ -269,9 +262,6 @@ function showNotice(message, error = false) {
   box.textContent = message;
 }
 
-
-/* ERROR HANDLERS */
-
 window.addEventListener("error", event => {
   console.error("Page error:", event.error || event.message);
   showNotice("JavaScript error: " + (event.message || "Unknown error"), true);
@@ -279,12 +269,12 @@ window.addEventListener("error", event => {
 
 window.addEventListener("unhandledrejection", event => {
   console.error("Unhandled error:", event.reason);
-  const message = event.reason?.message || String(event.reason || "Unknown error");
-  showNotice("Firebase error: " + message, true);
+  showNotice(
+    "Firebase error: " + (event.reason?.message || String(event.reason)),
+    true
+  );
 });
 
-
-/* HELPERS */
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({
@@ -303,14 +293,8 @@ function money(value) {
 
 function asDate(value) {
   if (!value) return null;
-
-  if (typeof value.toDate === "function") {
-    return value.toDate();
-  }
-
-  if (value.seconds) {
-    return new Date(value.seconds * 1000);
-  }
+  if (typeof value.toDate === "function") return value.toDate();
+  if (value.seconds) return new Date(value.seconds * 1000);
 
   const d = new Date(value);
   return Number.isNaN(d.getTime()) ? null : d;
@@ -363,9 +347,6 @@ document.querySelectorAll(".menu button").forEach(button => {
 
 $("logoutBtn").addEventListener("click", async () => {
   const button = $("logoutBtn");
-
-  if (button.disabled) return;
-
   button.disabled = true;
   button.textContent = "LOGGING OUT...";
 
@@ -373,8 +354,8 @@ $("logoutBtn").addEventListener("click", async () => {
     await signOut(auth);
     window.location.href = "./admin-login.html";
   } catch (error) {
-    console.error("Logout error:", error);
-    showNotice("Logout failed: " + (error.message || "Unknown error"), true);
+    console.error(error);
+    showNotice("Logout failed: " + error.message, true);
     button.disabled = false;
     button.textContent = "LOGOUT";
   }
@@ -422,7 +403,7 @@ function renderInvestments() {
         <td>${escapeHTML(i.plan || "-")}</td>
         <td>${money(i.amount)}</td>
         <td>${money(i.profit)}</td>
-        <td>${escapeHTML(dateText(i.investmentDate || i.createdAt))}</td>
+        <td>${escapeHTML(dateText(i.investmentDate || i.startDate || i.createdAt))}</td>
         <td>${escapeHTML(dateText(i.maturityDate))}</td>
         <td>${badge(i.status || "Pending")}</td>
       </tr>
@@ -476,7 +457,7 @@ function renderWithdrawals() {
         <td>${escapeHTML(w.id || w.reference || "-")}</td>
         <td>${escapeHTML(w.memberId || w.email || w.name || w.uid || "-")}</td>
         <td>${money(w.amount)}</td>
-        <td>${escapeHTML(w.method || w.bankName || "-")}</td>
+        <td>${escapeHTML(w.method || w.bankName || w.bankDetails?.bankName || "-")}</td>
         <td>${escapeHTML(dateText(w.createdAt || w.date || w.submittedAt))}</td>
         <td>${badge(w.status || "Pending")}</td>
       </tr>
@@ -498,7 +479,7 @@ function renderReferrals() {
 
         return `
           <tr>
-            <td>${escapeHTML(m.referralId || "-")}</td>
+            <td>${escapeHTML(m.myReferralId || m.referralId || "-")}</td>
             <td>${escapeHTML(m.name || m.email || "-")}</td>
             <td>${escapeHTML(m.referredBy)}</td>
             <td>${money(amount)}</td>
@@ -521,7 +502,7 @@ function renderTransactions() {
         <td>${escapeHTML(t.type || "-")}</td>
         <td>${escapeHTML(t.memberId || t.email || t.uid || "-")}</td>
         <td>${money(t.amount)}</td>
-        <td>${escapeHTML(dateText(t.createdAt || t.date))}</td>
+        <td>${escapeHTML(dateText(t.createdAt || t.date || t.submittedAt))}</td>
         <td>${badge(t.status || "Pending")}</td>
       </tr>
     `).join("")
@@ -600,12 +581,7 @@ async function loadDashboard() {
 
   } catch (error) {
     console.error("Dashboard load error:", error);
-
-    showNotice(
-      "Dashboard error: " + (error.message || "Unknown Firebase error"),
-      true
-    );
-
+    showNotice("Dashboard error: " + (error.message || "Unknown error"), true);
   } finally {
     loading = false;
     refresh.disabled = false;
@@ -637,164 +613,161 @@ $("paymentBody").addEventListener("click", async event => {
     return;
   }
 
-  if (action === "approve") {
-    const confirmed = confirm(
-      "Have you verified that this payment has actually been credited to the bank? Only then approve."
-    );
-    if (!confirmed) return;
-  }
+  if (action === "approve" && !confirm(
+    "Have you verified actual bank credit for this payment?"
+  )) return;
 
-  if (action === "reject") {
-    const confirmed = confirm(
-      "Are you sure you want to reject this payment request?"
-    );
-    if (!confirmed) return;
-  }
+  if (action === "reject" && !confirm(
+    "Are you sure you want to reject this payment?"
+  )) return;
 
   button.disabled = true;
-  const originalText = button.textContent;
   button.textContent = "Please wait...";
 
   try {
     const requestRef = doc(db, "paymentRequests", requestId);
 
-    await runTransaction(db, async tx => {
-
-      const requestSnap = await tx.get(requestRef);
+    await runTransaction(db, async transaction => {
+      const requestSnap = await transaction.get(requestRef);
 
       if (!requestSnap.exists()) {
-        throw new Error("Payment request does not exist.");
+        throw new Error("Payment request not found.");
       }
 
       const current = requestSnap.data();
-      const currentStatus = String(current.status || "").toLowerCase();
 
-      if (!currentStatus.includes("pending")) {
-        throw new Error("This payment request has already been reviewed.");
+      if (String(current.status || "").toLowerCase() !== "pending verification") {
+        throw new Error("Payment has already been reviewed.");
       }
 
       if (action === "reject") {
-        tx.update(requestRef, {
+        transaction.update(requestRef, {
           status: "Rejected",
-          reviewedAt: serverTimestamp(),
-          reviewedBy: auth.currentUser.uid
+          reviewedAt: serverTimestamp()
         });
-
         return;
       }
 
       if (!current.uid) {
-        throw new Error("Member UID is missing in payment request.");
+        throw new Error("Member UID is missing.");
       }
 
-      const amount
-            const memberRef = doc(db, "members", current.uid);
-      const investmentRef = doc(db, "investments", requestId);
-      const requestRef = doc(db, "paymentRequests", requestId);
-
+      const amount = Number(current.amount || 0);
+      const profit = Number(
+        current.displayedProfit ??
+        current.estimatedProfit ??
+        current.profit ??
+        0
+      );
       const durationMonths = Number(current.durationMonths || 12);
+
+      if (!Number.isFinite(amount) || amount <= 0) {
+        throw new Error("Invalid payment amount.");
+      }
+
+      if (!Number.isFinite(profit) || profit < 0) {
+        throw new Error("Invalid estimated profit.");
+      }
 
       if (!Number.isFinite(durationMonths) || durationMonths <= 0) {
         throw new Error("Invalid investment duration.");
       }
 
+      const memberRef = doc(db, "members", current.uid);
+      const investmentRef = doc(db, "investments", requestId);
+
+      const memberSnap = await transaction.get(memberRef);
+      const investmentSnap = await transaction.get(investmentRef);
+
+      if (!memberSnap.exists()) {
+        throw new Error("Member account not found.");
+      }
+
+      if (investmentSnap.exists()) {
+        throw new Error("Investment already exists.");
+      }
+
       const maturityDate = new Date();
       maturityDate.setMonth(maturityDate.getMonth() + durationMonths);
 
-      await runTransaction(db, async (transaction) => {
-        const memberSnap = await transaction.get(memberRef);
-        const investmentSnap = await transaction.get(investmentRef);
-        const requestSnap = await transaction.get(requestRef);
-
-        if (!memberSnap.exists()) {
-          throw new Error("Member account not found.");
-        }
-
-        if (!requestSnap.exists()) {
-          throw new Error("Payment request not found.");
-        }
-
-        if (investmentSnap.exists()) {
-          throw new Error("Investment already created for this payment.");
-        }
-
-        const latestRequest = requestSnap.data();
-
-        if (
-          String(latestRequest.status || "").toLowerCase() !==
-          "pending verification"
-        ) {
-          throw new Error("This payment request is not pending.");
-        }
-
-        transaction.set(investmentRef, {
-          uid: current.uid,
-          memberId: current.memberId || "",
-          memberName: current.memberName || "",
-          paymentRequestId: requestId,
-          plan: current.plan || "",
-          amount: amount,
-          profit: profit,
-          totalAmount: amount + profit,
-          durationMonths: durationMonths,
-          startDate: serverTimestamp(),
-          maturityDate: Timestamp.fromDate(maturityDate),
-          status: "Active",
-          createdAt: serverTimestamp()
-        });
-
-        transaction.update(memberRef, {
-          investment: increment(amount),
-          totalInvestment: increment(amount),
-          profit: increment(profit),
-          expectedTotal: increment(amount + profit),
-          status: "Active",
-          updatedAt: serverTimestamp()
-        });
-
-        transaction.update(requestRef, {
-          status: "Approved",
-          approvedAt: serverTimestamp(),
-          maturityDate: Timestamp.fromDate(maturityDate)
-        });
+      transaction.set(investmentRef, {
+        uid: current.uid,
+        memberId: current.memberId || "",
+        memberName: current.memberName || "",
+        paymentRequestId: requestId,
+        plan: current.plan || "",
+        amount: amount,
+        profit: profit,
+        totalAmount: amount + profit,
+        durationMonths: durationMonths,
+        startDate: serverTimestamp(),
+        maturityDate: Timestamp.fromDate(maturityDate),
+        status: "Active",
+        createdAt: serverTimestamp()
       });
 
-      showNotice("Payment approved successfully.");
-      await loadDashboard();
+      transaction.update(memberRef, {
+        investment: increment(amount),
+        totalInvestment: increment(amount),
+        profit: increment(profit),
+        expectedTotal: increment(amount + profit),
+        status: "Active",
+        updatedAt: serverTimestamp()
+      });
 
-    } catch (error) {
-      console.error("Payment approval error:", error);
-      showNotice("Approval failed: " + error.message, true);
-    }
+      transaction.update(requestRef, {
+        status: "Approved",
+        approvedAt: serverTimestamp(),
+        maturityDate: Timestamp.fromDate(maturityDate)
+      });
+    });
+
+    showNotice(
+      action === "approve"
+        ? "Payment approved successfully."
+        : "Payment rejected successfully."
+    );
+
+    await loadDashboard();
+
+  } catch (error) {
+    console.error("Payment review error:", error);
+    showNotice("Payment action failed: " + error.message, true);
+  } finally {
+    button.disabled = false;
+    button.textContent = action === "approve" ? "Approve" : "Reject";
+  }
+});
+
+
+/* ADMIN AUTHENTICATION */
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    adminReady = false;
+    showNotice("Admin login required. Redirecting...");
+    window.location.replace("./admin-login.html");
+    return;
   }
 
-  // Initial dashboard authentication
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      adminReady = false;
-      showNotice("Admin login required. Redirecting...");
-      window.location.replace("./admin-login.html");
-      return;
+  if (user.uid !== ADMIN_UID) {
+    adminReady = false;
+    showNotice("Access denied. This account is not authorized as Admin.", true);
+
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Sign out error:", error);
     }
 
-    if (user.uid !== ADMIN_UID) {
-      adminReady = false;
-      showNotice("Access denied. This account is not authorized as Admin.", true);
+    window.location.replace("./admin-login.html");
+    return;
+  }
 
-      try {
-        await signOut(auth);
-      } catch (error) {
-        console.error("Sign out error:", error);
-      }
-
-      window.location.replace("./admin-login.html");
-      return;
-    }
-
-    adminReady = true;
-    showNotice("Admin login successful. Loading dashboard...");
-    await loadDashboard();
-  });
+  adminReady = true;
+  showNotice("Admin login successful. Loading dashboard...");
+  await loadDashboard();
+});
 
 </script>
 </body>
