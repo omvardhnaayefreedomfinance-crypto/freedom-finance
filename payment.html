@@ -4,420 +4,282 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Freedom Finance - Payment</title>
-
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;padding:0;background:#050505;
-  color:#fff8e7;font-family:Arial,sans-serif;
-}
-header{
-  padding:18px;display:flex;justify-content:space-between;
-  align-items:center;background:#080808;
-  border-bottom:1px solid #604b18;
-}
+body{margin:0;background:#050505;color:#fff8e7;font-family:Arial,sans-serif}
+header{padding:18px;display:flex;justify-content:space-between;align-items:center;background:#080808;border-bottom:1px solid #604b18}
 .logo{color:#ffd96a;font-weight:bold;font-size:20px}
 .back{color:#ffd96a;text-decoration:none}
 .container{max-width:700px;margin:auto;padding:22px 15px 40px}
-.card{
-  padding:23px;margin-bottom:20px;
-  border:1px solid #735719;border-radius:16px;
-  background:linear-gradient(145deg,#17130b,#090909);
-}
-h1{font-size:27px;text-align:center;color:#ffd96a}
+.card{padding:23px;margin-bottom:20px;border:1px solid #735719;border-radius:16px;background:linear-gradient(145deg,#17130b,#090909)}
+h1{font-size:25px;text-align:center;color:#ffd96a}
 .subtitle{text-align:center;color:#aaa;line-height:1.6}
-.row{
-  display:flex;justify-content:space-between;gap:12px;
-  padding:14px 0;border-bottom:1px solid #443718;
-}
+.row{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid #443718}
 .row span:first-child{color:#aaa}
 .row strong{text-align:right;overflow-wrap:anywhere}
 .gold{color:#ffd96a}
-input{
-  width:100%;padding:14px;margin-top:10px;
-  border:1px solid #604b18;border-radius:9px;
-  background:#080808;color:white;font-size:16px;
-}
-button{
-  width:100%;padding:14px;margin-top:15px;
-  border:0;border-radius:9px;
-  background:linear-gradient(135deg,#d99b16,#ffd96a);
-  color:#171107;font-weight:bold;font-size:15px;cursor:pointer;
-}
+input{width:100%;padding:14px;margin-top:10px;border:1px solid #604b18;border-radius:9px;background:#080808;color:white;font-size:16px}
+button{width:100%;padding:14px;margin-top:15px;border:0;border-radius:9px;background:linear-gradient(135deg,#d99b16,#ffd96a);color:#171107;font-weight:bold;font-size:15px;cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
-.secondary{
-  background:transparent;border:1px solid #ffd96a;color:#ffd96a;
-}
-.message{color:#ffd96a;text-align:center;line-height:1.5}
+.secondary{background:transparent;border:1px solid #ffd96a;color:#ffd96a}
+.message{color:#ffd96a;text-align:center;line-height:1.5;white-space:pre-wrap}
 .note{font-size:12px;color:#999;line-height:1.6;text-align:center}
 </style>
 </head>
-
 <body>
-
 <header>
-  <div class="logo">FREEDOM FINANCE</div>
-  <a href="plan-summary.html" class="back">← BACK</a>
+<div class="logo">FREEDOM FINANCE</div>
+<a href="plan-summary.html" class="back">← BACK</a>
 </header>
 
 <div class="container">
+<div class="card">
+<h1>Payment Details</h1>
+<p class="subtitle">Review your selected plan.</p>
+<div class="row"><span>Selected Plan</span><strong id="planName">—</strong></div>
+<div class="row"><span>Investment Amount</span><strong id="amount">—</strong></div>
+<div class="row"><span>Displayed Profit Estimate</span><strong id="profit">—</strong></div>
+<div class="row"><span>Displayed Total Estimate</span><strong class="gold" id="total">—</strong></div>
+</div>
 
-  <div class="card">
-    <h1>Payment Details</h1>
-    <p class="subtitle">Review your selected plan.</p>
+<div class="card">
+<h1>Payment Instructions</h1>
+<p class="subtitle">Verify beneficiary name and account details independently with your bank before making any payment.</p>
+<p class="note">A submitted transaction reference does not confirm receipt of funds.</p>
+</div>
 
-    <div class="row">
-      <span>Selected Plan</span>
-      <strong id="planName">—</strong>
-    </div>
-    <div class="row">
-      <span>Investment Amount</span>
-      <strong id="amount">—</strong>
-    </div>
-    <div class="row">
-      <span>Displayed Profit Estimate</span>
-      <strong id="profit">—</strong>
-    </div>
-    <div class="row">
-      <span>Displayed Total Estimate</span>
-      <strong class="gold" id="total">—</strong>
-    </div>
-  </div>
+<div class="card">
+<h1>Bank Details</h1>
+<div class="row"><span>Bank Name</span><strong>Federal Bank</strong></div>
+<div class="row"><span>Account Number</span><strong>77770127244362</strong></div>
+<div class="row"><span>IFSC Code</span><strong>FDRL0007777</strong></div>
+<div class="row"><span>Alternate IFSC</span><strong>FDRL0000001</strong></div>
+<div class="row"><span>Branch</span><strong>Neo Banking – Jupiter</strong></div>
+<div class="row"><span>Account Type</span><strong>Current Account</strong></div>
+<div class="row"><span>UPI ID</span><strong>omvardhnaaye@ptyes</strong></div>
+<p class="note">Verify account ownership and beneficiary details before transferring money.</p>
+</div>
 
-  <div class="card">
-    <h1>Payment Instructions</h1>
-    <p class="subtitle">
-      Verify the beneficiary name and account details independently
-      with your bank before making any payment.
-    </p>
-    <p class="note">
-      A submitted transaction reference does not confirm receipt
-      of funds or guarantee any investment return.
-    </p>
-  </div>
+<div class="card">
+<h1>Transaction Reference</h1>
+<label for="transactionId">UTR / Transaction Reference</label>
+<input type="text" id="transactionId" maxlength="100" autocomplete="off" placeholder="Enter your transaction reference">
 
-  <div class="card">
-    <h1>Bank Details</h1>
+<button type="button" id="submitBtn" disabled>CONNECTING...</button>
+<p class="message" id="message">Connecting to Firebase...</p>
 
-    <div class="row">
-      <span>Bank Name</span>
-      <strong>Federal Bank</strong>
-    </div>
-    <div class="row">
-      <span>Account Number</span>
-      <strong>77770127244362</strong>
-    </div>
-    <div class="row">
-      <span>IFSC Code</span>
-      <strong>FDRL0007777</strong>
-    </div>
-    <div class="row">
-      <span>Alternate IFSC</span>
-      <strong>FDRL0000001</strong>
-    </div>
-    <div class="row">
-      <span>Branch</span>
-      <strong>Neo Banking – Jupiter</strong>
-    </div>
-    <div class="row">
-      <span>Account Type</span>
-      <strong>Current Account</strong>
-    </div>
-    <div class="row">
-      <span>UPI ID</span>
-      <strong>omvardhnaaye@ptyes</strong>
-    </div>
+<div class="row"><span>Payment Status</span><strong id="paymentStatus">Not Submitted</strong></div>
+<div class="row"><span>Submitted UTR</span><strong id="savedUtr">—</strong></div>
 
-    <p class="note">
-      Please verify account ownership and beneficiary details
-      before transferring money.
-    </p>
-  </div>
-
-  <div class="card">
-    <h1>Transaction Reference</h1>
-
-    <label for="transactionId">UTR / Transaction Reference</label>
-    <input
-      type="text"
-      id="transactionId"
-      maxlength="100"
-      autocomplete="off"
-      placeholder="Enter your transaction reference">
-
-    <button type="button" id="submitBtn" disabled>
-      LOADING...
-    </button>
-
-    <p class="message" id="message" role="status">
-      Connecting to Firebase...
-    </p>
-
-    <div class="row">
-      <span>Payment Status</span>
-      <strong id="paymentStatus">Not Submitted</strong>
-    </div>
-
-    <p class="note">
-      Your request will remain pending until an administrator
-      independently verifies the payment.
-    </p>
-
-    <button type="button" class="secondary" id="dashboardBtn">
-      BACK TO DASHBOARD
-    </button>
-  </div>
-
+<p class="note">Your request remains pending until independently verified by an administrator.</p>
+<button type="button" class="secondary" id="dashboardBtn">BACK TO DASHBOARD</button>
+</div>
 </div>
 
 <script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
-  getAuth,
-  onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+ getFirestore,doc,getDoc,collection,addDoc,
+ query,where,getDocs,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  collection,
-  addDoc,
-  serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
-  authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
-  projectId: "omvardhnaayefreedomfinan-efaf4",
-  storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
-  messagingSenderId: "552483514216",
-  appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
-  measurementId: "G-6MPELL55BD"
+const firebaseConfig={
+ apiKey:"AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+ authDomain:"omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+ projectId:"omvardhnaayefreedomfinan-efaf4",
+ storageBucket:"omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+ messagingSenderId:"552483514216",
+ appId:"1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+ measurementId:"G-6MPELL55BD"
 };
 
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const $=id=>document.getElementById(id);
+let currentUser=null;
+let memberData=null;
+let existingRequest=null;
+let busy=false;
 
+const plan=localStorage.getItem("selectedPlan");
+const amountRaw=localStorage.getItem("selectedAmount");
+const profitRaw=localStorage.getItem("selectedProfit");
+const totalRaw=localStorage.getItem("selectedTotal");
 
-const plan = localStorage.getItem("selectedPlan");
-const amountRaw = localStorage.getItem("selectedAmount");
-const profitRaw = localStorage.getItem("selectedProfit");
-const totalRaw = localStorage.getItem("selectedTotal");
-
-const planNameEl = document.getElementById("planName");
-const amountEl = document.getElementById("amount");
-const profitEl = document.getElementById("profit");
-const totalEl = document.getElementById("total");
-
-const submitBtn = document.getElementById("submitBtn");
-const message = document.getElementById("message");
-const transactionInput = document.getElementById("transactionId");
-const statusEl = document.getElementById("paymentStatus");
-
-let currentUser = null;
-let memberData = null;
-let isSubmitting = false;
-let requestSubmitted = false;
-
-
-const amount = Number(
-  String(amountRaw || "").replace(/[₹,\s]/g, "")
-);
-
-const profit = Number(
-  String(profitRaw || "").replace(/[₹,\s]/g, "")
-);
-
-const total = Number(
-  String(totalRaw || "").replace(/[₹,\s]/g, "")
-);
-
-
-if(plan && amountRaw !== null && profitRaw !== null && totalRaw !== null
-   && Number.isFinite(amount) && amount > 0
-   && Number.isFinite(profit) && Number.isFinite(total)) {
-
-  planNameEl.textContent = plan;
-  amountEl.textContent = amountRaw;
-  profitEl.textContent = profitRaw;
-  totalEl.textContent = totalRaw;
-
-} else {
-
-  message.textContent =
-    "No valid plan found. Please select your plan again.";
-
-  submitBtn.textContent = "PLAN NOT FOUND";
-  submitBtn.disabled = true;
+function numberValue(value){
+ return Number(String(value||"").replace(/[₹,\s]/g,""));
 }
 
+const amount=numberValue(amountRaw);
+const profit=numberValue(profitRaw);
+const total=numberValue(totalRaw);
 
-onAuthStateChanged(auth, async (user) => {
+const validPlan=!!plan && amountRaw!==null &&
+ Number.isFinite(amount) && amount>0 &&
+ Number.isFinite(profit) && Number.isFinite(total);
 
-  currentUser = user;
-  memberData = null;
+if(validPlan){
+ $("planName").textContent=plan;
+ $("amount").textContent=amountRaw;
+ $("profit").textContent=profitRaw;
+ $("total").textContent=totalRaw;
+}else{
+ $("message").textContent="No valid selected plan. Please select your plan again.";
+ $("submitBtn").textContent="PLAN NOT FOUND";
+}
 
-  if(!user) {
-    message.textContent =
-      "Please login to your member account first.";
+function setMessage(text){
+ $("message").textContent=text;
+}
 
-    submitBtn.textContent = "LOGIN REQUIRED";
-    submitBtn.disabled = true;
-    return;
+function lockSubmitted(data){
+ existingRequest=data;
+ const utr=data.transactionReference||data.utr||"—";
+ $("savedUtr").textContent=utr;
+ $("paymentStatus").textContent=data.status||"Pending Verification";
+ $("transactionId").value=utr==="—"?"":utr;
+ $("transactionId").disabled=true;
+ $("submitBtn").disabled=true;
+ $("submitBtn").textContent="REQUEST ALREADY SUBMITTED";
+ setMessage("Your payment request is already saved. Please wait for admin verification.");
+}
+
+async function loadExistingRequest(){
+ const q=query(
+  collection(db,"paymentRequests"),
+  where("uid","==",currentUser.uid)
+ );
+ const snap=await getDocs(q);
+
+ if(snap.empty)return false;
+
+ const records=snap.docs.map(d=>({id:d.id,...d.data()}));
+ records.sort((a,b)=>{
+  const da=a.submittedAt?.seconds||0;
+  const dbb=b.submittedAt?.seconds||0;
+  return dbb-da;
+ });
+
+ const matching=records.find(r=>
+  String(r.plan||"")===String(plan||"") &&
+  Number(r.amount||0)===amount
+ );
+
+ const record=matching||records[0];
+
+ if(record){
+  lockSubmitted(record);
+  return true;
+ }
+ return false;
+}
+
+onAuthStateChanged(auth,async user=>{
+ currentUser=user;
+
+ if(!user){
+  $("submitBtn").disabled=true;
+  $("submitBtn").textContent="LOGIN REQUIRED";
+  setMessage("Please login to your member account.");
+  return;
+ }
+
+ if(!user.emailVerified){
+  $("submitBtn").disabled=true;
+  $("submitBtn").textContent="VERIFY EMAIL";
+  setMessage("Please verify your email before submitting.");
+  return;
+ }
+
+ if(!validPlan){
+  $("submitBtn").disabled=true;
+  $("submitBtn").textContent="INVALID PLAN";
+  return;
+ }
+
+ try{
+  const memberSnap=await getDoc(doc(db,"members",user.uid));
+
+  if(!memberSnap.exists()){
+   $("submitBtn").disabled=true;
+   $("submitBtn").textContent="MEMBER NOT FOUND";
+   setMessage("Member record not found in Firebase.");
+   return;
   }
 
-  if(!user.emailVerified) {
-    message.textContent =
-      "Please verify your email before submitting payment.";
+  memberData=memberSnap.data();
 
-    submitBtn.textContent = "EMAIL VERIFICATION REQUIRED";
-    submitBtn.disabled = true;
-    return;
-  }
+  const already=await loadExistingRequest();
+  if(already)return;
 
-  try {
+  $("submitBtn").disabled=false;
+  $("submitBtn").textContent="SUBMIT FOR VERIFICATION";
+  setMessage("Firebase connected. Enter your UTR and submit.");
 
-    const memberRef = doc(db, "members", user.uid);
-    const memberSnap = await getDoc(memberRef);
-
-    if(!memberSnap.exists()) {
-
-      message.textContent =
-        "Member record not found in Firebase. Please contact admin.";
-
-      submitBtn.textContent = "MEMBER RECORD NOT FOUND";
-      submitBtn.disabled = true;
-      return;
-    }
-
-    memberData = memberSnap.data();
-
-    if(!plan || !Number.isFinite(amount) || amount <= 0) {
-      submitBtn.textContent = "INVALID PLAN";
-      submitBtn.disabled = true;
-      return;
-    }
-
-    message.textContent =
-      "Firebase connected. You can submit your transaction reference.";
-
-    submitBtn.textContent = "SUBMIT FOR VERIFICATION";
-    submitBtn.disabled = false;
-
-  } catch(error) {
-
-    console.error("Member loading error:", error);
-
-    message.textContent =
-      "Firebase error: " + error.code + " — " + error.message;
-
-    submitBtn.textContent = "CONNECTION ERROR";
-    submitBtn.disabled = true;
-  }
-
+ }catch(error){
+  console.error(error);
+  $("submitBtn").disabled=true;
+  $("submitBtn").textContent="CONNECTION ERROR";
+  setMessage("Firebase error: "+error.code+" — "+error.message);
+ }
 });
 
+$("submitBtn").addEventListener("click",async()=>{
+ if(busy||existingRequest||!currentUser||!memberData)return;
 
-submitBtn.addEventListener("click", async () => {
+ const utr=$("transactionId").value.trim();
 
-  if(isSubmitting || requestSubmitted) return;
+ if(utr.length<4||utr.length>100){
+  setMessage("Enter a valid UTR / transaction reference (4–100 characters).");
+  return;
+ }
 
-  const transaction = transactionInput.value.trim();
+ busy=true;
+ $("submitBtn").disabled=true;
+ $("submitBtn").textContent="SAVING...";
 
-  if(!currentUser || !memberData) {
-    message.textContent = "Member login or member record is missing.";
-    return;
-  }
+ try{
+  // Check again before writing to avoid accidental duplicate submission.
+  const already=await loadExistingRequest();
+  if(already)return;
 
-  if(!currentUser.emailVerified) {
-    message.textContent = "Please verify your email first.";
-    return;
-  }
+  const requestData={
+   uid:currentUser.uid,
+   memberId:memberData.memberId||"",
+   memberName:memberData.name||memberData.fullName||"",
+   email:currentUser.email||"",
+   plan:String(plan),
+   amount:amount,
+   displayedProfit:profit,
+   displayedTotal:total,
+   transactionReference:utr,
+   utr:utr,
+   status:"Pending Verification",
+   submittedAt:serverTimestamp()
+  };
 
-  if(!plan || !Number.isFinite(amount) || amount <= 0) {
-    message.textContent = "Invalid selected plan or amount.";
-    return;
-  }
+  const ref=await addDoc(collection(db,"paymentRequests"),requestData);
 
-  if(transaction.length < 4 || transaction.length > 100) {
-    message.textContent =
-      "Please enter a valid transaction reference (4–100 characters).";
-    return;
-  }
+  lockSubmitted({...requestData,id:ref.id});
+  setMessage("UTR successfully saved. Request ID: "+ref.id+". Waiting for admin verification.");
 
-  isSubmitting = true;
-  submitBtn.disabled = true;
-  submitBtn.textContent = "SAVING REQUEST...";
-
-  try {
-
-    const requestData = {
-      uid: currentUser.uid,
-      memberId: memberData.memberId || "",
-      memberName: memberData.name || "",
-      email: currentUser.email,
-      plan: String(plan),
-      amount: amount,
-      displayedProfit: profit,
-      displayedTotal: total,
-      transactionReference: transaction,
-      status: "Pending Verification",
-      submittedAt: serverTimestamp()
-    };
-
-    const requestRef = await addDoc(
-      collection(db, "paymentRequests"),
-      requestData
-    );
-
-    requestSubmitted = true;
-
-    statusEl.textContent = "Pending Verification";
-
-    message.textContent =
-      "Request successfully saved in Firebase. Request ID: " +
-      requestRef.id +
-      ". Payment is awaiting independent verification.";
-
-    transactionInput.disabled = true;
-    submitBtn.textContent = "REQUEST SUBMITTED";
-
-  } catch(error) {
-
-    console.error("Payment request save error:", error);
-
-    message.textContent =
-      "SAVE FAILED: " + error.code + " — " + error.message;
-
-    submitBtn.textContent = "RETRY SUBMISSION";
-    submitBtn.disabled = false;
-
-  } finally {
-
-    isSubmitting = false;
-
-  }
-
+ }catch(error){
+  console.error("UTR save error:",error);
+  $("submitBtn").disabled=false;
+  $("submitBtn").textContent="RETRY SUBMISSION";
+  setMessage("UTR SAVE FAILED: "+error.code+" — "+error.message);
+ }finally{
+  busy=false;
+ }
 });
 
-
-document.getElementById("dashboardBtn")
-.addEventListener("click", () => {
-
-  window.location.href = "member-dashboard.html";
-
+$("dashboardBtn").addEventListener("click",()=>{
+ window.location.href="member-dashboard.html";
 });
-
 </script>
-
 </body>
-  </html>
+                                                                   </html>
+                                                                     
