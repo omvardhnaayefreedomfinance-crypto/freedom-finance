@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,8 +42,21 @@ td{color:#e5e7eb}
 .reject-btn{background:#b91c1c;color:#fff}
 button:disabled{opacity:.5;cursor:not-allowed}
 #notice{padding:11px;margin-bottom:15px;border-radius:7px;font-size:13px;display:none;overflow-wrap:anywhere}
-@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.menu{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:500px){.container{padding:12px}.header{padding:13px}.logo{font-size:17px}.stat{padding:13px}.stat-value{font-size:20px}.menu{grid-template-columns:repeat(2,1fr)}.menu button{font-size:11px}.title h1{font-size:22px}}
+[hidden]{display:none!important}
+@media(max-width:800px){
+.stats{grid-template-columns:repeat(2,1fr)}
+.menu{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:500px){
+.container{padding:12px}
+.header{padding:13px}
+.logo{font-size:17px}
+.stat{padding:13px}
+.stat-value{font-size:20px}
+.menu{grid-template-columns:repeat(2,1fr)}
+.menu button{font-size:11px}
+.title h1{font-size:22px}
+}
 </style>
 </head>
 
@@ -68,10 +80,22 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <div id="notice"></div>
 
   <div class="stats">
-    <div class="stat"><div class="stat-title">Total Members</div><div class="stat-value" id="totalMembers">0</div></div>
-    <div class="stat"><div class="stat-title">Active Members</div><div class="stat-value" id="activeMembers">0</div></div>
-    <div class="stat"><div class="stat-title">Total Investment</div><div class="stat-value" id="totalInvestment">₹0</div></div>
-    <div class="stat"><div class="stat-title">Total Withdrawals</div><div class="stat-value" id="totalWithdrawals">₹0</div></div>
+    <div class="stat">
+      <div class="stat-title">Total Members</div>
+      <div class="stat-value" id="totalMembers">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Active Members</div>
+      <div class="stat-value" id="activeMembers">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Total Investment</div>
+      <div class="stat-value" id="totalInvestment">₹0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Total Withdrawals</div>
+      <div class="stat-value" id="totalWithdrawals">₹0</div>
+    </div>
   </div>
 
   <div class="menu">
@@ -138,7 +162,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Reference</th><th>Member</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th></tr>
+          <tr>
+            <th>Reference</th><th>Member</th><th>Amount</th>
+            <th>Method</th><th>Date</th><th>Status</th>
+          </tr>
         </thead>
         <tbody id="withdrawalBody"></tbody>
       </table>
@@ -150,7 +177,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Referral ID</th><th>Member</th><th>Referred By</th><th>Investment</th><th>Reward 2%</th><th>Status</th></tr>
+          <tr>
+            <th>Referral ID</th><th>Member</th><th>Referred By</th>
+            <th>Investment</th><th>Reward 2%</th><th>Status</th>
+          </tr>
         </thead>
         <tbody id="referralBody"></tbody>
       </table>
@@ -162,7 +192,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Reference</th><th>Type</th><th>Member</th><th>Amount</th><th>Date</th><th>Status</th></tr>
+          <tr>
+            <th>Reference</th><th>Type</th><th>Member</th>
+            <th>Amount</th><th>Date</th><th>Status</th>
+          </tr>
         </thead>
         <tbody id="transactionBody"></tbody>
       </table>
@@ -172,6 +205,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </main>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
 import {
@@ -192,6 +226,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 
+/* FIREBASE CONFIG */
+
 const firebaseConfig = {
   apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
   authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
@@ -207,7 +243,9 @@ const ADMIN_UID = "oQ14ElwzwMTQacne1dTIZ5DX9bQ2";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-  alert("ADMIN JAVASCRIPT STARTED");
+
+
+/* GLOBAL STATE */
 
 const $ = id => document.getElementById(id);
 
@@ -221,7 +259,9 @@ let adminReady = false;
 let loading = false;
 
 
-function showNotice(message, error=false) {
+/* NOTICE */
+
+function showNotice(message, error = false) {
   const box = $("notice");
   box.style.display = "block";
   box.style.background = error ? "#451a1a" : "#142b20";
@@ -229,18 +269,35 @@ function showNotice(message, error=false) {
   box.textContent = message;
 }
 
+
+/* ERROR HANDLERS */
+
+window.addEventListener("error", event => {
+  console.error("Page error:", event.error || event.message);
+  showNotice("JavaScript error: " + (event.message || "Unknown error"), true);
+});
+
+window.addEventListener("unhandledrejection", event => {
+  console.error("Unhandled error:", event.reason);
+  const message = event.reason?.message || String(event.reason || "Unknown error");
+  showNotice("Firebase error: " + message, true);
+});
+
+
+/* HELPERS */
+
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
   })[c]);
 }
 
 function money(value) {
-  const n = Number(value || 0);
+  const n = Number(value ?? 0);
   return "₹" + (Number.isFinite(n) ? n : 0).toLocaleString("en-IN");
 }
 
@@ -251,6 +308,10 @@ function asDate(value) {
     return value.toDate();
   }
 
+  if (value.seconds) {
+    return new Date(value.seconds * 1000);
+  }
+
   const d = new Date(value);
   return Number.isNaN(d.getTime()) ? null : d;
 }
@@ -258,12 +319,6 @@ function asDate(value) {
 function dateText(value) {
   const d = asDate(value);
   return d ? d.toLocaleDateString("en-IN") : "-";
-}
-
-function oneYearLater(date, months=12) {
-  const d = new Date(date);
-  d.setMonth(d.getMonth() + months);
-  return d;
 }
 
 function badge(status) {
@@ -283,6 +338,9 @@ function badge(status) {
 function emptyRow(columns, message) {
   return `<tr><td colspan="${columns}" class="empty">${escapeHTML(message)}</td></tr>`;
 }
+
+
+/* SECTION NAVIGATION */
 
 function showSection(id) {
   document.querySelectorAll(".section").forEach(section => {
@@ -305,15 +363,18 @@ document.querySelectorAll(".menu button").forEach(button => {
 
 $("logoutBtn").addEventListener("click", async () => {
   const button = $("logoutBtn");
+
+  if (button.disabled) return;
+
   button.disabled = true;
   button.textContent = "LOGGING OUT...";
 
   try {
     await signOut(auth);
-    window.location.replace("./admin-login.html");
+    window.location.href = "./admin-login.html";
   } catch (error) {
-    console.error(error);
-    showNotice("Logout failed: " + error.message, true);
+    console.error("Logout error:", error);
+    showNotice("Logout failed: " + (error.message || "Unknown error"), true);
     button.disabled = false;
     button.textContent = "LOGOUT";
   }
@@ -391,10 +452,12 @@ function renderPayments() {
               ${pending ? `
                 <button class="action approve-btn"
                   data-action="approve"
-                  data-id="${escapeHTML(p.id)}">Approve</button>
+                  data-id="${escapeHTML(p.id)}"
+                  type="button">Approve</button>
                 <button class="action reject-btn"
                   data-action="reject"
-                  data-id="${escapeHTML(p.id)}">Reject</button>
+                  data-id="${escapeHTML(p.id)}"
+                  type="button">Reject</button>
               ` : "-"}
             </td>
           </tr>
@@ -469,11 +532,11 @@ function renderTransactions() {
 /* FIRESTORE READ */
 
 async function readCollection(name) {
-  const snap = await getDocs(collection(db, name));
+  const snapshot = await getDocs(collection(db, name));
 
-  return snap.docs.map(d => ({
-    id: d.id,
-    ...d.data()
+  return snapshot.docs.map(item => ({
+    id: item.id,
+    ...item.data()
   }));
 }
 
@@ -481,7 +544,12 @@ async function readCollection(name) {
 /* DASHBOARD LOAD */
 
 async function loadDashboard() {
-  if (!adminReady || loading) return;
+  if (!adminReady) {
+    showNotice("Admin authentication is not ready yet.", true);
+    return;
+  }
+
+  if (loading) return;
 
   loading = true;
 
@@ -490,7 +558,7 @@ async function loadDashboard() {
   refresh.textContent = "Loading...";
 
   try {
-    const data = await Promise.all([
+    const results = await Promise.all([
       readCollection("members"),
       readCollection("paymentRequests"),
       readCollection("withdrawalRequests"),
@@ -498,11 +566,11 @@ async function loadDashboard() {
       readCollection("investments")
     ]);
 
-    members = data[0];
-    paymentRequests = data[1];
-    withdrawals = data[2];
-    transactions = data[3];
-    investmentRecords = data[4];
+    members = results[0];
+    paymentRequests = results[1];
+    withdrawals = results[2];
+    transactions = results[3];
+    investmentRecords = results[4];
 
     $("totalMembers").textContent = members.length;
 
@@ -511,12 +579,12 @@ async function loadDashboard() {
     ).length;
 
     const total = investmentRecords.reduce(
-      (sum, item) => sum + Number(item.amount || 0), 0
+      (sum, item) => sum + (Number(item.amount) || 0), 0
     );
 
     const withdrawn = withdrawals
       .filter(w => String(w.status || "").toLowerCase() === "approved")
-      .reduce((sum, w) => sum + Number(w.amount || 0), 0);
+      .reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
 
     $("totalInvestment").textContent = money(total);
     $("totalWithdrawals").textContent = money(withdrawn);
@@ -537,6 +605,7 @@ async function loadDashboard() {
       "Dashboard error: " + (error.message || "Unknown Firebase error"),
       true
     );
+
   } finally {
     loading = false;
     refresh.disabled = false;
@@ -564,7 +633,7 @@ $("paymentBody").addEventListener("click", async event => {
   const request = paymentRequests.find(p => p.id === requestId);
 
   if (!request) {
-    showNotice("Payment request not found. Refresh the dashboard.", true);
+    showNotice("Payment request not found. Refresh dashboard.", true);
     return;
   }
 
@@ -572,22 +641,25 @@ $("paymentBody").addEventListener("click", async event => {
     const confirmed = confirm(
       "Have you verified that this payment has actually been credited to the bank? Only then approve."
     );
-
     if (!confirmed) return;
   }
 
   if (action === "reject") {
-    const confirmed = confirm("Are you sure you want to reject this payment request?");
+    const confirmed = confirm(
+      "Are you sure you want to reject this payment request?"
+    );
     if (!confirmed) return;
   }
 
   button.disabled = true;
+  const originalText = button.textContent;
   button.textContent = "Please wait...";
 
   try {
     const requestRef = doc(db, "paymentRequests", requestId);
 
     await runTransaction(db, async tx => {
+
       const requestSnap = await tx.get(requestRef);
 
       if (!requestSnap.exists()) {
@@ -611,151 +683,119 @@ $("paymentBody").addEventListener("click", async event => {
         return;
       }
 
-      /* APPROVAL VALIDATION */
-
       if (!current.uid) {
         throw new Error("Member UID is missing in payment request.");
       }
 
-      const amount = Number(current.amount || 0);
-
-      if (!Number.isFinite(amount) || amount <= 0) {
-        throw new Error("Invalid payment amount.");
-      }
-
-      const memberRef = doc(db, "members", current.uid);
+      const amount
+            const memberRef = doc(db, "members", current.uid);
       const investmentRef = doc(db, "investments", requestId);
+      const requestRef = doc(db, "paymentRequests", requestId);
 
-      const memberSnap = await tx.get(memberRef);
-      const investmentSnap = await tx.get(investmentRef);
+      const durationMonths = Number(current.durationMonths || 12);
 
-      if (!memberSnap.exists()) {
-        throw new Error("Member record not found.");
+      if (!Number.isFinite(durationMonths) || durationMonths <= 0) {
+        throw new Error("Invalid investment duration.");
       }
 
-      if (investmentSnap.exists()) {
-        throw new Error("Investment already exists. Duplicate credit stopped.");
-      }
+      const maturityDate = new Date();
+      maturityDate.setMonth(maturityDate.getMonth() + durationMonths);
 
-      const member = memberSnap.data();
+      await runTransaction(db, async (transaction) => {
+        const memberSnap = await transaction.get(memberRef);
+        const investmentSnap = await transaction.get(investmentRef);
+        const requestSnap = await transaction.get(requestRef);
 
-      /*
-       * Profit is taken from the submitted plan details.
-       * If no profit value was saved, it remains zero.
-       * No automatic 30% profit is invented here.
-       */
-      const profit = Math.max(0, Number(
-        current.displayedProfit ??
-        current.estimatedProfit ??
-        current.profit ??
-        0
-      ));
+        if (!memberSnap.exists()) {
+          throw new Error("Member account not found.");
+        }
 
-      if (!Number.isFinite(profit)) {
-        
-{
-        throw new Error("Invalid estimated profit value.");
-      }
+        if (!requestSnap.exists()) {
+          throw new Error("Payment request not found.");
+        }
 
-      const startDate = new Date();
-      const durationMonths = Math.max(
-        1,
-        Number(current.durationMonths || 12)
-      );
+        if (investmentSnap.exists()) {
+          throw new Error("Investment already created for this payment.");
+        }
 
-      const maturityDate = new Date(startDate);
-      maturityDate.setMonth(
-        maturityDate.getMonth() + durationMonths
-      );
+        const latestRequest = requestSnap.data();
 
-      const investmentData = {
-        uid: current.uid,
-        memberId: member.memberId || current.memberId || "",
-        memberName: member.name || current.memberName || "",
-        email: member.email || current.email || "",
-        plan: current.plan || "",
-        amount: amount,
-        profit: profit,
-        expectedTotal: amount + profit,
-        investmentDate: Timestamp.fromDate(startDate),
-        maturityDate: Timestamp.fromDate(maturityDate),
-        status: "Active",
-        paymentRequestId: requestId,
-        createdAt: serverTimestamp()
-      };
+        if (
+          String(latestRequest.status || "").toLowerCase() !==
+          "pending verification"
+        ) {
+          throw new Error("This payment request is not pending.");
+        }
 
-      tx.set(investmentRef, investmentData);
+        transaction.set(investmentRef, {
+          uid: current.uid,
+          memberId: current.memberId || "",
+          memberName: current.memberName || "",
+          paymentRequestId: requestId,
+          plan: current.plan || "",
+          amount: amount,
+          profit: profit,
+          totalAmount: amount + profit,
+          durationMonths: durationMonths,
+          startDate: serverTimestamp(),
+          maturityDate: Timestamp.fromDate(maturityDate),
+          status: "Active",
+          createdAt: serverTimestamp()
+        });
 
-      tx.update(memberRef, {
-        investment: increment(amount),
-        totalInvestment: increment(amount),
-        profit: increment(profit),
-        expectedTotal: increment(amount + profit),
-        status: "Active"
+        transaction.update(memberRef, {
+          investment: increment(amount),
+          totalInvestment: increment(amount),
+          profit: increment(profit),
+          expectedTotal: increment(amount + profit),
+          status: "Active",
+          updatedAt: serverTimestamp()
+        });
+
+        transaction.update(requestRef, {
+          status: "Approved",
+          approvedAt: serverTimestamp(),
+          maturityDate: Timestamp.fromDate(maturityDate)
+        });
       });
 
-      tx.update(requestRef, {
-        status: "Approved",
-        reviewedAt: serverTimestamp(),
-        approvedAt: serverTimestamp(),
-        reviewedBy: auth.currentUser.uid,
-        investmentId: requestId
-      });
-    });
+      showNotice("Payment approved successfully.");
+      await loadDashboard();
 
-    showNotice(
-      action === "approve"
-        ? "Payment approved. Investment created and member status updated."
-        : "Payment request rejected successfully."
-    );
-
-    await loadDashboard();
-
-  } catch (error) {
-    console.error("Payment action error:", error);
-
-    showNotice(
-      "Payment action failed: " + (error.message || "Unknown error"),
-      true
-    );
-
-    button.disabled = false;
-    button.textContent = action === "approve" ? "Approve" : "Reject";
-  }
-});
-
-
-/* ADMIN AUTHENTICATION */
-
-onAuthStateChanged(auth, async user => {
-  if (!user) {
-    window.location.replace("./admin-login.html");
-    return;
-  }
-
-  if (user.uid !== ADMIN_UID) {
-    showNotice(
-      "Access denied. This account is not authorized as Admin.",
-      true
-    );
-
-    try {
-      await signOut(auth);
     } catch (error) {
-      console.error("Sign out error:", error);
+      console.error("Payment approval error:", error);
+      showNotice("Approval failed: " + error.message, true);
+    }
+  }
+
+  // Initial dashboard authentication
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      adminReady = false;
+      showNotice("Admin login required. Redirecting...");
+      window.location.replace("./admin-login.html");
+      return;
     }
 
-    window.location.replace("./admin-login.html");
-    return;
-  }
+    if (user.uid !== ADMIN_UID) {
+      adminReady = false;
+      showNotice("Access denied. This account is not authorized as Admin.", true);
 
-  adminReady = true;
-  showNotice("Admin login successful.");
-  await loadDashboard();
-});
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error("Sign out error:", error);
+      }
+
+      window.location.replace("./admin-login.html");
+      return;
+    }
+
+    adminReady = true;
+    showNotice("Admin login successful. Loading dashboard...");
+    await loadDashboard();
+  });
 
 </script>
 </body>
 </html>
-
-       
