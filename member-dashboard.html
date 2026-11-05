@@ -1,337 +1,161 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Member Dashboard - Freedom Finance</title>  <style>  
-*{  
-    box-sizing:border-box;  
-    margin:0;  
-    padding:0;  
-    font-family:Arial,sans-serif;  
-}  
-  
-body{  
-    background:#080808;  
-    color:#fff;  
-    min-height:100vh;  
-}  
-  
-.header{  
-    background:#111;  
-    border-bottom:1px solid #333;  
-    padding:18px 15px;  
-    text-align:center;  
-}  
-  
-.header h1{  
-    color:#f5b400;  
-    font-size:25px;  
-}  
-  
-.header p{  
-    color:#aaa;  
-    font-size:13px;  
-    margin-top:5px;  
-}  
-  
-.container{  
-    width:94%;  
-    max-width:1100px;  
-    margin:25px auto;  
-}  
-  
-.welcome{  
-    background:#111;  
-    border:1px solid #333;  
-    border-radius:14px;  
-    padding:20px;  
-    margin-bottom:20px;  
-}  
-  
-.welcome h2{  
-    color:#f5b400;  
-    margin-bottom:8px;  
-}  
-  
-.welcome p{  
-    color:#aaa;  
-    font-size:14px;  
-}  
-  
-.stats{  
-    display:grid;  
-    grid-template-columns:repeat(4,1fr);  
-    gap:15px;  
-    margin-bottom:25px;  
-}  
-  
-.stat{  
-    background:#111;  
-    border:1px solid #333;  
-    border-radius:12px;  
-    padding:20px;  
-    text-align:center;  
-}  
-  
-.stat span{  
-    display:block;  
-    color:#aaa;  
-    font-size:13px;  
-    margin-bottom:9px;  
-}  
-  
-.stat strong{  
-    color:#f5b400;  
-    font-size:23px;  
-}  
-  
-.card{  
-    background:#111;  
-    border:1px solid #333;  
-    border-radius:14px;  
-    padding:20px;  
-    margin-bottom:20px;  
-}  
-  
-.card-title{  
-    color:#f5b400;  
-    font-size:19px;  
-    font-weight:bold;  
-    margin-bottom:18px;  
-}  
-  
-.actions{  
-    display:grid;  
-    grid-template-columns:repeat(3,1fr);  
-    gap:14px;  
-}  
-  
-.action{  
-    display:block;  
-    text-align:center;  
-    text-decoration:none;  
-    padding:15px 10px;  
-    border-radius:9px;  
-    font-weight:bold;  
-    transition:.2s;  
-}  
-  
-.action:hover{  
-    transform:translateY(-2px);  
-    opacity:.9;  
-}  
-  
-.gold{  
-    background:#f5b400;  
-    color:#000;  
-}  
-  
-.dark{  
-    background:#222;  
-    color:#fff;  
-    border:1px solid #444;  
-}  
-  
-.profile{  
-    display:grid;  
-    grid-template-columns:1fr 1fr;  
-    gap:12px;  
-}  
-  
-.profile-item{  
-    background:#181818;  
-    border-radius:9px;  
-    padding:14px;  
-}  
-  
-.profile-item span{  
-    display:block;  
-    color:#888;  
-    font-size:12px;  
-    margin-bottom:5px;  
-}  
-  
-.profile-item strong{  
-    color:#ddd;  
-    font-size:14px;  
-    word-break:break-word;  
-}  
-  
-.logout{  
-    width:100%;  
-    padding:14px;  
-    background:#222;  
-    color:#ff6b6b;  
-    border:1px solid #444;  
-    border-radius:9px;  
-    font-weight:bold;  
-    cursor:pointer;  
-}  
-  
-.note{  
-    color:#777;  
-    font-size:12px;  
-    line-height:1.6;  
-    text-align:center;  
-    margin-top:10px;  
-}  
-  
-@media(max-width:800px){  
-  
-    .stats{  
-        grid-template-columns:repeat(2,1fr);  
-    }  
-  
-    .actions{  
-        grid-template-columns:repeat(2,1fr);  
-    }  
-}  
-  
-@media(max-width:500px){  
-  
-    .stats{  
-        grid-template-columns:1fr 1fr;  
-    }  
-  
-    .actions{  
-        grid-template-columns:1fr;  
-    }  
-  
-    .profile{  
-        grid-template-columns:1fr;  
-    }  
-}  
-</style>  </head>  <body>  <div class="header">  
-    <h1>FREEDOM FINANCE</h1>  
-    <p>Member Dashboard</p>  
-</div>  <div class="container">  <div class="welcome">  
-    <h2>Welcome, <span id="memberName">Member</span> 👋</h2>  
-    <p>Your Freedom Finance member dashboard</p>  
-</div>  
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Member Dashboard - Freedom Finance</title>
 
-<div class="stats">  
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#080808;color:#fff;min-height:100vh}
+.header{background:#111;border-bottom:1px solid #333;padding:18px 15px;text-align:center}
+.header h1{color:#f5b400;font-size:25px}
+.header p{color:#aaa;font-size:13px;margin-top:5px}
+.container{width:94%;max-width:1100px;margin:25px auto}
+.welcome{background:#111;border:1px solid #333;border-radius:14px;padding:20px;margin-bottom:20px}
+.welcome h2{color:#f5b400;margin-bottom:8px}
+.welcome p{color:#aaa;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:25px}
+.stat{background:#111;border:1px solid #333;border-radius:12px;padding:20px;text-align:center}
+.stat span{display:block;color:#aaa;font-size:13px;margin-bottom:9px}
+.stat strong{color:#f5b400;font-size:23px;overflow-wrap:anywhere}
+.card{background:#111;border:1px solid #333;border-radius:14px;padding:20px;margin-bottom:20px}
+.card-title{color:#f5b400;font-size:19px;font-weight:bold;margin-bottom:18px}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.action{display:block;text-align:center;text-decoration:none;padding:15px 10px;border-radius:9px;font-weight:bold;transition:.2s}
+.action:hover{transform:translateY(-2px);opacity:.9}
+.gold{background:#f5b400;color:#000}
+.dark{background:#222;color:#fff;border:1px solid #444}
+.profile{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.profile-item{background:#181818;border-radius:9px;padding:14px}
+.profile-item span{display:block;color:#888;font-size:12px;margin-bottom:5px}
+.profile-item strong{color:#ddd;font-size:14px;word-break:break-word}
+.logout{width:100%;padding:14px;background:#222;color:#ff6b6b;border:1px solid #444;border-radius:9px;font-weight:bold;cursor:pointer}
+.refresh{background:#2563eb;color:#fff;border:0;border-radius:7px;padding:10px 15px;font-weight:bold;cursor:pointer;margin-bottom:12px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:750px}
+th,td{padding:12px 9px;border-bottom:1px solid #333;text-align:left;font-size:12px}
+th{color:#f5b400;background:#181818}
+td{color:#ddd}
+.empty{text-align:center;color:#999;padding:20px}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#14532d;color:#86efac;font-size:11px}
+.note{color:#777;font-size:12px;line-height:1.6;text-align:center;margin-top:10px}
+#notice{display:none;padding:12px;border-radius:8px;margin-bottom:15px;font-size:13px;overflow-wrap:anywhere}
+button:disabled{opacity:.5}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.actions{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){
+.container{margin:15px auto}
+.stats{grid-template-columns:1fr 1fr;gap:9px}
+.stat{padding:13px}
+.stat strong{font-size:19px}
+.actions{grid-template-columns:1fr}
+.profile{grid-template-columns:1fr}
+.card{padding:15px}
+}
+</style>
+</head>
 
-    <div class="stat">  
-        <span>Available Balance</span>  
-        <strong id="balance">₹0</strong>  
-    </div>  
+<body>
 
-    <div class="stat">  
-        <span>Total Investment</span>  
-        <strong id="investment">₹0</strong>  
-    </div>  
+<div class="header">
+<h1>FREEDOM FINANCE</h1>
+<p>Member Dashboard</p>
+</div>
 
-    <div class="stat">  
-        <span>Total Profit</span>  
-        <strong id="profit">₹0</strong>  
-    </div>  
+<div class="container">
 
-    <div class="stat">  
-        <span>Total Withdrawal</span>  
-        <strong id="withdrawal">₹0</strong>  
-    </div>  
+<div class="welcome">
+<h2>Welcome, <span id="memberName">Member</span> 👋</h2>
+<p>Your Freedom Finance member dashboard</p>
+</div>
 
-</div>  
+<div id="notice"></div>
 
+<div class="stats">
+<div class="stat">
+<span>Available Balance</span>
+<strong id="balance">₹0</strong>
+</div>
+<div class="stat">
+<span>Total Investment</span>
+<strong id="investment">₹0</strong>
+</div>
+<div class="stat">
+<span>Estimated Profit</span>
+<strong id="profit">₹0</strong>
+</div>
+<div class="stat">
+<span>Total Withdrawal</span>
+<strong id="withdrawal">₹0</strong>
+</div>
+</div>
 
-<div class="card">  
+<div class="card">
+<div class="card-title">QUICK ACTIONS</div>
+<div class="actions">
 
-    <div class="card-title">  
-        QUICK ACTIONS  
-    </div>  
+<a href="plans.html" class="action gold">📋 PLANS</a>
+<a href="payment.html" class="action dark">💳 PAYMENT PAGE</a>
+<a href="transactions.html" class="action gold">📊 TRANSACTION HISTORY</a>
+<a href="withdrawal.html" class="action dark">💸 WITHDRAWAL</a>
+<a href="referral.html" class="action gold">🤝 REFERRAL PROGRAM</a>
+<a href="plan-summary.html" class="action dark">📄 PLAN SUMMARY</a>
 
-    <div class="actions">  
+</div>
+</div>
 
-        <a href="plans.html" class="action gold">  
-            📋 PLANS  
-        </a>  
+<div class="card">
+<div class="card-title">MY INVESTMENTS</div>
+<button class="refresh" id="refreshBtn" type="button">↻ Refresh Data</button>
 
-        <a href="payment.html" class="action dark">  
-            💳 PAYMENT PAGE  
-        </a>  
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Plan</th>
+<th>Investment</th>
+<th>Estimated Profit</th>
+<th>Expected Total</th>
+<th>Investment Date</th>
+<th>Maturity Date</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="investmentBody">
+<tr><td colspan="7" class="empty">Loading investments...</td></tr>
+</tbody>
+</table>
+</div>
 
-        <a href="transactions.html" class="action gold">  
-            📊 TRANSACTION HISTORY  
-        </a>  
+<p class="note">
+Estimated profit is a projection, not a guaranteed or withdrawable balance.
+Maturity dates are calculated separately for each investment.
+</p>
+</div>
 
-        <a href="withdraw.html" class="action dark">  
-            💸 WITHDRAWAL  
-        </a>  
+<div class="card">
+<div class="card-title">MEMBER PROFILE</div>
 
-        <a href="referral.html" class="action gold">  
-            🤝 REFERRAL PROGRAM  
-        </a>  
+<div class="profile">
+<div class="profile-item"><span>Member ID</span><strong id="memberId">—</strong></div>
+<div class="profile-item"><span>Name</span><strong id="profileName">—</strong></div>
+<div class="profile-item"><span>Email</span><strong id="email">—</strong></div>
+<div class="profile-item"><span>Mobile</span><strong id="mobile">—</strong></div>
+<div class="profile-item"><span>Referral ID</span><strong id="referralId">—</strong></div>
+<div class="profile-item"><span>Status</span><strong id="status">—</strong></div>
+<div class="profile-item"><span>Join Date</span><strong id="joinDate">—</strong></div>
+</div>
+</div>
 
-        <a href="plan-summary.html" class="action dark">  
-            📄 PLAN SUMMARY  
-        </a>  
-
-    </div>  
-
-</div>  
-
-
-<div class="card">  
-
-    <div class="card-title">  
-        MEMBER PROFILE  
-    </div>  
-
-    <div class="profile">  
-
-        <div class="profile-item">  
-            <span>Member ID</span>  
-            <strong id="memberId">—</strong>  
-        </div>  
-
-        <div class="profile-item">  
-            <span>Name</span>  
-            <strong id="profileName">—</strong>  
-        </div>  
-
-        <div class="profile-item">  
-            <span>Email</span>  
-            <strong id="email">—</strong>  
-        </div>  
-
-        <div class="profile-item">  
-            <span>Mobile</span>  
-            <strong id="mobile">—</strong>  
-        </div>  
-
-        <div class="profile-item">  
-            <span>Referral ID</span>  
-            <strong id="referralId">—</strong>  
-        </div>  
-
-        <div class="profile-item">  
-            <span>Status</span>  
-            <strong id="status">Active</strong>  
-        </div>  
-
-        <div class="profile-item">  
-            <span>Join Date</span>  
-            <strong id="joinDate">—</strong>  
-        </div>  
-
-    </div>  
-
-</div>  
-
-
-<div class="card">  
-
-    <button class="logout" onclick="logout()">  
-        LOGOUT  
-    </button>  
-
-    <div class="note">  
-        Freedom Finance · Member Area · real frontend system  
-    </div>  
+<div class="card">
+<button class="logout" id="logoutBtn" type="button">LOGOUT</button>
+<div class="note">Freedom Finance · Member Area</div>
+</div>
 
 </div>
 
-</div>  <script type="module">
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
 import {
@@ -343,9 +167,12 @@ import {
 import {
   getFirestore,
   doc,
-  getDoc
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
@@ -361,23 +188,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const $ = id => document.getElementById(id);
 
-const money = value =>
-  "₹" + Number(value || 0).toLocaleString("en-IN");
+let currentUser = null;
 
-
-function showError(message) {
-  document.getElementById("memberName").textContent = "Member";
-  document.getElementById("profileName").textContent = message;
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN");
 }
-
 
 function formatDate(value) {
   if (!value) return "—";
 
   let date;
 
-  if (value.toDate) {
+  if (typeof value.toDate === "function") {
     date = value.toDate();
   } else {
     date = new Date(value);
@@ -388,14 +212,61 @@ function formatDate(value) {
   return date.toLocaleDateString("en-IN");
 }
 
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[c]);
+}
+
+function notice(message, error = false) {
+  $("notice").style.display = "block";
+  $("notice").style.background = error ? "#451a1a" : "#142b20";
+  $("notice").style.color = error ? "#fecaca" : "#bbf7d0";
+  $("notice").textContent = message;
+}
+
+function renderInvestments(records) {
+  const body = $("investmentBody");
+
+  if (!records.length) {
+    body.innerHTML =
+      '<tr><td colspan="7" class="empty">No approved investments found.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = records.map(item => {
+    const amount = Number(item.amount || 0);
+    const profit = Number(item.profit || 0);
+    const expected = Number(item.expectedTotal || (amount + profit));
+
+    return `
+      <tr>
+        <td>${escapeHTML(item.plan || "—")}</td>
+        <td>${money(amount)}</td>
+        <td>${money(profit)}</td>
+        <td>${money(expected)}</td>
+        <td>${escapeHTML(formatDate(item.investmentDate))}</td>
+        <td>${escapeHTML(formatDate(item.maturityDate))}</td>
+        <td><span class="badge">${escapeHTML(item.status || "Active")}</span></td>
+      </tr>
+    `;
+  }).join("");
+}
 
 async function loadMember(user) {
+  const refresh = $("refreshBtn");
+  refresh.disabled = true;
+  refresh.textContent = "Loading...";
 
   try {
-
     if (!user.emailVerified) {
+      notice("Please verify your email before accessing your dashboard.", true);
       await signOut(auth);
-      window.location.href = "member-login.html";
+      window.location.replace("member-login.html");
       return;
     }
 
@@ -403,96 +274,121 @@ async function loadMember(user) {
     const memberSnap = await getDoc(memberRef);
 
     if (!memberSnap.exists()) {
-      showError("Member profile database mein nahi mili.");
+      notice("Member profile was not found in the database.", true);
       return;
     }
 
     const member = memberSnap.data();
 
-    document.getElementById("memberName").textContent =
-      member.name || "Member";
-
-    document.getElementById("profileName").textContent =
-      member.name || "—";
-
-    document.getElementById("memberId").textContent =
-      member.memberId || "—";
-
-    document.getElementById("email").textContent =
-      member.email || user.email || "—";
-
-    document.getElementById("mobile").textContent =
-      member.mobile || "—";
-
-    document.getElementById("referralId").textContent =
-      member.myReferralId || "—";
-
-    document.getElementById("status").textContent =
-      member.status || "Pending";
-
-    document.getElementById("joinDate").textContent =
+    $("memberName").textContent = member.name || "Member";
+    $("profileName").textContent = member.name || "—";
+    $("memberId").textContent = member.memberId || "—";
+    $("email").textContent = member.email || user.email || "—";
+    $("mobile").textContent = member.mobile || "—";
+    $("referralId").textContent =
+      member.referralId || member.myReferralId || "—";
+    $("status").textContent = member.status || "Pending";
+    $("joinDate").textContent =
       formatDate(member.joinDate || member.createdAt);
 
-    document.getElementById("balance").textContent =
-      money(member.availableBalance);
+    $("balance").textContent = money(member.availableBalance);
+    $("withdrawal").textContent = money(member.totalWithdrawal);
 
-    document.getElementById("investment").textContent =
-      money(member.totalInvestment ?? member.investment);
+    // Load only this logged-in member's investment records.
+    const investmentsQuery = query(
+      collection(db, "investments"),
+      where("uid", "==", user.uid)
+    );
 
-    document.getElementById("profit").textContent =
-      money(member.profit);
+    const investmentSnap = await getDocs(investmentsQuery);
 
-    document.getElementById("withdrawal").textContent =
-      money(member.totalWithdrawal);
+    const records = investmentSnap.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    }));
 
-    // Fresh database profile local storage mein bhi update.
+    records.sort((a, b) => {
+      const dateA = a.investmentDate?.toDate
+        ? a.investmentDate.toDate().getTime()
+        : new Date(a.investmentDate || 0).getTime();
+
+      const dateB = b.investmentDate?.toDate
+        ? b.investmentDate.toDate().getTime()
+        : new Date(b.investmentDate || 0).getTime();
+
+      return dateB - dateA;
+    });
+
+    renderInvestments(records);
+
+    const investmentTotal = records.length
+      ? records.reduce((sum, item) => sum + Number(item.amount || 0), 0)
+      : Number(member.totalInvestment ?? member.investment ?? 0);
+
+    const profitTotal = records.length
+      ? records.reduce((sum, item) => sum + Number(item.profit || 0), 0)
+      : Number(member.profit || 0);
+
+    $("investment").textContent = money(investmentTotal);
+    $("profit").textContent = money(profitTotal);
+
     localStorage.setItem("currentMember", JSON.stringify(member));
 
-  } catch (error) {
+    notice("Dashboard data loaded successfully.");
 
-    console.error("Dashboard error:", error);
+  } catch (error) {
+    console.error("Member dashboard error:", error);
 
     if (error.code === "permission-denied") {
-      showError("Database permission denied. Firestore Rules check karein.");
+      notice(
+        "Investment data permission denied. Firestore investments rules need checking.",
+        true
+      );
     } else {
-      showError("Profile load nahi hui: " + error.message);
+      notice("Dashboard error: " + error.message, true);
     }
 
+  } finally {
+    refresh.disabled = false;
+    refresh.textContent = "↻ Refresh Data";
   }
 }
 
-
-// Login session check
-onAuthStateChanged(auth, user => {
-
-  if (!user) {
-    window.location.href = "member-login.html";
-    return;
-  }
-
-  loadMember(user);
-
+$("refreshBtn").addEventListener("click", () => {
+  if (currentUser) loadMember(currentUser);
 });
 
-
-// Logout
-window.logout = async function() {
+$("logoutBtn").addEventListener("click", async () => {
+  const button = $("logoutBtn");
+  button.disabled = true;
+  button.textContent = "LOGGING OUT...";
 
   try {
-
     await signOut(auth);
 
     localStorage.removeItem("memberLoggedIn");
     localStorage.removeItem("currentMember");
     localStorage.removeItem("memberEmail");
 
-    window.location.href = "member-login.html";
+    window.location.replace("member-login.html");
 
   } catch (error) {
-    alert("Logout error: " + error.message);
+    notice("Logout error: " + error.message, true);
+    button.disabled = false;
+    button.textContent = "LOGOUT";
+  }
+});
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.replace("member-login.html");
+    return;
   }
 
-};
+  currentUser = user;
+  loadMember(user);
+});
+</script>
 
-</script>  </body>  
-        </html>
+</body>
+</html>
