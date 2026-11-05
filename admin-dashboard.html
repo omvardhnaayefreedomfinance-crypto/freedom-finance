@@ -40,6 +40,7 @@ td{color:#e5e7eb}
 .refresh{background:#2563eb;color:#fff;margin-bottom:12px}
 .approve-btn{background:#15803d;color:#fff}
 .reject-btn{background:#b91c1c;color:#fff}
+button:disabled{opacity:.5;cursor:not-allowed}
 #notice{padding:11px;margin-bottom:15px;border-radius:7px;font-size:13px;display:none;overflow-wrap:anywhere}
 @media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.menu{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:500px){.container{padding:12px}.header{padding:13px}.logo{font-size:17px}.stat{padding:13px}.stat-value{font-size:20px}.menu{grid-template-columns:repeat(2,1fr)}.menu button{font-size:11px}.title h1{font-size:22px}}
@@ -109,21 +110,19 @@ td{color:#e5e7eb}
   </section>
 
   <section class="section" id="investmentSection" hidden>
-    <h2>Investments</h2>
+    <h2>Individual Investments</h2>
     <div class="table-wrap">
       <table>
-        <thead>
-  <tr>
-    <th>Member ID</th>
-    <th>Name</th>
-    <th>Plan</th>
-    <th>Investment</th>
-    <th>Profit</th>
-    <th>Investment Date</th>
-    <th>Maturity Date</th>
-    <th>Status</th>
-  </tr>
-        </thead>
+        <thead><tr>
+          <th>Member ID</th>
+          <th>Name</th>
+          <th>Plan</th>
+          <th>Investment</th>
+          <th>Estimated Profit</th>
+          <th>Investment Date</th>
+          <th>Maturity Date</th>
+          <th>Status</th>
+        </tr></thead>
         <tbody id="investmentBody"></tbody>
       </table>
     </div>
@@ -132,7 +131,7 @@ td{color:#e5e7eb}
   <section class="section" id="paymentSection" hidden>
     <h2>Payment Requests</h2>
     <p style="color:#aaa;font-size:12px;margin-bottom:12px">
-      Approve only after confirming that the payment is actually credited to your bank account.
+      Approve only after confirming actual bank credit.
     </p>
     <div class="table-wrap">
       <table>
@@ -199,315 +198,8 @@ import {
   doc,
   runTransaction,
   increment,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
-  authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
-  projectId: "omvardhnaayefreedomfinan-efaf4",
-  storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
-  messagingSenderId: "552483514216",
-  appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
-  measurementId: "G-6MPELL55BD"
-};
-
-const ADMIN_UID = "oQ14ElwzwMTQacne1dTIZ5DX9bQ2";
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-let members = [];
-let paymentRequests = [];
-let withdrawals = [];
-let transactions = [];
-let adminReady = false;
-
-const $ = id => document.getElementById(id);
-
-function showNotice(message, isError = false) {
-  const box = $("notice");
-  box.style.display = "block";
-  box.style.background = isError ? "#451a1a" : "#142b20";
-  box.style.color = isError ? "#fecaca" : "#bbf7d0";
-  box.textContent = message;
-}
-
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[char]);
-}
-
-function money(value) {
-  return "₹" + Number(value || 0).toLocaleString("en-IN");
-}
-
-function dateText(value) {
-  if (!value) return "-";
-  if (value.toDate) value = value.toDate();
-  const date = new Date(value);
-  return isNaN(date.getTime()) ? String(value) : date.toLocaleDateString("en-IN");
-}
-
-function badge(status) {
-  const s = String(status || "Pending");
-  const cls = s.toLowerCase().includes("approv") || s.toLowerCase() === "active"
-    ? "approved"
-    : s.toLowerCase().includes("reject")
-      ? "rejected"
-      : "pending";
-  return `<span class="badge ${cls}">${escapeHTML(s)}</span>`;
-}
-
-function emptyRow(columns, message) {
-  return `<tr><td colspan="${columns}" class="empty">${escapeHTML(message)}</td></tr>`;
-}
-
-function showSection(sectionId) {
-  document.querySelectorAll(".section").forEach(section => {
-    section.hidden = section.id !== sectionId;
-  });
-
-  document.querySelectorAll(".menu button").forEach(button => {
-    button.classList.toggle("active", button.dataset.section === sectionId);
-  });
-}
-
-document.querySelectorAll(".menu button").forEach(button => {
-  button.addEventListener("click", () => showSection(button.dataset.section));
-});
-
-$("logoutBtn").addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-    window.location.replace("admin-login.html");
-  } catch (error) {
-    showNotice("Logout error: " + error.message, true);
-  }
-});
-
-function renderMembers() {
-  const search = $("memberSearch").value.toLowerCase().trim();
-
-  const filtered = members.filter(m =>
-    [m.memberId, m.name, m.email, m.mobile]
-      .some(value => String(value || "").toLowerCase().includes(search))
-  );
-
-  $("membersBody").innerHTML = filtered.length
-    ? filtered.map(m => `<tr>
-        <td>${escapeHTML(m.memberId || "-")}</td>
-        <td>${escapeHTML(m.name || "-")}</td>
-        <td>${escapeHTML(m.email || "-")}</td>
-        <td>${escapeHTML(m.mobile || "-")}</td>
-        <td>${badge(m.status || "Pending Verification")}</td>
-        <td>${money(m.totalInvestment || m.investment)}</td>
-        <td>${money(m.profit)}</td>
-        <td>${escapeHTML(dateText(m.joinDate || m.createdAt))}</td>
-      </tr>`).join("")
-    : emptyRow(8, "No members found.");
-}
-
-function renderInvestments() {
-  const list = members.filter(m => Number(m.totalInvestment || m.investment || 0) > 0);
-
-  $("investmentBody").innerHTML = list.length
-    ? list.map(m => `<tr>
-        <td>${escapeHTML(m.memberId || "-")}</td>
-        <td>${escapeHTML(m.name || "-")}</td>
-        <td>${escapeHTML(m.planName || m.plan || "-")}</td>
-        <td>${money(m.totalInvestment || m.investment)}</td>
-        <td>${money(m.profit)}</td>
-        <td>${badge(m.status)}</td>
-      </tr>`).join("")
-    : emptyRow(6, "No investments found.");
-}
-
-function renderPayments() {
-  $("paymentBody").innerHTML = paymentRequests.length
-    ? paymentRequests.map(p => {
-        const status = String(p.status || "Pending Verification");
-        const pending = status.toLowerCase().includes("pending");
-        return `<tr>
-          <td>${escapeHTML(p.id)}</td>
-          <td>${escapeHTML(p.memberName || p.email || p.uid || "-")}</td>
-          <td>${escapeHTML(p.plan || "-")}</td>
-          <td>${money(p.amount)}</td>
-          <td>${escapeHTML(p.transactionReference || "-")}</td>
-          <td>${escapeHTML(dateText(p.submittedAt))}</td>
-          <td>${badge(status)}</td>
-          <td>${pending ? `
-            <button class="action approve-btn" data-action="approve" data-id="${escapeHTML(p.id)}">Approve</button>
-            <button class="action reject-btn" data-action="reject" data-id="${escapeHTML(p.id)}">Reject</button>
-          ` : "-"}</td>
-        </tr>`;
-      }).join("")
-    : emptyRow(8, "No payment requests found.");
-}
-
-function renderWithdrawals() {
-  $("withdrawalBody").innerHTML = withdrawals.length
-    ? withdrawals.map(w => `<tr>
-        <td>${escapeHTML(w.id || w.reference || "-")}</td>
-        <td>${escapeHTML(w.memberId || w.email || w.name || w.uid || "-")}</td>
-        <td>${money(w.amount)}</td>
-        <td>${escapeHTML(w.method || "-")}</td>
-        <td>${escapeHTML(dateText(w.createdAt || w.date || w.submittedAt))}</td>
-        <td>${badge(w.status)}</td>
-      </tr>`).join("")
-    : emptyRow(6, "No withdrawal records found.");
-}
-
-function renderReferrals() {
-  const list = members.filter(m => m.referredBy && m.referredBy !== "Direct");
-
-  $("referralBody").innerHTML = list.length
-    ? list.map(m => {
-        const investment = Number(m.totalInvestment || m.investment || 0);
-        return `<tr>
-          <td>${escapeHTML(m.myReferralId || m.referralId || "-")}</td>
-          <td>${escapeHTML(m.name || m.email || "-")}</td>
-          <td>${escapeHTML(m.referredBy)}</td>
-          <td>${money(investment)}</td>
-          <td>${money(investment * 0.02)}</td>
-          <td>${badge(m.status || "Pending")}</td>
-        </tr>`;
-      }).join("")
-    : emptyRow(6, "No referrals found.");
-}
-
-function renderTransactions() {
-  $("transactionBody").innerHTML = transactions.length
-    ? transactions.map(t => `<tr>
-        <td>${escapeHTML(t.id || t.reference || "-")}</td>
-        <td>${escapeHTML(t.type || "-")}</td>
-        <td>${escapeHTML(t.memberId || t.email || t.uid || "-")}</td>
-        <td>${money(t.amount)}</td>
-        <td>${escapeHTML(dateText(t.createdAt || t.date))}</td>
-        <td>${badge(t.status)}</td>
-      </tr>`).join("")
-    : emptyRow(6, "No transaction records found.");
-}
-
-async function readCollection(name) {
-  try {
-    const snapshot = await getDocs(collection(db, name));
-    return snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-  } catch (error) {
-    console.warn("Could not read collection:", name, error);
-    return [];
-  }
-}
-
-async function loadDashboard() {
-  if (!adminReady) return;
-
-  $("refreshBtn").disabled = true;
-  $("refreshBtn").textContent = "Loading...";
-
-  try {
-    const results = await Promise.all([
-      readCollection("members"),
-      readCollection("paymentRequests"),
-      readCollection("withdrawalRequests"),
-      readCollection("transactions")
-    ]);
-
-    members = results[0];
-    paymentRequests = results[1];
-    withdrawals = results[2];
-    transactions = results[3];
-
-    $("totalMembers").textContent = members.length;
-
-    $("activeMembers").textContent = members.filter(m =>
-      String(m.status || "").toLowerCase() === "active"
-    ).length;
-
-    const totalInvestment = members.reduce((sum, m) =>
-      sum + Number(m.totalInvestment || m.investment || 0), 0
-    );
-
-    const totalWithdrawals = withdrawals
-      .filter(w => String(w.status || "").toLowerCase() === "approved")
-      .reduce((sum, w) => sum + Number(w.amount || 0), 0);
-
-    $("totalInvestment").textContent = money(totalInvestment);
-    $("totalWithdrawals").textContent = money(totalWithdrawals);
-
-    renderMembers();
-    renderInvestments();
-    renderPayments();
-    renderWithdrawals();
-    renderReferrals();
-    renderTransactions();
-
-    showNotice("Dashboard data refreshed.");
-  } catch (error) {
-    showNotice("Dashboard load error: " + error.message, true);
-  } finally {
-    $("refreshBtn").disabled = false;
-    $("refreshBtn").textContent = "↻ Refresh Data";
-  }
-}
-
-$("memberSearch").addEventListener("input", renderMembers);
-$("refreshBtn").addEventListener("click", loadDashboard);
-
-$("paymentBody").addEventListener("click", async event => {
-  const button = event.target.closest("button[data-action]");
-  if (!button) return;
-
-  const requestId = button.dataset.id;
-  const action = button.dataset.action;
-  const request = paymentRequests.find(p => p.id === requestId);
-
-  if (!request) {
-    showNotice("Payment request not found. Refresh the dashboard.", true);
-    return;
-  }
-
-  if (action === "approve") {
-    const confirmed = confirm(
-      "Kya tumne bank statement mein is payment ka actual credit verify kar liya hai?\n\n" +
-      "Sirf UTR dekhkar approve mat karo.\n\n" +
-      "Actual bank credit confirm hai?"
-    );
-
-    if (!confirmed) return;
-  } else {
-    if (!confirm("Is payment request ko reject karna hai?")) return;
-  }
-
-  button.disabled = true;
-
-  try {
-    const requestRef = doc(db, "paymentRequests", requestId);
-
-    if (action === "reject") {
-      await runTransaction(db, async transaction => {
-        const requestSnap = await transaction.get(requestRef);
-
-        if (!requestSnap.exists()) throw new Error("Payment request no longer exists.");
-
-        const current = requestSnap.data();
-        if (!String(current.status || "").toLowerCase().includes("pending")) {
-          throw new Error("This request has already been reviewed.");
-        }
-
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-
-import {
-  getAuth, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-
-import {
-  getFirestore, collection, getDocs, doc,
-  runTransaction, increment, serverTimestamp, Timestamp
+  serverTimestamp,
+  Timestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -545,26 +237,31 @@ function showNotice(message, isError = false) {
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;",
-    '"':"&quot;", "'":"&#39;"
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
   })[char]);
 }
 
 function money(value) {
-  return "₹" + Number(value || 0).toLocaleString("en-IN");
+  return "₹" + Number(value || 0).toLocaleString("en-IN", {
+    maximumFractionDigits: 2
+  });
 }
 
 function asDate(value) {
   if (!value) return null;
   if (value.toDate) return value.toDate();
 
-  const d = new Date(value);
-  return isNaN(d.getTime()) ? null : d;
+  const date = new Date(value);
+  return isNaN(date.getTime()) ? null : date;
 }
 
 function dateText(value) {
-  const d = asDate(value);
-  return d ? d.toLocaleDateString("en-IN") : "-";
+  const date = asDate(value);
+  return date ? date.toLocaleDateString("en-IN") : "-";
 }
 
 function oneYearLater(date) {
@@ -577,13 +274,14 @@ function badge(status) {
   const s = String(status || "Pending");
   const lower = s.toLowerCase();
 
-  const cls = lower.includes("approv") ||
-              lower === "active" ||
-              lower === "matured"
-    ? "approved"
-    : lower.includes("reject")
-      ? "rejected"
-      : "pending";
+  const cls =
+    lower.includes("approv") ||
+    lower === "active" ||
+    lower === "matured"
+      ? "approved"
+      : lower.includes("reject")
+        ? "rejected"
+        : "pending";
 
   return `<span class="badge ${cls}">${escapeHTML(s)}</span>`;
 }
@@ -630,7 +328,7 @@ function renderMembers() {
         <td>${escapeHTML(m.email || "-")}</td>
         <td>${escapeHTML(m.mobile || "-")}</td>
         <td>${badge(m.status || "Pending Verification")}</td>
-        <td>${money(m.totalInvestment || m.investment)}</td>
+        <td>${money(m.totalInvestment ?? m.investment)}</td>
         <td>${money(m.profit)}</td>
         <td>${escapeHTML(dateText(m.joinDate || m.createdAt))}</td>
       </tr>`).join("")
@@ -638,24 +336,18 @@ function renderMembers() {
 }
 
 function renderInvestments() {
-  const memberMap = new Map(members.map(m => [m.uid || m.id, m]));
-
   $("investmentBody").innerHTML = investmentRecords.length
-    ? investmentRecords.map(i => {
-        const member = memberMap.get(i.uid) || {};
-
-        return `<tr>
-          <td>${escapeHTML(i.memberId || member.memberId || "-")}</td>
-          <td>${escapeHTML(i.memberName || member.name || "-")}</td>
-          <td>${escapeHTML(i.plan || "-")}</td>
-          <td>${money(i.amount)}</td>
-          <td>${money(i.profit)}</td>
-          <td>${escapeHTML(dateText(i.investmentDate))}</td>
-          <td>${escapeHTML(dateText(i.maturityDate))}</td>
-          <td>${badge(i.status || "Active")}</td>
-        </tr>`;
-      }).join("")
-    : emptyRow(8, "No investments found.");
+    ? investmentRecords.map(i => `<tr>
+        <td>${escapeHTML(i.memberId || "-")}</td>
+        <td>${escapeHTML(i.memberName || "-")}</td>
+        <td>${escapeHTML(i.plan || "-")}</td>
+        <td>${money(i.amount)}</td>
+        <td>${money(i.profit)}</td>
+        <td>${escapeHTML(dateText(i.investmentDate))}</td>
+        <td>${escapeHTML(dateText(i.maturityDate))}</td>
+        <td>${badge(i.status || "Active")}</td>
+      </tr>`).join("")
+    : emptyRow(8, "No individual investments found.");
 }
 
 function renderPayments() {
@@ -669,8 +361,8 @@ function renderPayments() {
           <td>${escapeHTML(p.memberName || p.email || p.uid || "-")}</td>
           <td>${escapeHTML(p.plan || "-")}</td>
           <td>${money(p.amount)}</td>
-          <td>${escapeHTML(p.transactionReference || "-")}</td>
-          <td>${escapeHTML(dateText(p.submittedAt))}</td>
+          <td>${escapeHTML(p.transactionReference || p.utr || "-")}</td>
+          <td>${escapeHTML(dateText(p.submittedAt || p.createdAt))}</td>
           <td>${badge(status)}</td>
           <td>${pending ? `
             <button class="action approve-btn" data-action="approve" data-id="${escapeHTML(p.id)}">Approve</button>
@@ -695,14 +387,16 @@ function renderWithdrawals() {
 }
 
 function renderReferrals() {
-  const list = members.filter(m => m.referredBy && m.referredBy !== "Direct");
+  const list = members.filter(m =>
+    m.referredBy && m.referredBy !== "Direct"
+  );
 
   $("referralBody").innerHTML = list.length
     ? list.map(m => {
-        const investment = Number(m.totalInvestment || m.investment || 0);
+        const investment = Number(m.totalInvestment ?? m.investment ?? 0);
 
         return `<tr>
-          <td>${escapeHTML(m.myReferralId || m.referralId || "-")}</td>
+          <td>${escapeHTML(m.referralId || "-")}</td>
           <td>${escapeHTML(m.name || m.email || "-")}</td>
           <td>${escapeHTML(m.referredBy)}</td>
           <td>${money(investment)}</td>
@@ -734,64 +428,120 @@ async function readCollection(name) {
   }));
 }
 
-// Existing approved requests ko history mein migrate karta hai.
-// Principal ko dobara increment NAHI karta.
-async function migrateOldApprovedRequests() {
-  for (const p of paymentRequests) {
-    if (String(p.status || "").toLowerCase() !== "approved") continue;
-    if (!p.uid) continue;
+/*
+  MIGRATION:
+  Approved old payment requests get an individual investment document.
+  Existing member investment amount is NOT incremented again.
+  The investment document ID is the payment request ID, preventing duplicates.
+*/
 
-    const requestRef = doc(db, "paymentRequests", p.id);
-    const investmentRef = doc(db, "investments", p.id);
-    const memberRef = doc(db, "members", p.uid);
+function calculateProfit(request, amount) {
+  const savedProfit = Number(
+    request.displayedProfit ??
+    request.profit ??
+    request.estimatedProfit ??
+    0
+  );
 
-    await runTransaction(db, async transaction => {
-      const requestSnap = await transaction.get(requestRef);
-      const investmentSnap = await transaction.get(investmentRef);
-      const memberSnap = await transaction.get(memberRef);
+  if (savedProfit > 0) return savedProfit;
 
-      if (!requestSnap.exists() || investmentSnap.exists()) return;
-      if (!memberSnap.exists()) return;
+  return amount * 0.30;
+}
 
-      const current = requestSnap.data();
+async function migrateOldApprovedPayments() {
+  let migrated = 0;
+  let failed = [];
 
-      if (String(current.status || "").toLowerCase() !== "approved") return;
+  const approvedRequests = paymentRequests.filter(p =>
+    String(p.status || "").toLowerCase() === "approved"
+  );
 
-      const amount = Number(current.amount || 0);
-      const profit = Math.max(0, Number(current.displayedProfit || 0));
+  for (const p of approvedRequests) {
+    try {
+      if (!p.uid) {
+        failed.push(p.id + ": payment request has no UID");
+        continue;
+      }
 
-      if (!Number.isFinite(amount) || amount <= 0) return;
+      const requestRef = doc(db, "paymentRequests", p.id);
+      const investmentRef = doc(db, "investments", p.id);
+      const memberRef = doc(db, "members", p.uid);
 
-      const approvalDate =
-        asDate(current.reviewedAt) ||
-        asDate(current.submittedAt) ||
-        new Date();
+      const wasCreated = await runTransaction(db, async tx => {
+        const requestSnap = await tx.get(requestRef);
+        const investmentSnap = await tx.get(investmentRef);
+        const memberSnap = await tx.get(memberRef);
 
-      const maturityDate = oneYearLater(approvalDate);
+        if (!requestSnap.exists()) return false;
 
-      transaction.set(investmentRef, {
-        uid: current.uid,
-        memberId: current.memberId || "",
-        memberName: current.memberName || "",
-        plan: current.plan || "",
-        amount,
-        profit,
-        expectedTotal: amount + profit,
-        investmentDate: Timestamp.fromDate(approvalDate),
-        maturityDate: Timestamp.fromDate(maturityDate),
-        status: "Active",
-        paymentRequestId: p.id,
-        createdAt: serverTimestamp()
+        const current = requestSnap.data();
+
+        if (String(current.status || "").toLowerCase() !== "approved") {
+          return false;
+        }
+
+        if (investmentSnap.exists()) {
+          return false;
+        }
+
+        if (!memberSnap.exists()) {
+          throw new Error("Member profile not found for UID " + p.uid);
+        }
+
+        const member = memberSnap.data();
+        const amount = Number(current.amount || 0);
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+          throw new Error("Invalid investment amount");
+        }
+
+        const profit = calculateProfit(current, amount);
+
+        const investmentDate =
+          asDate(current.reviewedAt) ||
+          asDate(current.approvedAt) ||
+          asDate(current.submittedAt) ||
+          new Date();
+
+        const maturityDate = oneYearLater(investmentDate);
+
+        tx.set(investmentRef, {
+          uid: p.uid,
+          memberId: member.memberId || current.memberId || "",
+          memberName: member.name || current.memberName || "",
+          plan: current.plan || "",
+          amount: amount,
+          profit: profit,
+          expectedTotal: amount + profit,
+          investmentDate: Timestamp.fromDate(investmentDate),
+          maturityDate: Timestamp.fromDate(maturityDate),
+          status: "Active",
+          paymentRequestId: p.id,
+          createdAt: serverTimestamp()
+        });
+
+        /*
+          Only profit and projected total are updated here.
+          Principal was already added by the earlier approval.
+        */
+        tx.update(memberRef, {
+          profit: increment(profit),
+          expectedTotal: increment(amount + profit),
+          status: "Active"
+        });
+
+        return true;
       });
 
-      // Old approval already added principal.
-      // Only backfill missing profit estimate; do not add principal again.
-      transaction.update(memberRef, {
-        profit: increment(profit),
-        expectedTotal: increment(amount + profit)
-      });
-    });
+      if (wasCreated) migrated++;
+
+    } catch (error) {
+      console.error("Migration failed:", p.id, error);
+      failed.push(p.id + ": " + error.message);
+    }
   }
+
+  return { migrated, failed };
 }
 
 async function loadDashboard() {
@@ -805,18 +555,22 @@ async function loadDashboard() {
       readCollection("members"),
       readCollection("paymentRequests"),
       readCollection("withdrawalRequests"),
-      readCollection("transactions")
+      readCollection("transactions"),
+      readCollection("investments")
     ]);
 
     members = results[0];
     paymentRequests = results[1];
     withdrawals = results[2];
     transactions = results[3];
+    investmentRecords = results[4];
 
-    // Safe one-time migration of previously approved investments
-    await migrateOldApprovedRequests();
+    const migration = await migrateOldApprovedPayments();
 
-    investmentRecords = await readCollection("investments");
+    if (migration.migrated > 0) {
+      investmentRecords = await readCollection("investments");
+      members = await readCollection("members");
+    }
 
     $("totalMembers").textContent = members.length;
 
@@ -824,9 +578,11 @@ async function loadDashboard() {
       String(m.status || "").toLowerCase() === "active"
     ).length;
 
-    const totalInvestment = members.reduce((sum, m) =>
-      sum + Number(m.totalInvestment || m.investment || 0), 0
-    );
+    const totalInvestment = investmentRecords.length
+      ? investmentRecords.reduce((sum, i) => sum + Number(i.amount || 0), 0)
+      : members.reduce((sum, m) =>
+          sum + Number(m.totalInvestment ?? m.investment ?? 0), 0
+        );
 
     const totalWithdrawals = withdrawals
       .filter(w => String(w.status || "").toLowerCase() === "approved")
@@ -842,183 +598,19 @@ async function loadDashboard() {
     renderReferrals();
     renderTransactions();
 
-    showNotice("Dashboard refreshed. Investment history synchronized.");
-  } catch (error) {
-    showNotice("Dashboard load error: " + error.message, true);
-    console.error(error);
-  } finally {
-    $("refreshBtn").disabled = false;
-    $("refreshBtn").textContent = "↻ Refresh Data";
-  }
-}
-
-$("memberSearch").addEventListener("input", renderMembers);
-$("refreshBtn").addEventListener("click", loadDashboard);
-
-$("paymentBody").addEventListener("click", async event => {
-  const button = event.target.closest("button[data-action]");
-  if (!button) return;
-
-  const requestId = button.dataset.id;
-  const action = button.dataset.action;
-  const request = paymentRequests.find(p => p.id === requestId);
-
-  if (!request) {
-    showNotice("Payment request not found. Refresh dashboard.", true);
-    return;
-  }
-
-  if (action === "approve") {
-    const confirmed = confirm(
-      "Bank statement mein actual payment credit verify hai?\n\n" +
-      "Sirf UTR dekhkar approve mat karein."
-    );
-
-    if (!confirmed) return;
-  } else {
-    if (!confirm("Is payment request ko reject karna hai?")) return;
-  }
-
-  button.disabled = true;
-
-  try {
-    const requestRef = doc(db, "paymentRequests", requestId);
-
-    if (action === "reject") {
-      await runTransaction(db, async transaction => {
-        const requestSnap = await transaction.get(requestRef);
-
-        if (!requestSnap.exists()) {
-          throw new Error("Payment request not found.");
-        }
-
-        const current = requestSnap.data();
-
-        if (!String(current.status || "").toLowerCase().includes("pending")) {
-          throw new Error("This request has already been reviewed.");
-        }
-
-        transaction.update(requestRef, {
-          status: "Rejected",
-          reviewedAt: serverTimestamp(),
-          adminNote: "Rejected by admin"
-        });
-      });
-
-      showNotice("Payment request rejected.");
-    } else {
-      const memberUid = request.uid;
-      if (!memberUid) throw new Error("Member UID missing.");
-
-      const investmentRef = doc(db, "investments", requestId);
-      const memberRef = doc(db, "members", memberUid);
-
-      const approvalDate = new Date();
-      const maturityDate = oneYearLater(approvalDate);
-
-      const approvalTimestamp = Timestamp.fromDate(approvalDate);
-      const maturityTimestamp = Timestamp.fromDate(maturityDate);
-
-      await runTransaction(db, async transaction => {
-        const requestSnap = await transaction.get(requestRef);
-        const memberSnap = await transaction.get(memberRef);
-        const investmentSnap = await transaction.get(investmentRef);
-
-        if (!requestSnap.exists()) {
-          throw new Error("Payment request no longer exists.");
-        }
-
-        if (!memberSnap.exists()) {
-          throw new Error("Member profile not found.");
-        }
-
-        if (investmentSnap.exists()) {
-          throw new Error("Investment record already exists. Duplicate blocked.");
-        }
-
-        const current = requestSnap.data();
-
-        if (!String(current.status || "").toLowerCase().includes("pending")) {
-          throw new Error("This request has already been reviewed.");
-        }
-
-        const amount = Number(current.amount);
-        const profit = Math.max(0, Number(current.displayedProfit || 0));
-
-        if (!Number.isFinite(amount) || amount <= 0) {
-          throw new Error("Invalid payment amount.");
-        }
-
-        if (!Number.isFinite(profit)) {
-          throw new Error("Invalid profit estimate.");
-        }
-
-        transaction.update(requestRef, {
-          status: "Approved",
-          reviewedAt: approvalTimestamp,
-          adminNote: "Bank credit verified by admin"
-        });
-
-        transaction.update(memberRef, {
-          investment: increment(amount),
-          totalInvestment: increment(amount),
-          profit: increment(profit),
-          expectedTotal: increment(amount + profit),
-          plan: current.plan || "",
-          planName: current.plan || "",
-          status: "Active",
-          investmentDate: approvalTimestamp
-        });
-
-        transaction.set(investmentRef, {
-          uid: current.uid,
-          memberId: current.memberId || "",
-          memberName: current.memberName || "",
-          plan: current.plan || "",
-          amount,
-          profit,
-          expectedTotal: amount + profit,
-          investmentDate: approvalTimestamp,
-          maturityDate: maturityTimestamp,
-          status: "Active",
-          paymentRequestId: requestId,
-          createdAt: serverTimestamp()
-        });
-      });
-
+    if (migration.failed.length) {
       showNotice(
-        "Approved. Separate investment record and 1-year maturity date saved."
+        "Dashboard loaded. Some old investments could not be migrated: " +
+        migration.failed.join(" | "),
+        true
       );
+    } else if (migration.migrated > 0) {
+      showNotice(
+        migration.migrated +
+        " old approved investment record(s) created successfully. No principal was added again."
+      );
+    } else {
+      showNotice("Dashboard data refreshed successfully.");
     }
 
-    await loadDashboard();
-
-  } catch (error) {
-    showNotice("Action failed: " + error.message, true);
-    console.error(error);
-    button.disabled = false;
-  }
-});
-
-onAuthStateChanged(auth, async user => {
-  if (!user) {
-    window.location.replace("admin-login.html");
-    return;
-  }
-
-  if (user.uid !== ADMIN_UID) {
-    await signOut(auth);
-    window.location.replace("admin-login.html");
-    return;
-  }
-
-  adminReady = true;
-  await loadDashboard();
-});
-
-showSection("membersSection");
-  </script>
-      
-
-</body>
-          </html>
+  
