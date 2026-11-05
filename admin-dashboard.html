@@ -112,9 +112,18 @@ td{color:#e5e7eb}
     <h2>Investments</h2>
     <div class="table-wrap">
       <table>
-        <thead><tr>
-          <th>Member ID</th><th>Name</th><th>Plan</th><th>Investment</th><th>Profit</th><th>Status</th>
-        </tr></thead>
+        <thead>
+  <tr>
+    <th>Member ID</th>
+    <th>Name</th>
+    <th>Plan</th>
+    <th>Investment</th>
+    <th>Profit</th>
+    <th>Investment Date</th>
+    <th>Maturity Date</th>
+    <th>Status</th>
+  </tr>
+        </thead>
         <tbody id="investmentBody"></tbody>
       </table>
     </div>
@@ -488,6 +497,407 @@ $("paymentBody").addEventListener("click", async event => {
           throw new Error("This request has already been reviewed.");
         }
 
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+import {
+  getAuth, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+import {
+  getFirestore, collection, getDocs, doc,
+  runTransaction, increment, serverTimestamp, Timestamp
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+  authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+  projectId: "omvardhnaayefreedomfinan-efaf4",
+  storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+  messagingSenderId: "552483514216",
+  appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+  measurementId: "G-6MPELL55BD"
+};
+
+const ADMIN_UID = "oQ14ElwzwMTQacne1dTIZ5DX9bQ2";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let members = [];
+let paymentRequests = [];
+let investmentRecords = [];
+let withdrawals = [];
+let transactions = [];
+let adminReady = false;
+
+const $ = id => document.getElementById(id);
+
+function showNotice(message, isError = false) {
+  const box = $("notice");
+  box.style.display = "block";
+  box.style.background = isError ? "#451a1a" : "#142b20";
+  box.style.color = isError ? "#fecaca" : "#bbf7d0";
+  box.textContent = message;
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[char]);
+}
+
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN");
+}
+
+function asDate(value) {
+  if (!value) return null;
+  if (value.toDate) return value.toDate();
+
+  const d = new Date(value);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function dateText(value) {
+  const d = asDate(value);
+  return d ? d.toLocaleDateString("en-IN") : "-";
+}
+
+function oneYearLater(date) {
+  const result = new Date(date);
+  result.setFullYear(result.getFullYear() + 1);
+  return result;
+}
+
+function badge(status) {
+  const s = String(status || "Pending");
+  const lower = s.toLowerCase();
+
+  const cls = lower.includes("approv") ||
+              lower === "active" ||
+              lower === "matured"
+    ? "approved"
+    : lower.includes("reject")
+      ? "rejected"
+      : "pending";
+
+  return `<span class="badge ${cls}">${escapeHTML(s)}</span>`;
+}
+
+function emptyRow(columns, message) {
+  return `<tr><td colspan="${columns}" class="empty">${escapeHTML(message)}</td></tr>`;
+}
+
+function showSection(sectionId) {
+  document.querySelectorAll(".section").forEach(section => {
+    section.hidden = section.id !== sectionId;
+  });
+
+  document.querySelectorAll(".menu button").forEach(button => {
+    button.classList.toggle("active", button.dataset.section === sectionId);
+  });
+}
+
+document.querySelectorAll(".menu button").forEach(button => {
+  button.addEventListener("click", () => showSection(button.dataset.section));
+});
+
+$("logoutBtn").addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+    window.location.replace("admin-login.html");
+  } catch (error) {
+    showNotice("Logout error: " + error.message, true);
+  }
+});
+
+function renderMembers() {
+  const search = $("memberSearch").value.toLowerCase().trim();
+
+  const filtered = members.filter(m =>
+    [m.memberId, m.name, m.email, m.mobile]
+      .some(value => String(value || "").toLowerCase().includes(search))
+  );
+
+  $("membersBody").innerHTML = filtered.length
+    ? filtered.map(m => `<tr>
+        <td>${escapeHTML(m.memberId || "-")}</td>
+        <td>${escapeHTML(m.name || "-")}</td>
+        <td>${escapeHTML(m.email || "-")}</td>
+        <td>${escapeHTML(m.mobile || "-")}</td>
+        <td>${badge(m.status || "Pending Verification")}</td>
+        <td>${money(m.totalInvestment || m.investment)}</td>
+        <td>${money(m.profit)}</td>
+        <td>${escapeHTML(dateText(m.joinDate || m.createdAt))}</td>
+      </tr>`).join("")
+    : emptyRow(8, "No members found.");
+}
+
+function renderInvestments() {
+  const memberMap = new Map(members.map(m => [m.uid || m.id, m]));
+
+  $("investmentBody").innerHTML = investmentRecords.length
+    ? investmentRecords.map(i => {
+        const member = memberMap.get(i.uid) || {};
+
+        return `<tr>
+          <td>${escapeHTML(i.memberId || member.memberId || "-")}</td>
+          <td>${escapeHTML(i.memberName || member.name || "-")}</td>
+          <td>${escapeHTML(i.plan || "-")}</td>
+          <td>${money(i.amount)}</td>
+          <td>${money(i.profit)}</td>
+          <td>${escapeHTML(dateText(i.investmentDate))}</td>
+          <td>${escapeHTML(dateText(i.maturityDate))}</td>
+          <td>${badge(i.status || "Active")}</td>
+        </tr>`;
+      }).join("")
+    : emptyRow(8, "No investments found.");
+}
+
+function renderPayments() {
+  $("paymentBody").innerHTML = paymentRequests.length
+    ? paymentRequests.map(p => {
+        const status = String(p.status || "Pending Verification");
+        const pending = status.toLowerCase().includes("pending");
+
+        return `<tr>
+          <td>${escapeHTML(p.id)}</td>
+          <td>${escapeHTML(p.memberName || p.email || p.uid || "-")}</td>
+          <td>${escapeHTML(p.plan || "-")}</td>
+          <td>${money(p.amount)}</td>
+          <td>${escapeHTML(p.transactionReference || "-")}</td>
+          <td>${escapeHTML(dateText(p.submittedAt))}</td>
+          <td>${badge(status)}</td>
+          <td>${pending ? `
+            <button class="action approve-btn" data-action="approve" data-id="${escapeHTML(p.id)}">Approve</button>
+            <button class="action reject-btn" data-action="reject" data-id="${escapeHTML(p.id)}">Reject</button>
+          ` : "-"}</td>
+        </tr>`;
+      }).join("")
+    : emptyRow(8, "No payment requests found.");
+}
+
+function renderWithdrawals() {
+  $("withdrawalBody").innerHTML = withdrawals.length
+    ? withdrawals.map(w => `<tr>
+        <td>${escapeHTML(w.id || w.reference || "-")}</td>
+        <td>${escapeHTML(w.memberId || w.email || w.name || w.uid || "-")}</td>
+        <td>${money(w.amount)}</td>
+        <td>${escapeHTML(w.method || "-")}</td>
+        <td>${escapeHTML(dateText(w.createdAt || w.date || w.submittedAt))}</td>
+        <td>${badge(w.status)}</td>
+      </tr>`).join("")
+    : emptyRow(6, "No withdrawal records found.");
+}
+
+function renderReferrals() {
+  const list = members.filter(m => m.referredBy && m.referredBy !== "Direct");
+
+  $("referralBody").innerHTML = list.length
+    ? list.map(m => {
+        const investment = Number(m.totalInvestment || m.investment || 0);
+
+        return `<tr>
+          <td>${escapeHTML(m.myReferralId || m.referralId || "-")}</td>
+          <td>${escapeHTML(m.name || m.email || "-")}</td>
+          <td>${escapeHTML(m.referredBy)}</td>
+          <td>${money(investment)}</td>
+          <td>${money(investment * 0.02)}</td>
+          <td>${badge(m.status || "Pending")}</td>
+        </tr>`;
+      }).join("")
+    : emptyRow(6, "No referrals found.");
+}
+
+function renderTransactions() {
+  $("transactionBody").innerHTML = transactions.length
+    ? transactions.map(t => `<tr>
+        <td>${escapeHTML(t.id || t.reference || "-")}</td>
+        <td>${escapeHTML(t.type || "-")}</td>
+        <td>${escapeHTML(t.memberId || t.email || t.uid || "-")}</td>
+        <td>${money(t.amount)}</td>
+        <td>${escapeHTML(dateText(t.createdAt || t.date))}</td>
+        <td>${badge(t.status)}</td>
+      </tr>`).join("")
+    : emptyRow(6, "No transaction records found.");
+}
+
+async function readCollection(name) {
+  const snapshot = await getDocs(collection(db, name));
+  return snapshot.docs.map(item => ({
+    id: item.id,
+    ...item.data()
+  }));
+}
+
+// Existing approved requests ko history mein migrate karta hai.
+// Principal ko dobara increment NAHI karta.
+async function migrateOldApprovedRequests() {
+  for (const p of paymentRequests) {
+    if (String(p.status || "").toLowerCase() !== "approved") continue;
+    if (!p.uid) continue;
+
+    const requestRef = doc(db, "paymentRequests", p.id);
+    const investmentRef = doc(db, "investments", p.id);
+    const memberRef = doc(db, "members", p.uid);
+
+    await runTransaction(db, async transaction => {
+      const requestSnap = await transaction.get(requestRef);
+      const investmentSnap = await transaction.get(investmentRef);
+      const memberSnap = await transaction.get(memberRef);
+
+      if (!requestSnap.exists() || investmentSnap.exists()) return;
+      if (!memberSnap.exists()) return;
+
+      const current = requestSnap.data();
+
+      if (String(current.status || "").toLowerCase() !== "approved") return;
+
+      const amount = Number(current.amount || 0);
+      const profit = Math.max(0, Number(current.displayedProfit || 0));
+
+      if (!Number.isFinite(amount) || amount <= 0) return;
+
+      const approvalDate =
+        asDate(current.reviewedAt) ||
+        asDate(current.submittedAt) ||
+        new Date();
+
+      const maturityDate = oneYearLater(approvalDate);
+
+      transaction.set(investmentRef, {
+        uid: current.uid,
+        memberId: current.memberId || "",
+        memberName: current.memberName || "",
+        plan: current.plan || "",
+        amount,
+        profit,
+        expectedTotal: amount + profit,
+        investmentDate: Timestamp.fromDate(approvalDate),
+        maturityDate: Timestamp.fromDate(maturityDate),
+        status: "Active",
+        paymentRequestId: p.id,
+        createdAt: serverTimestamp()
+      });
+
+      // Old approval already added principal.
+      // Only backfill missing profit estimate; do not add principal again.
+      transaction.update(memberRef, {
+        profit: increment(profit),
+        expectedTotal: increment(amount + profit)
+      });
+    });
+  }
+}
+
+async function loadDashboard() {
+  if (!adminReady) return;
+
+  $("refreshBtn").disabled = true;
+  $("refreshBtn").textContent = "Loading...";
+
+  try {
+    const results = await Promise.all([
+      readCollection("members"),
+      readCollection("paymentRequests"),
+      readCollection("withdrawalRequests"),
+      readCollection("transactions")
+    ]);
+
+    members = results[0];
+    paymentRequests = results[1];
+    withdrawals = results[2];
+    transactions = results[3];
+
+    // Safe one-time migration of previously approved investments
+    await migrateOldApprovedRequests();
+
+    investmentRecords = await readCollection("investments");
+
+    $("totalMembers").textContent = members.length;
+
+    $("activeMembers").textContent = members.filter(m =>
+      String(m.status || "").toLowerCase() === "active"
+    ).length;
+
+    const totalInvestment = members.reduce((sum, m) =>
+      sum + Number(m.totalInvestment || m.investment || 0), 0
+    );
+
+    const totalWithdrawals = withdrawals
+      .filter(w => String(w.status || "").toLowerCase() === "approved")
+      .reduce((sum, w) => sum + Number(w.amount || 0), 0);
+
+    $("totalInvestment").textContent = money(totalInvestment);
+    $("totalWithdrawals").textContent = money(totalWithdrawals);
+
+    renderMembers();
+    renderInvestments();
+    renderPayments();
+    renderWithdrawals();
+    renderReferrals();
+    renderTransactions();
+
+    showNotice("Dashboard refreshed. Investment history synchronized.");
+  } catch (error) {
+    showNotice("Dashboard load error: " + error.message, true);
+    console.error(error);
+  } finally {
+    $("refreshBtn").disabled = false;
+    $("refreshBtn").textContent = "↻ Refresh Data";
+  }
+}
+
+$("memberSearch").addEventListener("input", renderMembers);
+$("refreshBtn").addEventListener("click", loadDashboard);
+
+$("paymentBody").addEventListener("click", async event => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+
+  const requestId = button.dataset.id;
+  const action = button.dataset.action;
+  const request = paymentRequests.find(p => p.id === requestId);
+
+  if (!request) {
+    showNotice("Payment request not found. Refresh dashboard.", true);
+    return;
+  }
+
+  if (action === "approve") {
+    const confirmed = confirm(
+      "Bank statement mein actual payment credit verify hai?\n\n" +
+      "Sirf UTR dekhkar approve mat karein."
+    );
+
+    if (!confirmed) return;
+  } else {
+    if (!confirm("Is payment request ko reject karna hai?")) return;
+  }
+
+  button.disabled = true;
+
+  try {
+    const requestRef = doc(db, "paymentRequests", requestId);
+
+    if (action === "reject") {
+      await runTransaction(db, async transaction => {
+        const requestSnap = await transaction.get(requestRef);
+
+        if (!requestSnap.exists()) {
+          throw new Error("Payment request not found.");
+        }
+
+        const current = requestSnap.data();
+
+        if (!String(current.status || "").toLowerCase().includes("pending")) {
+          throw new Error("This request has already been reviewed.");
+        }
+
         transaction.update(requestRef, {
           status: "Rejected",
           reviewedAt: serverTimestamp(),
@@ -497,53 +907,95 @@ $("paymentBody").addEventListener("click", async event => {
 
       showNotice("Payment request rejected.");
     } else {
-      const amount = Number(request.amount);
+      const memberUid = request.uid;
+      if (!memberUid) throw new Error("Member UID missing.");
 
-      if (!Number.isFinite(amount) || amount <= 0) {
-        throw new Error("Invalid payment amount.");
-      }
+      const investmentRef = doc(db, "investments", requestId);
+      const memberRef = doc(db, "members", memberUid);
 
-      if (!request.uid) {
-        throw new Error("Member UID is missing from this payment request.");
-      }
+      const approvalDate = new Date();
+      const maturityDate = oneYearLater(approvalDate);
 
-      const memberRef = doc(db, "members", request.uid);
+      const approvalTimestamp = Timestamp.fromDate(approvalDate);
+      const maturityTimestamp = Timestamp.fromDate(maturityDate);
 
       await runTransaction(db, async transaction => {
         const requestSnap = await transaction.get(requestRef);
         const memberSnap = await transaction.get(memberRef);
+        const investmentSnap = await transaction.get(investmentRef);
 
-        if (!requestSnap.exists()) throw new Error("Payment request no longer exists.");
-        if (!memberSnap.exists()) throw new Error("Member profile not found.");
+        if (!requestSnap.exists()) {
+          throw new Error("Payment request no longer exists.");
+        }
+
+        if (!memberSnap.exists()) {
+          throw new Error("Member profile not found.");
+        }
+
+        if (investmentSnap.exists()) {
+          throw new Error("Investment record already exists. Duplicate blocked.");
+        }
 
         const current = requestSnap.data();
+
         if (!String(current.status || "").toLowerCase().includes("pending")) {
           throw new Error("This request has already been reviewed.");
         }
 
+        const amount = Number(current.amount);
+        const profit = Math.max(0, Number(current.displayedProfit || 0));
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+          throw new Error("Invalid payment amount.");
+        }
+
+        if (!Number.isFinite(profit)) {
+          throw new Error("Invalid profit estimate.");
+        }
+
         transaction.update(requestRef, {
           status: "Approved",
-          reviewedAt: serverTimestamp(),
+          reviewedAt: approvalTimestamp,
           adminNote: "Bank credit verified by admin"
         });
 
         transaction.update(memberRef, {
           investment: increment(amount),
           totalInvestment: increment(amount),
+          profit: increment(profit),
+          expectedTotal: increment(amount + profit),
           plan: current.plan || "",
           planName: current.plan || "",
           status: "Active",
-          investmentDate: serverTimestamp()
+          investmentDate: approvalTimestamp
+        });
+
+        transaction.set(investmentRef, {
+          uid: current.uid,
+          memberId: current.memberId || "",
+          memberName: current.memberName || "",
+          plan: current.plan || "",
+          amount,
+          profit,
+          expectedTotal: amount + profit,
+          investmentDate: approvalTimestamp,
+          maturityDate: maturityTimestamp,
+          status: "Active",
+          paymentRequestId: requestId,
+          createdAt: serverTimestamp()
         });
       });
 
-      showNotice("Payment approved and member investment updated.");
+      showNotice(
+        "Approved. Separate investment record and 1-year maturity date saved."
+      );
     }
 
     await loadDashboard();
 
   } catch (error) {
     showNotice("Action failed: " + error.message, true);
+    console.error(error);
     button.disabled = false;
   }
 });
@@ -565,7 +1017,8 @@ onAuthStateChanged(auth, async user => {
 });
 
 showSection("membersSection");
-</script>
+  </script>
+      
 
 </body>
           </html>
