@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Freedom Finance - Admin Dashboard</title>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 body{background:#080b12;color:#fff}
@@ -46,6 +47,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 @media(max-width:500px){.container{padding:12px}.header{padding:13px}.logo{font-size:17px}.stat{padding:13px}.stat-value{font-size:20px}.menu{grid-template-columns:repeat(2,1fr)}.menu button{font-size:11px}.title h1{font-size:22px}}
 </style>
 </head>
+
 <body>
 
 <header class="header">
@@ -57,6 +59,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </header>
 
 <main class="container">
+
   <div class="title">
     <h1>Admin Dashboard</h1>
     <p>Manage members, investments, payments, withdrawals and referrals.</p>
@@ -84,72 +87,110 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <h2>Members</h2>
     <input class="search" id="memberSearch" placeholder="Search by name, email or Member ID...">
     <button class="refresh" id="refreshBtn" type="button">↻ Refresh Data</button>
-    <div class="table-wrap"><table>
-      <thead><tr>
-        <th>Member ID</th><th>Name</th><th>Email</th><th>Mobile</th>
-        <th>Status</th><th>Investment</th><th>Profit</th><th>Join Date</th>
-      </tr></thead>
-      <tbody id="membersBody"></tbody>
-    </table></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Member ID</th><th>Name</th><th>Email</th><th>Mobile</th>
+            <th>Status</th><th>Investment</th><th>Profit</th><th>Join Date</th>
+          </tr>
+        </thead>
+        <tbody id="membersBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <section class="section" id="investmentSection" hidden>
     <h2>Individual Investments</h2>
-    <div class="table-wrap"><table>
-      <thead><tr>
-        <th>Member ID</th><th>Name</th><th>Plan</th><th>Investment</th>
-        <th>Estimated Profit</th><th>Investment Date</th><th>Maturity Date</th><th>Status</th>
-      </tr></thead>
-      <tbody id="investmentBody"></tbody>
-    </table></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Member ID</th><th>Name</th><th>Plan</th><th>Investment</th>
+            <th>Estimated Profit</th><th>Investment Date</th><th>Maturity Date</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="investmentBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <section class="section" id="paymentSection" hidden>
     <h2>Payment Requests</h2>
-    <p style="color:#aaa;font-size:12px;margin-bottom:12px">Approve only after confirming actual bank credit.</p>
-    <div class="table-wrap"><table>
-      <thead><tr>
-        <th>Request ID</th><th>Member</th><th>Plan</th><th>Amount</th>
-        <th>UTR / Reference</th><th>Date</th><th>Status</th><th>Action</th>
-      </tr></thead>
-      <tbody id="paymentBody"></tbody>
-    </table></div>
+    <p style="color:#aaa;font-size:12px;margin-bottom:12px">
+      Approve only after confirming actual bank credit. UTR submission alone is not payment confirmation.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Request ID</th><th>Member</th><th>Plan</th><th>Amount</th>
+            <th>UTR / Reference</th><th>Date</th><th>Status</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="paymentBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <section class="section" id="withdrawalSection" hidden>
     <h2>Withdrawals</h2>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Reference</th><th>Member</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th></tr></thead>
-      <tbody id="withdrawalBody"></tbody>
-    </table></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Reference</th><th>Member</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th></tr>
+        </thead>
+        <tbody id="withdrawalBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <section class="section" id="referralSection" hidden>
     <h2>Referrals</h2>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Referral ID</th><th>Member</th><th>Referred By</th><th>Investment</th><th>Reward 2%</th><th>Status</th></tr></thead>
-      <tbody id="referralBody"></tbody>
-    </table></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Referral ID</th><th>Member</th><th>Referred By</th><th>Investment</th><th>Reward 2%</th><th>Status</th></tr>
+        </thead>
+        <tbody id="referralBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <section class="section" id="transactionSection" hidden>
     <h2>Transactions</h2>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Reference</th><th>Type</th><th>Member</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
-      <tbody id="transactionBody"></tbody>
-    </table></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Reference</th><th>Type</th><th>Member</th><th>Amount</th><th>Date</th><th>Status</th></tr>
+        </thead>
+        <tbody id="transactionBody"></tbody>
+      </table>
+    </div>
   </section>
+
 </main>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
 import {
-  getAuth, onAuthStateChanged, signOut
+  getAuth,
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
 import {
-  getFirestore, collection, getDocs, doc,
-  runTransaction, increment, serverTimestamp, Timestamp
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  runTransaction,
+  increment,
+  serverTimestamp,
+  Timestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
@@ -162,6 +203,7 @@ const firebaseConfig = {
 };
 
 const ADMIN_UID = "oQ14ElwzwMTQacne1dTIZ5DX9bQ2";
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -173,8 +215,10 @@ let paymentRequests = [];
 let investmentRecords = [];
 let withdrawals = [];
 let transactions = [];
+
 let adminReady = false;
 let loading = false;
+
 
 function showNotice(message, error=false) {
   const box = $("notice");
@@ -186,17 +230,26 @@ function showNotice(message, error=false) {
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
   })[c]);
 }
 
 function money(value) {
-  return "₹" + Number(value || 0).toLocaleString("en-IN");
+  const n = Number(value || 0);
+  return "₹" + (Number.isFinite(n) ? n : 0).toLocaleString("en-IN");
 }
 
 function asDate(value) {
   if (!value) return null;
-  if (typeof value.toDate === "function") return value.toDate();
+
+  if (typeof value.toDate === "function") {
+    return value.toDate();
+  }
+
   const d = new Date(value);
   return Number.isNaN(d.getTime()) ? null : d;
 }
@@ -206,242 +259,231 @@ function dateText(value) {
   return d ? d.toLocaleDateString("en-IN") : "-";
 }
 
-function oneYearLater(date) {
+function oneYearLater(date, months=12) {
   const d = new Date(date);
-  d.setFullYear(d.getFullYear()+1);
+  d.setMonth(d.getMonth() + months);
   return d;
 }
 
 function badge(status) {
   const s = String(status || "Pending");
   const v = s.toLowerCase();
-  const cls = v.includes("approv") || v==="active" || v==="matured"
-    ? "approved" : v.includes("reject") ? "rejected" : "pending";
+
+  const cls =
+    v.includes("approv") || v === "active" || v === "matured"
+      ? "approved"
+      : v.includes("reject")
+      ? "rejected"
+      : "pending";
+
   return `<span class="badge ${cls}">${escapeHTML(s)}</span>`;
 }
 
-function emptyRow(n, message) {
-  return `<tr><td colspan="${n}" class="empty">${escapeHTML(message)}</td></tr>`;
+function emptyRow(columns, message) {
+  return `<tr><td colspan="${columns}" class="empty">${escapeHTML(message)}</td></tr>`;
 }
 
 function showSection(id) {
-  document.querySelectorAll(".section").forEach(s => s.hidden = s.id !== id);
-  document.querySelectorAll(".menu button").forEach(b =>
-    b.classList.toggle("active", b.dataset.section === id)
-  );
+  document.querySelectorAll(".section").forEach(section => {
+    section.hidden = section.id !== id;
+  });
+
+  document.querySelectorAll(".menu button").forEach(button => {
+    button.classList.toggle("active", button.dataset.section === id);
+  });
 }
 
 document.querySelectorAll(".menu button").forEach(button => {
-  button.addEventListener("click", () => showSection(button.dataset.section));
+  button.addEventListener("click", () => {
+    showSection(button.dataset.section);
+  });
 });
+
+
+/* LOGOUT */
 
 $("logoutBtn").addEventListener("click", async () => {
   const button = $("logoutBtn");
   button.disabled = true;
   button.textContent = "LOGGING OUT...";
+
   try {
     await signOut(auth);
     window.location.replace("./admin-login.html");
   } catch (error) {
-    console.error("Logout error:", error);
+    console.error(error);
     showNotice("Logout failed: " + error.message, true);
     button.disabled = false;
     button.textContent = "LOGOUT";
   }
 });
 
+
+/* MEMBERS */
+
 function renderMembers() {
   const q = $("memberSearch").value.toLowerCase().trim();
+
   const filtered = members.filter(m =>
-    [m.memberId,m.name,m.email,m.mobile].some(v =>
-      String(v || "").toLowerCase().includes(q)
+    [m.memberId, m.name, m.email, m.mobile].some(value =>
+      String(value || "").toLowerCase().includes(q)
     )
   );
 
-  $("membersBody").innerHTML = filtered.length ? filtered.map(m => `<tr>
-    <td>${escapeHTML(m.memberId || "-")}</td>
-    <td>${escapeHTML(m.name || "-")}</td>
-    <td>${escapeHTML(m.email || "-")}</td>
-    <td>${escapeHTML(m.mobile || "-")}</td>
-    <td>${badge(m.status)}</td>
-    <td>${money(m.totalInvestment ?? m.investment)}</td>
-    <td>${money(m.profit)}</td>
-    <td>${escapeHTML(dateText(m.joinDate || m.createdAt))}</td>
-  </tr>`).join("") : emptyRow(8,"No members found.");
+  $("membersBody").innerHTML = filtered.length
+    ? filtered.map(m => `
+      <tr>
+        <td>${escapeHTML(m.memberId || "-")}</td>
+        <td>${escapeHTML(m.name || "-")}</td>
+        <td>${escapeHTML(m.email || "-")}</td>
+        <td>${escapeHTML(m.mobile || "-")}</td>
+        <td>${badge(m.status || "Pending")}</td>
+        <td>${money(m.totalInvestment ?? m.investment)}</td>
+        <td>${money(m.profit)}</td>
+        <td>${escapeHTML(dateText(m.joinDate || m.createdAt))}</td>
+      </tr>
+    `).join("")
+    : emptyRow(8, "No members found.");
 }
+
+$("memberSearch").addEventListener("input", renderMembers);
+
+
+/* INVESTMENTS */
 
 function renderInvestments() {
   $("investmentBody").innerHTML = investmentRecords.length
-    ? investmentRecords.map(i => `<tr>
-      <td>${escapeHTML(i.memberId || "-")}</td>
-      <td>${escapeHTML(i.memberName || "-")}</td>
-      <td>${escapeHTML(i.plan || "-")}</td>
-      <td>${money(i.amount)}</td>
-      <td>${money(i.profit)}</td>
-      <td>${escapeHTML(dateText(i.investmentDate))}</td>
-      <td>${escapeHTML(dateText(i.maturityDate))}</td>
-      <td>${badge(i.status || "Active")}</td>
-    </tr>`).join("")
-    : emptyRow(8,"No individual investments found.");
+    ? investmentRecords.map(i => `
+      <tr>
+        <td>${escapeHTML(i.memberId || "-")}</td>
+        <td>${escapeHTML(i.memberName || "-")}</td>
+        <td>${escapeHTML(i.plan || "-")}</td>
+        <td>${money(i.amount)}</td>
+        <td>${money(i.profit)}</td>
+        <td>${escapeHTML(dateText(i.investmentDate || i.createdAt))}</td>
+        <td>${escapeHTML(dateText(i.maturityDate))}</td>
+        <td>${badge(i.status || "Pending")}</td>
+      </tr>
+    `).join("")
+    : emptyRow(8, "No individual investments found.");
 }
+
+
+/* PAYMENTS */
 
 function renderPayments() {
   $("paymentBody").innerHTML = paymentRequests.length
     ? paymentRequests.map(p => {
-      const status = String(p.status || "Pending Verification");
-      const pending = status.toLowerCase().includes("pending");
-      return `<tr>
-        <td>${escapeHTML(p.id)}</td>
-        <td>${escapeHTML(p.memberName || p.email || p.uid || "-")}</td>
-        <td>${escapeHTML(p.plan || "-")}</td>
-        <td>${money(p.amount)}</td>
-        <td>${escapeHTML(p.transactionReference || p.utr || "-")}</td>
-        <td>${escapeHTML(dateText(p.submittedAt || p.createdAt))}</td>
-        <td>${badge(status)}</td>
-        <td>${pending ? `
-          <button class="action approve-btn" data-action="approve" data-id="${escapeHTML(p.id)}">Approve</button>
-          <button class="action reject-btn" data-action="reject" data-id="${escapeHTML(p.id)}">Reject</button>
-        ` : "-"}</td>
-      </tr>`;
-    }).join("")
-    : emptyRow(8,"No payment requests found.");
+        const status = String(p.status || "Pending Verification");
+        const pending = status.toLowerCase().includes("pending");
+
+        return `
+          <tr>
+            <td>${escapeHTML(p.id)}</td>
+            <td>${escapeHTML(p.memberName || p.email || p.uid || "-")}</td>
+            <td>${escapeHTML(p.plan || "-")}</td>
+            <td>${money(p.amount)}</td>
+            <td>${escapeHTML(p.transactionReference || p.utr || "-")}</td>
+            <td>${escapeHTML(dateText(p.submittedAt || p.createdAt))}</td>
+            <td>${badge(status)}</td>
+            <td>
+              ${pending ? `
+                <button class="action approve-btn"
+                  data-action="approve"
+                  data-id="${escapeHTML(p.id)}">Approve</button>
+                <button class="action reject-btn"
+                  data-action="reject"
+                  data-id="${escapeHTML(p.id)}">Reject</button>
+              ` : "-"}
+            </td>
+          </tr>
+        `;
+      }).join("")
+    : emptyRow(8, "No payment requests found.");
 }
+
+
+/* WITHDRAWALS */
 
 function renderWithdrawals() {
   $("withdrawalBody").innerHTML = withdrawals.length
-    ? withdrawals.map(w => `<tr>
-      <td>${escapeHTML(w.id || w.reference || "-")}</td>
-      <td>${escapeHTML(w.memberId || w.email || w.name || w.uid || "-")}</td>
-      <td>${money(w.amount)}</td>
-      <td>${escapeHTML(w.method || "-")}</td>
-      <td>${escapeHTML(dateText(w.createdAt || w.date || w.submittedAt))}</td>
-      <td>${badge(w.status)}</td>
-    </tr>`).join("")
-    : emptyRow(6,"No withdrawal records found.");
+    ? withdrawals.map(w => `
+      <tr>
+        <td>${escapeHTML(w.id || w.reference || "-")}</td>
+        <td>${escapeHTML(w.memberId || w.email || w.name || w.uid || "-")}</td>
+        <td>${money(w.amount)}</td>
+        <td>${escapeHTML(w.method || w.bankName || "-")}</td>
+        <td>${escapeHTML(dateText(w.createdAt || w.date || w.submittedAt))}</td>
+        <td>${badge(w.status || "Pending")}</td>
+      </tr>
+    `).join("")
+    : emptyRow(6, "No withdrawal records found.");
 }
 
+
+/* REFERRALS */
+
 function renderReferrals() {
-  const list = members.filter(m => m.referredBy && m.referredBy !== "Direct");
+  const list = members.filter(m =>
+    m.referredBy && m.referredBy !== "Direct"
+  );
+
   $("referralBody").innerHTML = list.length
     ? list.map(m => {
-      const amount = Number(m.totalInvestment ?? m.investment ?? 0);
-      return `<tr>
-        <td>${escapeHTML(m.referralId || "-")}</td>
-        <td>${escapeHTML(m.name || m.email || "-")}</td>
-        <td>${escapeHTML(m.referredBy)}</td>
-        <td>${money(amount)}</td>
-        <td>${money(amount*0.02)}</td>
-        <td>${badge(m.status)}</td>
-      </tr>`;
-    }).join("")
-    : emptyRow(6,"No referrals found.");
+        const amount = Number(m.totalInvestment ?? m.investment ?? 0);
+
+        return `
+          <tr>
+            <td>${escapeHTML(m.referralId || "-")}</td>
+            <td>${escapeHTML(m.name || m.email || "-")}</td>
+            <td>${escapeHTML(m.referredBy)}</td>
+            <td>${money(amount)}</td>
+            <td>${money(amount * 0.02)}</td>
+            <td>${badge(m.status || "Pending")}</td>
+          </tr>
+        `;
+      }).join("")
+    : emptyRow(6, "No referrals found.");
 }
+
+
+/* TRANSACTIONS */
 
 function renderTransactions() {
   $("transactionBody").innerHTML = transactions.length
-    ? transactions.map(t => `<tr>
-      <td>${escapeHTML(t.id || t.reference || "-")}</td>
-      <td>${escapeHTML(t.type || "-")}</td>
-      <td>${escapeHTML(t.memberId || t.email || t.uid || "-")}</td>
-      <td>${money(t.amount)}</td>
-      <td>${escapeHTML(dateText(t.createdAt || t.date))}</td>
-      <td>${badge(t.status)}</td>
-    </tr>`).join("")
-    : emptyRow(6,"No transaction records found.");
+    ? transactions.map(t => `
+      <tr>
+        <td>${escapeHTML(t.id || t.reference || "-")}</td>
+        <td>${escapeHTML(t.type || "-")}</td>
+        <td>${escapeHTML(t.memberId || t.email || t.uid || "-")}</td>
+        <td>${money(t.amount)}</td>
+        <td>${escapeHTML(dateText(t.createdAt || t.date))}</td>
+        <td>${badge(t.status || "Pending")}</td>
+      </tr>
+    `).join("")
+    : emptyRow(6, "No transaction records found.");
 }
+
+
+/* FIRESTORE READ */
 
 async function readCollection(name) {
-  const snap = await getDocs(collection(db,name));
-  return snap.docs.map(d => ({id:d.id,...d.data()}));
+  const snap = await getDocs(collection(db, name));
+
+  return snap.docs.map(d => ({
+    id: d.id,
+    ...d.data()
+  }));
 }
 
-function getProfit(request, amount) {
-  const saved = Number(
-    request.displayedProfit ??
-    request.estimatedProfit ??
-    request.profit ??
-    0
-  );
-  return saved > 0 ? saved : amount * 0.30;
-}
 
-/* Creates missing investment records for previously approved payments.
-   It does NOT add the principal to the member a second time. */
-
-async function migrateOldApprovedPayments() {
-  let created = 0;
-  const errors = [];
-
-  for (const p of paymentRequests) {
-    if (String(p.status || "").toLowerCase() !== "approved") continue;
-
-    try {
-      if (!p.uid) throw new Error("Payment request has no member UID");
-
-      const requestRef = doc(db,"paymentRequests",p.id);
-      const investmentRef = doc(db,"investments",p.id);
-      const memberRef = doc(db,"members",p.uid);
-
-      const didCreate = await runTransaction(db, async tx => {
-        const reqSnap = await tx.get(requestRef);
-        const invSnap = await tx.get(investmentRef);
-        const memSnap = await tx.get(memberRef);
-
-        if (!reqSnap.exists()) return false;
-        if (String(reqSnap.data().status || "").toLowerCase() !== "approved") return false;
-        if (invSnap.exists()) return false;
-        if (!memSnap.exists()) throw new Error("Member document not found");
-
-        const current = reqSnap.data();
-        const member = memSnap.data();
-        const amount = Number(current.amount || 0);
-        if (!Number.isFinite(amount) || amount <= 0) throw new Error("Invalid amount");
-
-        const profit = getProfit(current,amount);
-        const start = asDate(current.reviewedAt) ||
-                      asDate(current.approvedAt) ||
-                      asDate(current.submittedAt) || new Date();
-        const maturity = oneYearLater(start);
-
-        tx.set(investmentRef,{
-          uid:p.uid,
-          memberId:member.memberId || current.memberId || "",
-          memberName:member.name || current.memberName || "",
-          plan:current.plan || "",
-          amount,
-          profit,
-          expectedTotal:amount+profit,
-          investmentDate:Timestamp.fromDate(start),
-          maturityDate:Timestamp.fromDate(maturity),
-          status:"Active",
-          paymentRequestId:p.id,
-          createdAt:serverTimestamp()
-        });
-
-        // The old approval already added the principal.
-        tx.update(memberRef,{
-          profit:increment(profit),
-          expectedTotal:increment(amount+profit),
-          status:"Active"
-        });
-
-        return true;
-      });
-
-      if (didCreate) created++;
-    } catch (error) {
-      console.error("Migration error",p.id,error);
-      errors.push(p.id + ": " + error.message);
-    }
-  }
-
-  return {created,errors};
-}
+/* DASHBOARD LOAD */
 
 async function loadDashboard() {
   if (!adminReady || loading) return;
 
   loading = true;
+
   const refresh = $("refreshBtn");
   refresh.disabled = true;
   refresh.textContent = "Loading...";
@@ -461,29 +503,19 @@ async function loadDashboard() {
     transactions = data[3];
     investmentRecords = data[4];
 
-    const migration = await migrateOldApprovedPayments();
-
-    if (migration.created > 0) {
-      const newData = await Promise.all([
-        readCollection("members"),
-        readCollection("investments")
-      ]);
-      members = newData[0];
-      investmentRecords = newData[1];
-    }
-
     $("totalMembers").textContent = members.length;
+
     $("activeMembers").textContent = members.filter(m =>
       String(m.status || "").toLowerCase() === "active"
     ).length;
 
-    const total = investmentRecords.length
-      ? investmentRecords.reduce((s,i)=>s+Number(i.amount||0),0)
-      : members.reduce((s,m)=>s+Number(m.totalInvestment ?? m.investment ?? 0),0);
+    const total = investmentRecords.reduce(
+      (sum, item) => sum + Number(item.amount || 0), 0
+    );
 
     const withdrawn = withdrawals
-      .filter(w=>String(w.status||"").toLowerCase()==="approved")
-      .reduce((s,w)=>s+Number(w.amount||0),0);
+      .filter(w => String(w.status || "").toLowerCase() === "approved")
+      .reduce((sum, w) => sum + Number(w.amount || 0), 0);
 
     $("totalInvestment").textContent = money(total);
     $("totalWithdrawals").textContent = money(withdrawn);
@@ -495,17 +527,15 @@ async function loadDashboard() {
     renderReferrals();
     renderTransactions();
 
-    if (migration.errors.length) {
-      showNotice("Some approved payments could not be migrated: " + migration.errors.join(" | "),true);
-    } else if (migration.created) {
-      showNotice(migration.created + " old investment record(s) created. Principal was not added again.");
-    } else {
-      showNotice("Dashboard refreshed successfully.");
-    }
+    showNotice("Dashboard refreshed successfully.");
 
-  } catch(error) {
-    console.error("Dashboard load error:",error);
-    showNotice("Dashboard error: " + error.message,true);
+  } catch (error) {
+    console.error("Dashboard load error:", error);
+
+    showNotice(
+      "Dashboard error: " + (error.message || "Unknown Firebase error"),
+      true
+    );
   } finally {
     loading = false;
     refresh.disabled = false;
@@ -513,139 +543,188 @@ async function loadDashboard() {
   }
 }
 
-$("refreshBtn").addEventListener("click",loadDashboard);
-$("memberSearch").addEventListener("input",renderMembers);
+$("refreshBtn").addEventListener("click", loadDashboard);
 
-$("paymentBody").addEventListener("click",async event=>{
+
+/* PAYMENT APPROVE / REJECT */
+
+$("paymentBody").addEventListener("click", async event => {
   const button = event.target.closest("button[data-action]");
   if (!button) return;
 
-  const id = button.dataset.id;
   const action = button.dataset.action;
-  const request = paymentRequests.find(p=>p.id===id);
-  if (!request) {
-    showNotice("Payment request not found. Refresh data.",true);
+  const requestId = button.dataset.id;
+
+  if (!requestId) {
+    showNotice("Payment request ID missing.", true);
     return;
   }
 
-  if (action==="approve" && !confirm(
-    "Have you verified the actual bank credit? Do not approve based only on UTR. Continue?"
-  )) return;
+  const request = paymentRequests.find(p => p.id === requestId);
 
-  if (action==="reject" && !confirm("Reject this payment request?")) return;
+  if (!request) {
+    showNotice("Payment request not found. Refresh the dashboard.", true);
+    return;
+  }
+
+  if (action === "approve") {
+    const confirmed = confirm(
+      "Have you verified that this payment has actually been credited to the bank? Only then approve."
+    );
+
+    if (!confirmed) return;
+  }
+
+  if (action === "reject") {
+    const confirmed = confirm("Are you sure you want to reject this payment request?");
+    if (!confirmed) return;
+  }
 
   button.disabled = true;
+  button.textContent = "Please wait...";
 
   try {
-    const requestRef = doc(db,"paymentRequests",id);
+    const requestRef = doc(db, "paymentRequests", requestId);
 
-    if (action==="reject") {
-      await runTransaction(db,async tx=>{
-                const snap = await tx.get(requestRef);
+    await runTransaction(db, async tx => {
+      const requestSnap = await tx.get(requestRef);
 
-        if (!snap.exists()) {
-          throw new Error("Payment request not found");
-        }
+      if (!requestSnap.exists()) {
+        throw new Error("Payment request does not exist.");
+      }
 
-        const current = snap.data();
+      const current = requestSnap.data();
+      const currentStatus = String(current.status || "").toLowerCase();
 
-        if (String(current.status || "").toLowerCase() !== "pending") {
-          throw new Error("This payment request is not pending");
-        }
+      if (!currentStatus.includes("pending")) {
+        throw new Error("This payment request has already been reviewed.");
+      }
 
+      if (action === "reject") {
         tx.update(requestRef, {
           status: "Rejected",
           reviewedAt: serverTimestamp(),
           reviewedBy: auth.currentUser.uid
         });
-      });
 
-      showNotice("Payment request rejected successfully.");
-    }
-
-    if (action === "approve") {
-      if (!request.uid) {
-        throw new Error("Member UID missing in payment request.");
+        return;
       }
 
-      const memberRef = doc(db, "members", request.uid);
-      const investmentRef = doc(db, "investments", id);
+      /* APPROVAL VALIDATION */
 
-      await runTransaction(db, async tx => {
-        const requestSnap = await tx.get(requestRef);
-        const memberSnap = await tx.get(memberRef);
-        const investmentSnap = await tx.get(investmentRef);
+      if (!current.uid) {
+        throw new Error("Member UID is missing in payment request.");
+      }
 
-        if (!requestSnap.exists()) {
-          throw new Error("Payment request not found.");
-        }
+      const amount = Number(current.amount || 0);
 
-        if (!memberSnap.exists()) {
-          throw new Error("Member record not found.");
-        }
+      if (!Number.isFinite(amount) || amount <= 0) {
+        throw new Error("Invalid payment amount.");
+      }
 
-        if (investmentSnap.exists()) {
-          throw new Error("Investment already exists. Do not approve again.");
-        }
+      const memberRef = doc(db, "members", current.uid);
+      const investmentRef = doc(db, "investments", requestId);
 
-        const current = requestSnap.data();
+      const memberSnap = await tx.get(memberRef);
+      const investmentSnap = await tx.get(investmentRef);
 
-        if (String(current.status || "").toLowerCase() !== "pending") {
-          throw new Error("Payment request is not pending.");
-        }
+      if (!memberSnap.exists()) {
+        throw new Error("Member record not found.");
+      }
 
-        const amount = Number(current.amount || 0);
+      if (investmentSnap.exists()) {
+        throw new Error("Investment already exists. Duplicate credit stopped.");
+      }
 
-        if (!Number.isFinite(amount) || amount <= 0) {
-          throw new Error("Invalid payment amount.");
-        }
+      const member = memberSnap.data();
 
-        const profit = getProfit(current, amount);
-        const start = new Date();
-        const maturity = oneYearLater(start);
-        const member = memberSnap.data();
+      /*
+       * Profit is taken from the submitted plan details.
+       * If no profit value was saved, it remains zero.
+       * No automatic 30% profit is invented here.
+       */
+      const profit = Math.max(0, Number(
+        current.displayedProfit ??
+        current.estimatedProfit ??
+        current.profit ??
+        0
+      ));
 
-        tx.update(requestRef, {
-          status: "Approved",
-          reviewedAt: serverTimestamp(),
-          reviewedBy: auth.currentUser.uid
-        });
+      if (!Number.isFinite(profit)) {
+        
+{
+        throw new Error("Invalid estimated profit value.");
+      }
 
-        tx.set(investmentRef, {
-          uid: request.uid,
-          memberId: member.memberId || current.memberId || "",
-          memberName: member.name || current.memberName || "",
-          plan: current.plan || "",
-          amount: amount,
-          profit: profit,
-          expectedTotal: amount + profit,
-          investmentDate: Timestamp.fromDate(start),
-          maturityDate: Timestamp.fromDate(maturity),
-          status: "Active",
-          paymentRequestId: id,
-          createdAt: serverTimestamp()
-        });
+      const startDate = new Date();
+      const durationMonths = Math.max(
+        1,
+        Number(current.durationMonths || 12)
+      );
 
-        tx.update(memberRef, {
-          investment: increment(amount),
-          totalInvestment: increment(amount),
-          profit: increment(profit),
-          expectedTotal: increment(amount + profit),
-          status: "Active"
-        });
+      const maturityDate = new Date(startDate);
+      maturityDate.setMonth(
+        maturityDate.getMonth() + durationMonths
+      );
+
+      const investmentData = {
+        uid: current.uid,
+        memberId: member.memberId || current.memberId || "",
+        memberName: member.name || current.memberName || "",
+        email: member.email || current.email || "",
+        plan: current.plan || "",
+        amount: amount,
+        profit: profit,
+        expectedTotal: amount + profit,
+        investmentDate: Timestamp.fromDate(startDate),
+        maturityDate: Timestamp.fromDate(maturityDate),
+        status: "Active",
+        paymentRequestId: requestId,
+        createdAt: serverTimestamp()
+      };
+
+      tx.set(investmentRef, investmentData);
+
+      tx.update(memberRef, {
+        investment: increment(amount),
+        totalInvestment: increment(amount),
+        profit: increment(profit),
+        expectedTotal: increment(amount + profit),
+        status: "Active"
       });
 
-      showNotice("Payment approved. Individual investment created.");
-    }
+      tx.update(requestRef, {
+        status: "Approved",
+        reviewedAt: serverTimestamp(),
+        approvedAt: serverTimestamp(),
+        reviewedBy: auth.currentUser.uid,
+        investmentId: requestId
+      });
+    });
+
+    showNotice(
+      action === "approve"
+        ? "Payment approved. Investment created and member status updated."
+        : "Payment request rejected successfully."
+    );
 
     await loadDashboard();
 
   } catch (error) {
     console.error("Payment action error:", error);
-    showNotice("Payment action failed: " + error.message, true);
+
+    showNotice(
+      "Payment action failed: " + (error.message || "Unknown error"),
+      true
+    );
+
     button.disabled = false;
+    button.textContent = action === "approve" ? "Approve" : "Reject";
   }
 });
+
+
+/* ADMIN AUTHENTICATION */
 
 onAuthStateChanged(auth, async user => {
   if (!user) {
@@ -654,17 +733,28 @@ onAuthStateChanged(auth, async user => {
   }
 
   if (user.uid !== ADMIN_UID) {
-    showNotice("Access denied. This account is not an admin.", true);
-    await signOut(auth);
+    showNotice(
+      "Access denied. This account is not authorized as Admin.",
+      true
+    );
+
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+
     window.location.replace("./admin-login.html");
     return;
   }
 
   adminReady = true;
-  showNotice("Admin login successful. Loading dashboard...");
+  showNotice("Admin login successful.");
   await loadDashboard();
 });
-</script>
 
+</script>
 </body>
 </html>
+
+       
