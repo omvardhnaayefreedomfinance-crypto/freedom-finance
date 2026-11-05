@@ -7,470 +7,660 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#080808;color:#fff;min-height:100vh}
-.header{background:#111;border-bottom:1px solid #333;padding:20px 15px;text-align:center}
-.header h1{color:#f5b400;font-size:25px}
-.header p{color:#aaa;font-size:13px;margin-top:6px}
-.container{width:94%;max-width:850px;margin:25px auto}
-.back{display:inline-block;text-decoration:none;color:#fff;background:#222;border:1px solid #444;padding:10px 16px;border-radius:8px;margin-bottom:20px}
-.card{background:#111;border:1px solid #333;border-radius:14px;padding:22px;margin-bottom:20px}
-.card h2{color:#f5b400;margin-bottom:18px;font-size:20px}
-.balance{text-align:center;background:#181818;border-radius:12px;padding:20px;margin-bottom:20px}
-.balance span{display:block;color:#aaa;font-size:14px;margin-bottom:8px}
-.balance strong{color:#f5b400;font-size:30px}
-label{display:block;color:#ccc;margin:14px 0 7px;font-size:14px}
-input,select{width:100%;padding:13px;background:#080808;color:#fff;border:1px solid #444;border-radius:8px;outline:none}
-input:focus,select:focus{border-color:#f5b400}
-button{width:100%;margin-top:20px;padding:14px;border:0;border-radius:8px;background:#f5b400;color:#000;font-weight:bold;font-size:16px;cursor:pointer}
-button:hover{opacity:.9}
-.secondary{background:#333;color:#fff}
-.message{display:none;margin-top:15px;padding:12px;border-radius:8px;text-align:center;background:#182318;color:#52d273}
-.error{background:#301818;color:#ff7777}
-.table-box{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:650px}
-th,td{padding:12px 10px;border-bottom:1px solid #292929;text-align:left;font-size:13px}
-th{color:#f5b400;background:#181818}
-td{color:#ddd}
-.pending{color:#f5b400}
-.completed{color:#52d273}
-.failed{color:#ff6262}
-.empty{text-align:center;color:#888;padding:25px}
-.note{color:#888;font-size:12px;line-height:1.6;margin-top:15px}
-.bank-line{margin-bottom:12px;overflow-wrap:anywhere}
-.bank-line span{color:#aaa}
-@media(max-width:600px){.container{width:92%}.card{padding:18px}}
+body{background:#080b12;color:#fff;padding:18px}
+.container{max-width:850px;margin:auto}
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+h1{color:#d9ad48;font-size:25px}
+h2{color:#e6bd5c;font-size:18px;margin-bottom:16px}
+.card{background:#111827;border:1px solid #30394b;border-radius:12px;padding:20px;margin-bottom:18px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{margin-bottom:14px}
+label{display:block;color:#cbd5e1;font-size:13px;margin-bottom:7px}
+input,select{width:100%;padding:12px;background:#080d18;border:1px solid #3b465a;border-radius:7px;color:#fff;font-size:14px}
+input[readonly]{background:#182131;color:#d5d9e2}
+button,.linkbtn{border:0;border-radius:7px;padding:12px 17px;background:#d5a83e;color:#111827;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}
+button:disabled{opacity:.55;cursor:not-allowed}
+.secondary{background:#263247;color:#fff}
+.small{font-size:12px;color:#aab4c5;line-height:1.5;margin-top:10px}
+.balance{font-size:27px;color:#e9bd56;font-weight:bold;margin-top:8px}
+.status{display:inline-block;padding:5px 9px;border-radius:5px;background:#263247;color:#f2cf78;font-size:12px}
+.history-item{padding:13px 0;border-bottom:1px solid #30394b;line-height:1.7}
+.history-item:last-child{border-bottom:0}
+.history-item strong{color:#e6bd5c}
+.message{display:none;padding:12px;border-radius:7px;margin:12px 0;font-size:13px;line-height:1.5}
+.success{display:block;background:#123522;color:#9ce2b4}
+.error{display:block;background:#421d24;color:#ffb2b2}
+.info{display:block;background:#1b2c43;color:#c9dcf7}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:600px){
+ body{padding:12px}
+ .row{grid-template-columns:1fr}
+ .card{padding:15px}
+ h1{font-size:21px}
+}
 </style>
 </head>
 
 <body>
-<div class="header">
-    <h1>FREEDOM FINANCE</h1>
-    <p>Withdrawal Center</p>
-</div>
-
 <div class="container">
 
-<a href="member-dashboard.html" class="back">← Back to Dashboard</a>
+<div class="header">
+  <h1>Withdrawal Center</h1>
+  <a class="linkbtn secondary" href="member-dashboard.html">Back to Dashboard</a>
+</div>
+
+<div id="pageMessage" class="message"></div>
 
 <div class="card">
-    <h2>Member Details</h2>
-    <p class="bank-line"><span>Member Name:</span> <strong id="withdrawMemberName">—</strong></p>
-    <p class="bank-line"><span>Member ID:</span> <strong id="withdrawMemberId">—</strong></p>
-    <p class="bank-line"><span>Email:</span> <strong id="withdrawMemberEmail">—</strong></p>
-    <p class="bank-line"><span>Mobile:</span> <strong id="withdrawMemberMobile">—</strong></p>
+  <h2>Available Balance</h2>
+  <div class="balance" id="availableBalance">₹0.00</div>
+  <p class="small">Your available balance is fetched from your Firebase member account.</p>
 </div>
 
 <div class="card">
-    <h2>Investment &amp; Maturity Details</h2>
-    <p class="bank-line"><span>Selected Plan:</span> <strong id="withdrawPlan">Not Available</strong></p>
-    <p class="bank-line"><span>Investment Amount:</span> <strong id="withdrawInvestment">₹0</strong></p>
-    <p class="bank-line"><span>Investment Date:</span> <strong id="withdrawInvestmentDate">Not Available</strong></p>
-    <p class="bank-line"><span>Maturity Date:</span> <strong id="withdrawMaturityDate">Not Available</strong></p>
-    <p class="bank-line"><span>Days Remaining:</span> <strong id="withdrawDaysRemaining">—</strong></p>
-    <p class="bank-line"><span>Investment Status:</span> <strong id="withdrawInvestmentStatus">Awaiting Investment Details</strong></p>
-</div>
-
-<div class="card">
-    <h2>Registered Bank Details</h2>
-
-    <div id="savedBankDetails">
-        <p class="bank-line"><span>Account Holder:</span> <strong id="withdrawAccountHolder">—</strong></p>
-        <p class="bank-line"><span>Bank Name:</span> <strong id="withdrawBankName">—</strong></p>
-        <p class="bank-line"><span>Account Number:</span> <strong id="withdrawAccountNumber">—</strong></p>
-        <p class="bank-line"><span>IFSC Code:</span> <strong id="withdrawIFSC">—</strong></p>
-        <p class="bank-line"><span>Account Type:</span> <strong id="withdrawAccountType">—</strong></p>
-        <p class="bank-line"><span>UPI ID:</span> <strong id="withdrawUPI">—</strong></p>
+  <h2>Member Details</h2>
+  <div class="row">
+    <div class="field">
+      <label>Member Name</label>
+      <input id="memberName" readonly>
     </div>
+    <div class="field">
+      <label>Member ID</label>
+      <input id="memberId" readonly>
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input id="memberEmail" readonly>
+    </div>
+    <div class="field">
+      <label>Mobile</label>
+      <input id="memberMobile" readonly>
+    </div>
+  </div>
+</div>
 
-    <button type="button" id="editBankButton">EDIT BANK DETAILS</button>
+<div class="card">
+  <h2>Investment & Maturity Details</h2>
+  <div class="row">
+    <div class="field">
+      <label>Investment Plan</label>
+      <input id="investmentPlan" readonly>
+    </div>
+    <div class="field">
+      <label>Investment Amount</label>
+      <input id="investmentAmount" readonly>
+    </div>
+    <div class="field">
+      <label>Investment / Joining Date</label>
+      <input id="investmentDate" readonly>
+    </div>
+    <div class="field">
+      <label>Maturity Date (Automatic)</label>
+      <input id="maturityDate" readonly>
+    </div>
+    <div class="field">
+      <label>Investment Status</label>
+      <input id="investmentStatus" readonly>
+    </div>
+  </div>
+  <p class="small">
+    Maturity date is calculated automatically from the investment date and plan duration.
+    Members cannot edit this date.
+  </p>
+</div>
 
-    <form id="bankForm" style="display:none">
-        <label>Account Holder Name</label>
-        <input id="bankHolder" required maxlength="100">
+<div class="card">
+  <h2>Registered Bank Details</h2>
 
-        <label>Bank Name</label>
-        <input id="bankName" required maxlength="100">
+  <div class="row">
+    <div class="field">
+      <label>Account Holder Name</label>
+      <input id="accountHolder" placeholder="Enter account holder name">
+    </div>
+    <div class="field">
+      <label>Bank Name</label>
+      <input id="bankName" placeholder="Enter bank name">
+    </div>
+    <div class="field">
+      <label>Account Number</label>
+      <input id="accountNumber" placeholder="Enter account number">
+    </div>
+    <div class="field">
+      <label>IFSC Code</label>
+      <input id="ifscCode" placeholder="Enter IFSC code">
+    </div>
+    <div class="field">
+      <label>UPI ID (Optional)</label>
+      <input id="upiId" placeholder="example@upi">
+    </div>
+  </div>
 
-        <label>Account Number</label>
-        <input id="bankAccount" type="password" inputmode="numeric" required maxlength="20" autocomplete="off">
+  <div class="actions">
+    <button id="saveBankBtn" type="button">Save Bank Details</button>
+  </div>
+  <div id="bankMessage" class="message"></div>
+</div>
 
-        <label>Confirm Account Number</label>
-        <input id="confirmBankAccount" type="password" inputmode="numeric" required maxlength="20" autocomplete="off">
+<div class="card">
+  <h2>Submit Withdrawal Request</h2>
 
-        <label>IFSC Code</label>
-        <input id="bankIFSC" required maxlength="11" style="text-transform:uppercase">
+  <form id="withdrawalForm">
+    <div class="row">
+      <div class="field">
+        <label>Withdrawal Amount (₹)</label>
+        <input id="withdrawalAmount" type="number" min="1" step="0.01" placeholder="Enter amount" required>
+      </div>
 
-        <label>Account Type</label>
-        <select id="bankType" required>
-            <option value="">Select Account Type</option>
-            <option value="Savings">Savings</option>
-            <option value="Current">Current</option>
+      <div class="field">
+        <label>Withdrawal Method</label>
+        <select id="withdrawalMethod" required>
+          <option value="">Select Method</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="UPI">UPI</option>
         </select>
+      </div>
+    </div>
 
-        <label>UPI ID (Optional)</label>
-        <input id="bankUPI" maxlength="100">
+    <div class="field">
+      <label>Payment Details / Note</label>
+      <input id="withdrawalNote" placeholder="Optional note">
+    </div>
 
-        <button type="submit" id="saveBankButton">SAVE BANK DETAILS</button>
-        <button type="button" id="cancelBankButton" class="secondary">CANCEL</button>
-        <p id="bankMessage" class="message"></p>
-    </form>
+    <button id="submitWithdrawalBtn" type="submit">Submit Withdrawal Request</button>
+    <p class="small">
+      Your request will remain pending until verified by the admin.
+      Submitting a request does not automatically deduct your balance.
+    </p>
+  </form>
+
+  <div id="withdrawalMessage" class="message"></div>
 </div>
 
 <div class="card">
-    <h2>Request Withdrawal</h2>
-
-    <div class="balance">
-        <span>Available Balance</span>
-        <strong id="balance">₹0</strong>
-    </div>
-
-    <form id="withdrawForm">
-        <label for="amount">Withdrawal Amount</label>
-        <input type="number" id="amount" placeholder="Enter amount" min="1" required>
-
-        <label for="method">Withdrawal Method</label>
-        <select id="method" required>
-            <option value="">Select Method</option>
-            <option value="Bank Transfer">Bank Transfer</option>
-            <option value="UPI">UPI</option>
-        </select>
-
-        <label for="details">Bank Account / UPI Details</label>
-        <input type="text" id="details" placeholder="Enter account number / UPI ID" required>
-
-        <button type="submit">SUBMIT WITHDRAWAL</button>
-    </form>
-
-    <div id="message" class="message"></div>
-    <div class="note">
-        Demo/frontend version: withdrawal requests are stored locally in this browser. Real-money withdrawals require secure server-side authentication, database verification and payment processing.
-    </div>
-</div>
-
-<div class="card">
-    <h2>Withdrawal History</h2>
-    <div class="table-box">
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th><th>Amount</th><th>Method</th>
-                    <th>Details</th><th>Reference</th><th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="withdrawalBody"></tbody>
-        </table>
-        <div id="emptyMessage" class="empty">No withdrawal requests found.</div>
-    </div>
+  <h2>Withdrawal History</h2>
+  <div id="withdrawalHistory">Loading withdrawal history...</div>
 </div>
 
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
-    authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
-    projectId: "omvardhnaayefreedomfinan-efaf4",
-    storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
-    messagingSenderId: "552483514216",
-    appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
-    measurementId: "G-6MPELL55BD"
+  apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+  authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+  projectId: "omvardhnaayefreedomfinan-efaf4",
+  storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+  messagingSenderId: "552483514216",
+  appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+  measurementId: "G-6MPELL55BD"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+let currentUser = null;
+let memberData = null;
+let savedBankDetails = {};
+let selectedInvestment = null;
+let currentBalance = 0;
+
 const $ = id => document.getElementById(id);
 
-let currentUser = null;
-let memberData = {};
-let savedBank = {};
-
-function showBankMessage(text, isError = false) {
-    const el = $("bankMessage");
-    el.textContent = text;
-    el.className = isError ? "message error" : "message";
-    el.style.display = "block";
+function showMessage(id, message, type="info") {
+  const el = $(id);
+  el.textContent = message;
+  el.className = "message " + type;
 }
 
-function maskAccount(number) {
-    if (!number) return "—";
-    return "•••• •••• " + String(number).slice(-4);
+function hideMessage(id) {
+  $(id).textContent = "";
+  $(id).className = "message";
 }
 
-function displayBankDetails(bank = {}) {
-    savedBank = bank || {};
-    $("withdrawAccountHolder").textContent = savedBank.accountHolder || "—";
-    $("withdrawBankName").textContent = savedBank.bankName || "—";
-    $("withdrawAccountNumber").textContent = maskAccount(savedBank.accountNumber);
-    $("withdrawIFSC").textContent = savedBank.ifsc || "—";
-    $("withdrawAccountType").textContent = savedBank.accountType || "—";
-    $("withdrawUPI").textContent = savedBank.upiId || "—";
+function money(value) {
+  return "₹" + Number(value || 0).toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
 }
 
-function fillMemberDetails(data) {
-    $("withdrawMemberName").textContent = data.name || "—";
-    $("withdrawMemberId").textContent = data.memberId || "—";
-    $("withdrawMemberEmail").textContent = data.email || currentUser.email || "—";
-    $("withdrawMemberMobile").textContent = data.mobile || "—";
+function dateValue(value) {
+  if (!value) return null;
 
-    $("withdrawPlan").textContent = data.planName || data.plan || "Not Available";
+  if (value.toDate && typeof value.toDate === "function") {
+    return value.toDate();
+  }
 
-    const investment = Number(data.investment || data.totalInvestment || 0);
-    $("withdrawInvestment").textContent = "₹" + investment.toLocaleString("en-IN");
+  if (typeof value === "number") {
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? null : d;
+  }
 
-    $("withdrawInvestmentDate").textContent = data.investmentDate || "Not Available";
-    $("withdrawMaturityDate").textContent = data.maturityDate || "Not Available";
-    $("withdrawInvestmentStatus").textContent = data.status || "Awaiting Investment Details";
+  if (typeof value === "string") {
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? null : d;
+  }
 
-    if (data.maturityDate) {
-        const maturity = new Date(data.maturityDate);
-        if (!isNaN(maturity.getTime())) {
-            const days = Math.ceil((maturity - new Date()) / 86400000);
-            $("withdrawDaysRemaining").textContent = days > 0 ? days : "Maturity reached";
-        }
-    }
+  if (value.seconds) {
+    return new Date(value.seconds * 1000);
+  }
 
-    availableBalance = Number(data.availableBalance || 0);
-    localStorage.setItem("availableBalance", String(availableBalance));
-    updateBalance();
+  return null;
 }
 
-async function loadMemberData(user) {
-    const memberRef = doc(db, "members", user.uid);
-    const snapshot = await getDoc(memberRef);
+function formatDate(value) {
+  const d = dateValue(value);
+  if (!d) return "Not available";
 
-    if (!snapshot.exists()) {
-        throw new Error("Your member profile was not found in Firebase.");
-    }
-
-    memberData = snapshot.data();
-    fillMemberDetails(memberData);
-    displayBankDetails(memberData.bankDetails || {});
+  return d.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
 }
 
-$("editBankButton").addEventListener("click", () => {
-    $("bankForm").style.display = "block";
-    $("savedBankDetails").style.display = "none";
-    $("editBankButton").style.display = "none";
+function addMonths(date, months) {
+  const result = new Date(date);
+  const originalDay = result.getDate();
 
-    $("bankHolder").value = savedBank.accountHolder || "";
-    $("bankName").value = savedBank.bankName || "";
-    $("bankIFSC").value = savedBank.ifsc || "";
-    $("bankType").value = savedBank.accountType || "";
-    $("bankUPI").value = savedBank.upiId || "";
+  result.setDate(1);
+  result.setMonth(result.getMonth() + Number(months || 12));
 
-    // Account number is not filled for security. Re-enter it to save.
-    $("bankAccount").value = "";
-    $("confirmBankAccount").value = "";
-    $("bankMessage").style.display = "none";
-});
+  const lastDay = new Date(
+    result.getFullYear(),
+    result.getMonth() + 1,
+    0
+  ).getDate();
 
-$("cancelBankButton").addEventListener("click", () => {
-    $("bankForm").reset();
-    $("bankForm").style.display = "none";
-    $("savedBankDetails").style.display = "block";
-    $("editBankButton").style.display = "block";
-});
+  result.setDate(Math.min(originalDay, lastDay));
+  return result;
+}
 
-$("bankIFSC").addEventListener("input", () => {
-    $("bankIFSC").value = $("bankIFSC").value.toUpperCase();
-});
+function showBankDetails(bank = {}) {
+  $("accountHolder").value = bank.accountHolder || bank.accountName || "";
+  $("bankName").value = bank.bankName || "";
+  $("accountNumber").value = bank.accountNumber || "";
+  $("ifscCode").value = bank.ifscCode || "";
+  $("upiId").value = bank.upiId || "";
+}
 
-$("bankForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+function getInvestmentStartDate(investment) {
+  return dateValue(
+    investment.investmentDate ||
+    investment.joinDate ||
+    investment.createdAt ||
+    investment.approvedAt
+  );
+}
 
-    if (!currentUser) {
-        showBankMessage("Please log in again.", true);
-        return;
-    }
+function getDurationMonths(investment) {
+  const months = Number(
+    investment.durationMonths ||
+    investment.planDurationMonths ||
+    investment.duration ||
+    12
+  );
 
-    const accountHolder = $("bankHolder").value.trim();
-    const bankName = $("bankName").value.trim();
-    const accountNumber = $("bankAccount").value.trim();
-    const confirmNumber = $("confirmBankAccount").value.trim();
-    const ifsc = $("bankIFSC").value.trim().toUpperCase();
-    const accountType = $("bankType").value;
-    const upiId = $("bankUPI").value.trim();
+  return Number.isFinite(months) && months > 0 ? months : 12;
+}
 
-    if (!/^[0-9]{6,20}$/.test(accountNumber)) {
-        showBankMessage("Enter a valid account number (6–20 digits).", true);
-        return;
-    }
+function isApprovedInvestment(item) {
+  const status = String(item.status || "").toLowerCase();
+  return [
+    "active",
+    "approved",
+    "verified",
+    "completed"
+  ].includes(status);
+}
 
-    if (accountNumber !== confirmNumber) {
-        showBankMessage("Account numbers do not match.", true);
-        return;
-    }
+async function loadMember(user) {
+  const memberRef = doc(db, "members", user.uid);
+  const memberSnap = await getDoc(memberRef);
 
-    if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc)) {
-        showBankMessage("Please enter a valid IFSC code.", true);
-        return;
-    }
+  if (!memberSnap.exists()) {
+    throw new Error("Member profile not found in Firebase.");
+  }
 
-    if (!accountHolder || !bankName || !accountType) {
-        showBankMessage("Please fill all required bank details.", true);
-        return;
-    }
+  memberData = memberSnap.data();
 
-    if (upiId && !/^[\w.-]+@[\w.-]+$/.test(upiId)) {
-        showBankMessage("Please enter a valid UPI ID.", true);
-        return;
-    }
+  $("memberName").value = memberData.name || memberData.fullName || user.displayName || "";
+  $("memberId").value = memberData.memberId || "";
+  $("memberEmail").value = memberData.email || user.email || "";
+  $("memberMobile").value = memberData.mobile || "";
 
-    const saveButton = $("saveBankButton");
-    saveButton.disabled = true;
-    saveButton.textContent = "SAVING...";
+  currentBalance = Number(memberData.availableBalance || 0);
+  $("availableBalance").textContent = money(currentBalance);
 
+  savedBankDetails = memberData.bankDetails || {};
+  showBankDetails(savedBankDetails);
+}
+
+async function loadInvestment() {
+  const investmentQuery = query(
+    collection(db, "investments"),
+    where("uid", "==", currentUser.uid)
+  );
+
+  const snapshot = await getDocs(investmentQuery);
+
+  if (snapshot.empty) {
+    $("investmentPlan").value = "No investment found";
+    $("investmentAmount").value = "—";
+    $("investmentDate").value = "—";
+    $("maturityDate").value = "—";
+    $("investmentStatus").value = "No record";
+    return;
+  }
+
+  const records = snapshot.docs.map(item => ({
+    id: item.id,
+    ...item.data()
+  }));
+
+  records.sort((a, b) => {
+    const aDate = getInvestmentStartDate(a)?.getTime() || 0;
+    const bDate = getInvestmentStartDate(b)?.getTime() || 0;
+    return bDate - aDate;
+  });
+
+  selectedInvestment =
+    records.find(isApprovedInvestment) || records[0];
+
+  const investment = selectedInvestment;
+  const startDate = getInvestmentStartDate(investment);
+
+  $("investmentPlan").value =
+    investment.planName || investment.plan || "Investment Plan";
+
+  $("investmentAmount").value =
+    money(investment.amount || investment.investmentAmount || 0);
+
+  $("investmentDate").value =
+    startDate ? formatDate(startDate) : "Not available";
+
+  $("investmentStatus").value =
+    investment.status || "Pending";
+
+  if (!startDate) {
+    $("maturityDate").value = "Investment date missing";
+    return;
+  }
+
+  let maturity = dateValue(investment.maturityDate);
+
+  if (!maturity) {
+    const durationMonths = getDurationMonths(investment);
+    maturity = addMonths(startDate, durationMonths);
+
+    // Save the automatically calculated date to the investment record.
+    // If Firestore rules do not permit this write, the calculated date
+    // will still be displayed on this page.
     try {
-        const bankDetails = {
-            accountHolder,
-            bankName,
-            accountNumber,
-            ifsc,
-            accountType,
-            upiId
-        };
+      await updateDoc(
+        doc(db, "investments", investment.id),
+        {
+          maturityDate: maturity.toISOString(),
+          maturityDateAuto: true
+        }
+      );
 
-        await updateDoc(doc(db, "members", currentUser.uid), {
-            bankDetails
-        });
-
-        displayBankDetails(bankDetails);
-        $("bankForm").reset();
-        $("bankForm").style.display = "none";
-        $("savedBankDetails").style.display = "block";
-        $("editBankButton").style.display = "block";
-
-        alert("Bank details saved successfully in your account.");
+      selectedInvestment.maturityDate = maturity.toISOString();
     } catch (error) {
-        console.error("Bank save error:", error);
-        showBankMessage("Save failed: " + (error.message || "Please try again."), true);
-    } finally {
-        saveButton.disabled = false;
-        saveButton.textContent = "SAVE BANK DETAILS";
+      console.warn("Could not save automatic maturity date:", error);
     }
-});
+  }
 
-/* Withdrawal history - browser-local demo only */
-let availableBalance = Number(localStorage.getItem("availableBalance") || 0);
-let withdrawals = JSON.parse(localStorage.getItem("withdrawals") || "[]");
-
-const form = $("withdrawForm");
-const message = $("message");
-const tbody = $("withdrawalBody");
-const emptyMessage = $("emptyMessage");
-
-function updateBalance() {
-    $("balance").textContent = "₹" + availableBalance.toLocaleString("en-IN");
+  $("maturityDate").value = formatDate(maturity);
 }
 
-function showMessage(text) {
-    message.textContent = text;
-    message.style.display = "block";
-    setTimeout(() => message.style.display = "none", 4000);
-}
+async function loadWithdrawalHistory() {
+  const historyBox = $("withdrawalHistory");
+  historyBox.textContent = "Loading withdrawal history...";
 
-function loadWithdrawals() {
-    tbody.innerHTML = "";
+  try {
+    const q = query(
+      collection(db, "withdrawalRequests"),
+      where("uid", "==", currentUser.uid)
+    );
 
-    if (withdrawals.length === 0) {
-        emptyMessage.style.display = "block";
-        return;
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      historyBox.textContent = "No withdrawal requests found.";
+      return;
     }
 
-    emptyMessage.style.display = "none";
+    const records = snapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
 
-    withdrawals.forEach(item => {
-        const row = document.createElement("tr");
-        const values = [
-            item.date || "—",
-            "₹" + Number(item.amount || 0).toLocaleString("en-IN"),
-            item.method || "—",
-            item.details || "—",
-            item.reference || "—",
-            item.status || "Pending"
-        ];
-
-        values.forEach((value, index) => {
-            const cell = document.createElement("td");
-            cell.textContent = value;
-            if (index === 5) cell.className = String(value).toLowerCase();
-            row.appendChild(cell);
-        });
-
-        tbody.appendChild(row);
+    records.sort((a, b) => {
+      const da = dateValue(a.createdAt)?.getTime() || 0;
+      const dbb = dateValue(b.createdAt)?.getTime() || 0;
+      return dbb - da;
     });
+
+    historyBox.innerHTML = "";
+
+    records.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "history-item";
+
+      const status = item.status || "Pending";
+      const amount = money(item.amount || 0);
+      const method = item.method || "—";
+      const reference = item.reference || item.id;
+      const date = formatDate(item.createdAt);
+
+      div.innerHTML = `
+        <strong>${amount}</strong><br>
+        Method: ${escapeHtml(method)}<br>
+        Reference: ${escapeHtml(reference)}<br>
+        Date: ${escapeHtml(date)}<br>
+        Status: <span class="status">${escapeHtml(status)}</span>
+      `;
+
+      historyBox.appendChild(div);
+    });
+
+  } catch (error) {
+    console.error(error);
+    historyBox.textContent =
+      "Unable to load withdrawal history: " + error.message;
+  }
 }
 
-form.addEventListener("submit", e => {
-    e.preventDefault();
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+}
 
-    const amount = Number($("amount").value);
-    const method = $("method").value;
-    const details = $("details").value.trim();
+$("saveBankBtn").addEventListener("click", async () => {
+  hideMessage("bankMessage");
 
-    if (amount <= 0) return showMessage("Please enter a valid amount.");
-    if (amount > availableBalance) return showMessage("Insufficient available balance.");
-    if (!method || !details) return showMessage("Please complete all withdrawal fields.");
+  if (!currentUser) return;
 
-    const reference = "WD" + Date.now().toString().slice(-10);
+  const bank = {
+    accountHolder: $("accountHolder").value.trim(),
+    bankName: $("bankName").value.trim(),
+    accountNumber: $("accountNumber").value.trim(),
+    ifscCode: $("ifscCode").value.trim().toUpperCase(),
+    upiId: $("upiId").value.trim(),
+    updatedAt: new Date().toISOString()
+  };
 
-    withdrawals.unshift({
-        id: Date.now(),
-        amount,
-        method,
-        details,
-        reference,
-        status: "Pending",
-        date: new Date().toLocaleString("en-IN")
-    });
+  if (!bank.accountHolder || !bank.bankName ||
+      !bank.accountNumber || !bank.ifscCode) {
+    showMessage(
+      "bankMessage",
+      "Please enter account holder name, bank name, account number and IFSC code.",
+      "error"
+    );
+    return;
+  }
 
-    availableBalance -= amount;
+  if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(bank.ifscCode)) {
+    showMessage("bankMessage", "Please enter a valid IFSC code.", "error");
+    return;
+  }
 
-    localStorage.setItem("withdrawals", JSON.stringify(withdrawals));
-    localStorage.setItem("availableBalance", String(availableBalance));
+  $("saveBankBtn").disabled = true;
 
-    const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-    transactions.unshift({
-        date: new Date().toLocaleString("en-IN"),
-        type: "Withdrawal",
-        amount,
-        reference,
-        status: "Pending"
-    });
-    localStorage.setItem("transactions", JSON.stringify(transactions));
+  try {
+    await setDoc(
+      doc(db, "members", currentUser.uid),
+      { bankDetails: bank },
+      { merge: true }
+    );
 
-    form.reset();
-    updateBalance();
-    loadWithdrawals();
-    showMessage("Demo withdrawal request saved. Reference: " + reference);
+    savedBankDetails = bank;
+
+    showMessage(
+      "bankMessage",
+      "Bank details saved successfully.",
+      "success"
+    );
+
+  } catch (error) {
+    console.error(error);
+    showMessage(
+      "bankMessage",
+      "Could not save bank details: " + error.message,
+      "error"
+    );
+  } finally {
+    $("saveBankBtn").disabled = false;
+  }
 });
 
-updateBalance();
-loadWithdrawals();
+$("withdrawalForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  hideMessage("withdrawalMessage");
+
+  if (!currentUser || !memberData) return;
+
+  const amount = Number($("withdrawalAmount").value);
+  const method = $("withdrawalMethod").value;
+  const note = $("withdrawalNote").value.trim();
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    showMessage("withdrawalMessage", "Enter a valid withdrawal amount.", "error");
+    return;
+  }
+
+  if (amount > currentBalance) {
+    showMessage("withdrawalMessage", "Withdrawal amount is greater than your available balance.", "error");
+    return;
+  }
+
+  if (!method) {
+    showMessage("withdrawalMessage", "Please select a withdrawal method.", "error");
+    return;
+  }
+
+  if (!savedBankDetails.accountNumber || !savedBankDetails.ifscCode) {
+    showMessage("withdrawalMessage", "Please save your bank details before submitting a withdrawal request.", "error");
+    return;
+  }
+
+  if (method === "UPI" && !savedBankDetails.upiId) {
+    showMessage("withdrawalMessage", "Please add your UPI ID in bank details before choosing UPI withdrawal.", "error");
+    return;
+  }
+
+  $("submitWithdrawalBtn").disabled = true;
+
+  try {
+    const reference = "WD" + Date.now();
+
+    await addDoc(collection(db, "withdrawalRequests"), {
+      uid: currentUser.uid,
+      memberId: memberData.memberId || "",
+      memberName: memberData.name || memberData.fullName || "",
+      email: currentUser.email || "",
+      amount: amount,
+      method: method,
+      details: note,
+      bankDetails: savedBankDetails,
+      reference: reference,
+      status: "Pending",
+      createdAt: serverTimestamp()
+    });
+
+    showMessage(
+      "withdrawalMessage",
+      "Withdrawal request submitted successfully. Reference: " + reference,
+      "success"
+    );
+
+    $("withdrawalForm").reset();
+    await loadWithdrawalHistory();
+
+  } catch (error) {
+    console.error(error);
+    showMessage(
+      "withdrawalMessage",
+      "Withdrawal request failed: " + error.message,
+      "error"
+    );
+  } finally {
+    $("submitWithdrawalBtn").disabled = false;
+  }
+});
 
 onAuthStateChanged(auth, async user => {
-    if (!user) {
-        window.location.href = "member-login.html";
-        return;
-    }
+  if (!user) {
+    window.location.href = "member-login.html";
+    return;
+  }
 
-    currentUser = user;
+  if (!user.emailVerified) {
+    await signOut(auth);
+    window.location.href = "member-login.html";
+    return;
+  }
 
-    try {
-        await loadMemberData(user);
-    } catch (error) {
-        console.error("Member load error:", error);
-        alert("Could not load your Firebase member details: " + error.message);
-    }
+  currentUser = user;
+
+  try {
+    await loadMember(user);
+    await loadInvestment();
+    await loadWithdrawalHistory();
+
+  } catch (error) {
+    console.error(error);
+    showMessage("pageMessage", error.message, "error");
+  }
 });
 </script>
-
 </body>
-    </html>
-    
+        </html>
