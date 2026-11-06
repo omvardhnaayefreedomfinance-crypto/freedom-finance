@@ -159,19 +159,28 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </section>
 
   <section class="section" id="withdrawalSection" hidden>
-    <h2>Withdrawal Requests</h2>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Reference</th><th>Member</th><th>Amount</th>
-            <th>Method</th><th>Date</th><th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="withdrawalBody"></tbody>
-      </table>
-    </div>
-  </section>
+  <h2>Withdrawal Requests</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Member Name</th>
+          <th>Member ID</th>
+          <th>Amount</th>
+          <th>Method</th>
+          <th>Bank Details</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="withdrawalBody">
+        <tr><td colspan="9">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+          </section>
 
   <section class="section" id="referralSection" hidden>
     <h2>Referrals</h2>
