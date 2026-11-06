@@ -461,38 +461,63 @@ function renderPayments() {
 
 function renderWithdrawals() {
   const body = $("withdrawalBody");
-
   if (!body) return;
 
   body.innerHTML = withdrawals.length
     ? withdrawals.map(w => {
+        const member = members.find(m =>
+          m.id === w.uid || m.uid === w.uid
+        ) || {};
+
         const status = String(w.status || "Pending");
         const pending = status.toLowerCase().includes("pending");
 
-        const bank = [
-          w.bankName,
-          w.accountHolder,
-          w.accountNumber ? "A/C: " + w.accountNumber : "",
-          w.ifsc ? "IFSC: " + w.ifsc : "",
-          w.upiId ? "UPI: " + w.upiId : ""
+        const bank = w.bankDetails || member.bankDetails || {};
+
+        const bankName = w.bankName || bank.bankName || member.bankName || "";
+        const holder = w.accountHolder || bank.accountHolder || member.accountHolder || "";
+        const account = w.accountNumber || bank.accountNumber || member.accountNumber || "";
+        const ifsc = w.ifsc || bank.ifsc || member.ifsc || "";
+        const upi = w.upiId || bank.upiId || member.upiId || "";
+
+        const bankText = [
+          holder,
+          bankName,
+          account ? "A/C: " + account : "",
+          ifsc ? "IFSC: " + ifsc : "",
+          upi ? "UPI: " + upi : ""
         ].filter(Boolean).join(" | ");
+
+        const maturity = w.maturityDate || member.maturityDate || "-";
 
         return `
           <tr>
             <td>${escapeHTML(w.id)}</td>
-            <td>${escapeHTML(w.memberName || w.name || w.email || "-")}</td>
-            <td>${escapeHTML(w.memberId || "-")}</td>
+            <td>${escapeHTML(w.memberName || member.name || member.fullName || w.email || "-")}</td>
+            <td>${escapeHTML(w.memberId || member.memberId || "-")}</td>
             <td>${money(w.amount)}</td>
             <td>${escapeHTML(w.method || w.paymentMethod || "-")}</td>
-            <td>${escapeHTML(bank || w.bankDetails || "-")}</td>
+            <td>${escapeHTML(bankText || "-")}</td>
+            <td>${escapeHTML(dateText(maturity))}</td>
             <td>${escapeHTML(dateText(w.createdAt || w.requestedAt))}</td>
             <td>${badge(status)}</td>
             <td>
               ${pending ? `
+                <button class="action"
+                  data-withdraw-action="edit-bank"
+                  data-id="${escapeHTML(w.id)}"
+                  type="button">Edit Bank</button>
+
+                <button class="action"
+                  data-withdraw-action="edit-maturity"
+                  data-id="${escapeHTML(w.id)}"
+                  type="button">Edit Date</button>
+
                 <button class="action approve-btn"
                   data-withdraw-action="approve"
                   data-id="${escapeHTML(w.id)}"
                   type="button">Approve</button>
+
                 <button class="action reject-btn"
                   data-withdraw-action="reject"
                   data-id="${escapeHTML(w.id)}"
@@ -502,9 +527,8 @@ function renderWithdrawals() {
           </tr>
         `;
       }).join("")
-    : emptyRow(9, "No withdrawal requests found.");
-                                   }
-
+    : emptyRow(10, "No withdrawal requests found.");
+  }
 
 /* REFERRALS */
 
