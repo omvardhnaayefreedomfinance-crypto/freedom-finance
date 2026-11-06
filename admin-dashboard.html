@@ -866,7 +866,6 @@ if (withdrawalBody) {
     withdrawalBody.addEventListener("click", async function(e) {
 
         const button = e.target.closest("[data-withdraw-action]");
-
         if (!button) return;
 
         const action = button.dataset.withdrawAction;
@@ -882,10 +881,160 @@ if (withdrawalBody) {
         try {
             button.disabled = true;
 
-            if (action === "reject") {
+            // EDIT BANK DETAILS
+            if (action === "edit-bank") {
+
+                const requestSnap = await getDoc(requestRef);
+
+                if (!requestSnap.exists()) {
+                    throw new Error("Withdrawal request not found.");
+                }
+
+                const request = requestSnap.data();
+
+                const accountHolder = prompt(
+                    "Enter Account Holder Name:",
+                    request.accountHolder || ""
+                );
+                if (accountHolder === null) return;
+
+                const bankName = prompt(
+                    "Enter Bank Name:",
+                    request.bankName || ""
+                );
+                if (bankName === null) return;
+
+                const accountNumber = prompt(
+                    "Enter Account Number:",
+                    request.accountNumber || ""
+                );
+                if (accountNumber === null) return;
+
+                const ifsc = prompt(
+                    "Enter IFSC Code:",
+                    request.ifsc || ""
+                );
+                if (ifsc === null) return;
+
+                const upiId = prompt(
+                    "Enter UPI ID:",
+                    request.upiId || ""
+                );
+                if (upiId === null) return;
+
+                const bankData = {
+                    accountHolder: accountHolder.trim(),
+                    bankName: bankName.trim(),
+                    accountNumber: accountNumber.trim(),
+                    ifsc: ifsc.trim(),
+                    upiId: upiId.trim()
+                };
+
+                await runTransaction(db, async (transaction) => {
+
+                    const latestSnap = await transaction.get(requestRef);
+
+                    if (!latestSnap.exists()) {
+                        throw new Error("Withdrawal request not found.");
+                    }
+
+                    const latest = latestSnap.data();
+
+                    if (!String(latest.status || "Pending").toLowerCase().includes("pending")) {
+                        throw new Error("Processed withdrawal cannot be edited.");
+                    }
+
+                    transaction.update(requestRef, {
+                        ...bankData,
+                        bankDetails: bankData,
+                        updatedAt: serverTimestamp()
+                    });
+
+                    if (latest.uid) {
+                        const memberRef = doc(db, "members", latest.uid);
+                        const memberSnap = await transaction.get(memberRef);
+
+                        if (memberSnap.exists()) {
+                            transaction.update(memberRef, {
+                                ...bankData,
+                                bankDetails: bankData,
+                                updatedAt: serverTimestamp()
+                            });
+                        }
+                    }
+                });
+
+                alert("Bank details updated successfully.");
+            }
+
+            // EDIT MATURITY DATE
+            else if (action === "edit-maturity") {
+
+                const requestSnap = await getDoc(requestRef);
+
+                if (!requestSnap.exists()) {
+                    throw new Error("Withdrawal request not found.");
+                }
+
+                const request = requestSnap.data();
+
+                const maturityDate = prompt(
+                    "Enter Maturity Date (YYYY-MM-DD):",
+                    request.maturityDate || ""
+                );
+
+                if (maturityDate === null) return;
+
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(maturityDate.trim())) {
+                    throw new Error("Please enter date in YYYY-MM-DD format.");
+                }
+
+                const dateCheck = new Date(maturityDate + "T00:00:00");
+
+                if (isNaN(dateCheck.getTime()) ||
+                    dateCheck.toISOString().slice(0, 10) !== maturityDate.trim()) {
+                    throw new Error("Invalid maturity date.");
+                }
+
+                await runTransaction(db, async (transaction) => {
+
+                    const latestSnap = await transaction.get(requestRef);
+
+                    if (!latestSnap.exists()) {
+                        throw new Error("Withdrawal request not found.");
+                    }
+
+                    const latest = latestSnap.data();
+
+                    if (!String(latest.status || "Pending").toLowerCase().includes("pending")) {
+                        throw new Error("Processed withdrawal cannot be edited.");
+                    }
+
+                    transaction.update(requestRef, {
+                        maturityDate: maturityDate.trim(),
+                        updatedAt: serverTimestamp()
+                    });
+
+                    if (latest.uid) {
+                        const memberRef = doc(db, "members", latest.uid);
+                        const memberSnap = await transaction.get(memberRef);
+
+                        if (memberSnap.exists()) {
+                            transaction.update(memberRef, {
+                                maturityDate: maturityDate.trim(),
+                                updatedAt: serverTimestamp()
+                            });
+                        }
+                    }
+                });
+
+                alert("Maturity date updated successfully.");
+            }
+
+            // REJECT WITHDRAWAL
+            else if (action === "reject") {
 
                 if (!confirm("Are you sure you want to reject this withdrawal?")) {
-                    button.disabled = false;
                     return;
                 }
 
@@ -898,8 +1047,9 @@ if (withdrawalBody) {
                     }
 
                     const request = requestSnap.data();
+                    const status = String(request.status || "Pending").toLowerCase();
 
-                    if ((request.status || "").toLowerCase() !== "pending") {
+                    if (!status.includes("pending")) {
                         throw new Error("This request is already processed.");
                     }
 
@@ -912,12 +1062,12 @@ if (withdrawalBody) {
                 alert("Withdrawal request rejected successfully.");
             }
 
+            // APPROVE WITHDRAWAL
             else if (action === "approve") {
 
                 if (!confirm(
                     "Confirm that the actual bank/UPI payment has been completed. Approve this withdrawal?"
                 )) {
-                    button.disabled = false;
                     return;
                 }
 
@@ -932,8 +1082,9 @@ if (withdrawalBody) {
                     }
 
                     const request = requestSnap.data();
+                    const status = String(request.status || "Pending").toLowerCase();
 
-                    if ((request.status || "").toLowerCase() !== "pending") {
+                    if (!status.includes("pending")) {
                         throw new Error("This request is already processed.");
                     }
 
@@ -975,17 +1126,21 @@ if (withdrawalBody) {
                     transaction.set(transactionRef, {
                         uid: request.uid,
                         memberId: request.memberId || member.memberId || "",
-                        memberName: request.memberName || member.name || member.fullName || "",
+                        memberName: request.memberName ||
+                            member.name || member.fullName || "",
                         type: "Withdrawal",
                         amount: amount,
                         reference: request.reference || requestId,
                         status: "Approved",
                         createdAt: serverTimestamp()
                     });
-
                 });
 
                 alert("Withdrawal approved successfully.");
+            }
+
+            else {
+                throw new Error("Unknown withdrawal action: " + action);
             }
 
             await loadDashboard();
@@ -1000,7 +1155,6 @@ if (withdrawalBody) {
 
     });
   }
-
 
 /* ADMIN AUTHENTICATION */
 
