@@ -490,11 +490,11 @@ function renderWithdrawals() {
             <td>
               ${pending ? `
                 <button class="action approve-btn"
-                  data-action="approve"
+                  data-withdraw-action="approve"
                   data-id="${escapeHTML(w.id)}"
                   type="button">Approve</button>
                 <button class="action reject-btn"
-                  data-action="reject"
+                  data-withdraw-action="reject"
                   data-id="${escapeHTML(w.id)}"
                   type="button">Reject</button>
               ` : "-"}
