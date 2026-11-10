@@ -246,20 +246,19 @@ $("submitBtn").addEventListener("click",async()=>{
   const already=await loadExistingRequest();
   if(already)return;
 
-  const requestData={
-   uid:currentUser.uid,
-   memberId:memberData.memberId||"",
-   memberName:memberData.name||memberData.fullName||"",
-   email:currentUser.email||"",
-   plan:String(plan),
-   amount:amount,
-   displayedProfit:profit,
-   displayedTotal:total,
-   transactionReference:utr,
-   utr:utr,
-   status:"Pending Verification",
-   submittedAt:serverTimestamp()
-  };
+ const requestData = {
+    uid: currentUser.uid,
+    memberId: memberData.memberId || "",
+    memberName: memberData.name || memberData.fullName || "",
+    email: currentUser.email || "",
+    plan: String(plan),
+    amount: amount,
+    displayedProfit: profit,
+    displayedTotal: total,
+    transactionReference: utr,
+    status: "Pending Verification",
+    submittedAt: serverTimestamp()
+};
 
   const ref=await addDoc(collection(db,"paymentRequests"),requestData);
 
