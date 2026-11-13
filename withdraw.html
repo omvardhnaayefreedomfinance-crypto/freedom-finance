@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,6 +127,9 @@ import {
  collection,query,where,getDocs,addDoc,serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
+// EMAILJS IMPORT
+import emailjs from "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm";
+
 const firebaseConfig = {
  apiKey:"AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
  authDomain:"omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
@@ -140,6 +144,14 @@ const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
 
+// EMAILJS CONFIGURATION
+emailjs.init({
+ publicKey:"SAmSsALw6yYlMlWvc"
+});
+
+const EMAIL_SERVICE_ID="service_lptnngm";
+const EMAIL_TEMPLATE_ID="template_uxr5ged";
+
 const $=id=>document.getElementById(id);
 let currentUser=null;
 let memberData=null;
@@ -151,9 +163,11 @@ function message(id,text,type="info"){
  el.textContent=text;
  el.className="message "+type;
 }
+
 function money(v){
  return "₹"+Number(v||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
+
 function asDate(v){
  if(!v)return null;
  if(v.toDate)return v.toDate();
@@ -161,10 +175,12 @@ function asDate(v){
  const d=new Date(v);
  return isNaN(d.getTime())?null:d;
 }
+
 function dateText(v){
  const d=asDate(v);
  return d?d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"Not available";
 }
+
 function addMonths(date,months){
  const d=new Date(date);
  const day=d.getDate();
@@ -174,6 +190,7 @@ function addMonths(date,months){
  d.setDate(Math.min(day,last));
  return d;
 }
+
 function durationMonths(item){
  if(Number(item.durationMonths)>0)return Number(item.durationMonths);
  if(Number(item.planDurationMonths)>0)return Number(item.planDurationMonths);
@@ -182,6 +199,7 @@ function durationMonths(item){
  if(match)return Number(match[1])*(match[2].startsWith("year")?12:1);
  return 12;
 }
+
 function escapeHTML(s){
  return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
@@ -352,8 +370,11 @@ $("withdrawalForm").addEventListener("submit",async e=>{
  }
 
  $("submitWithdrawalBtn").disabled=true;
+
  try{
   const reference="WD"+Date.now();
+
+  // FIRST SAVE REQUEST IN FIRESTORE
   await addDoc(collection(db,"withdrawalRequests"),{
    uid:currentUser.uid,
    memberId:memberData.memberId||"",
@@ -368,9 +389,40 @@ $("withdrawalForm").addEventListener("submit",async e=>{
    createdAt:serverTimestamp()
   });
 
-  message("withdrawalMessage","Request submitted successfully. Reference: "+reference,"success");
+  // THEN SEND EMAIL CONFIRMATION
+  let emailStatus="";
+
+  try{
+   await emailjs.send(
+    EMAIL_SERVICE_ID,
+    EMAIL_TEMPLATE_ID,
+    {
+     to_email:currentUser.email||"",
+     member_name:memberData.name||memberData.fullName||"",
+     member_id:memberData.memberId||"",
+     withdrawal_amount:money(amount),
+     withdrawal_method:method,
+     reference:reference,
+     status:"Pending"
+    }
+   );
+
+   emailStatus=" Confirmation email sent successfully.";
+
+  }catch(emailError){
+   console.error("EmailJS Error:",emailError);
+   emailStatus=" Request saved, but confirmation email could not be sent.";
+  }
+
+  message(
+   "withdrawalMessage",
+   "Request submitted successfully. Reference: "+reference+emailStatus,
+   "success"
+  );
+
   $("withdrawalForm").reset();
   await loadHistory();
+
  }catch(e){
   console.error(e);
   message("withdrawalMessage","Request failed: "+e.message,"error");
@@ -391,6 +443,7 @@ onAuthStateChanged(auth,async user=>{
  }
 
  currentUser=user;
+
  try{
   await loadMember(user);
   await loadInvestment();
@@ -402,5 +455,5 @@ onAuthStateChanged(auth,async user=>{
 });
 </script>
 </body>
-                                                    </html>
- 
+                                                                                         </html>
+                                                 
