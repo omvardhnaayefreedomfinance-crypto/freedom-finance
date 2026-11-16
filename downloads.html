@@ -1,924 +1,721 @@
+HTML
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Downloads - Freedom Finance</title>
+<title>Freedom Finance - Downloads</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#080808;color:#fff;min-height:100vh}
-.header{background:#111;border-bottom:1px solid #333;padding:18px 15px;text-align:center}
-.header h1{color:#f5b400;font-size:25px}
-.header p{color:#aaa;font-size:13px;margin-top:5px}
-.container{width:94%;max-width:950px;margin:25px auto}
-.card{background:#111;border:1px solid #333;border-radius:14px;padding:20px;margin-bottom:20px}
-.card-title{color:#f5b400;font-size:19px;font-weight:bold;margin-bottom:16px}
-.member{color:#aaa;font-size:13px;margin-bottom:18px}
-.item{background:#181818;border:1px solid #333;border-radius:10px;padding:15px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.item h3{font-size:15px;color:#fff;margin-bottom:5px}
-.item p{font-size:12px;color:#999;line-height:1.5}
-.btn{display:inline-block;border:0;border-radius:7px;padding:12px 15px;background:#f5b400;color:#000;font-weight:bold;text-decoration:none;cursor:pointer;font-size:13px;white-space:nowrap}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.dark{background:#222;color:#fff;border:1px solid #444}
-.back{display:inline-block;color:#f5b400;text-decoration:none;margin-bottom:16px;font-size:13px}
-#notice{display:none;padding:12px;border-radius:8px;margin-bottom:15px;font-size:13px;overflow-wrap:anywhere}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:15px;
+  background:#080808;
+  color:#eee;
+  font-family:Arial,sans-serif;
+}
+.container{max-width:1050px;margin:auto}
+.header{
+  text-align:center;
+  padding:20px 10px;
+  border-bottom:1px solid #b58b35;
+  margin-bottom:20px;
+}
+h1,h2{color:#d6ad52}
+h1{font-size:25px}
+h2{font-size:19px}
+.card{
+  background:#151515;
+  border:1px solid #6f5425;
+  border-radius:10px;
+  padding:16px;
+  margin:16px 0;
+}
+button,.btn{
+  display:inline-block;
+  background:#c49a43;
+  color:#111;
+  border:0;
+  border-radius:6px;
+  padding:11px 15px;
+  font-weight:bold;
+  cursor:pointer;
+  text-decoration:none;
+  margin:5px 3px;
+}
+button:disabled{opacity:.5;cursor:not-allowed}
+.secondary{background:#333;color:white}
+.danger{background:#8c2929;color:white}
+input[type=checkbox]{width:18px;height:18px;vertical-align:middle}
+.notice{
+  background:#29220f;
+  border:1px solid #94732f;
+  padding:12px;
+  border-radius:7px;
+  line-height:1.5;
+}
+.status{font-weight:bold;color:#e5bd60}
+.small{font-size:13px;color:#bbb;line-height:1.5}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{
+  border:1px solid #444;
+  padding:9px;
+  text-align:left;
+  font-size:13px;
+}
+th{background:#29220f;color:#e5bd60}
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:600px}
-th,td{padding:12px 9px;border-bottom:1px solid #333;text-align:left;font-size:12px}
-th{color:#f5b400;background:#181818}
-td{color:#ddd}
-.empty{text-align:center;color:#999;padding:20px}
-.note{color:#888;font-size:12px;line-height:1.6;margin-top:12px}
-.status{color:#86efac}
-@media(max-width:550px){
- .container{margin:15px auto}
- .card{padding:15px}
- .item{align-items:flex-start;flex-direction:column}
- .btn{width:100%;text-align:center;white-space:normal}
+.empty{color:#aaa;text-align:center;padding:15px}
+#message{padding:12px;margin:10px 0;border-radius:6px}
+.hidden{display:none}
+label{line-height:1.6}
+hr{border:0;border-top:1px solid #444;margin:15px 0}
+@media(max-width:600px){
+  body{padding:9px}
+  .card{padding:12px}
+  th,td{font-size:12px;padding:7px}
 }
 </style>
 </head>
 
 <body>
-
-<div class="header">
- <h1>FREEDOM FINANCE</h1>
- <p>MEMBER DOWNLOAD CENTER</p>
-</div>
-
 <div class="container">
 
-<a href="member-dashboard.html" class="back">← Back to Dashboard</a>
+<div class="header">
+  <h1>FREEDOM FINANCE</h1>
+  <p>MEMBER DOWNLOAD CENTER</p>
+  <a class="btn secondary" href="./member-dashboard.html">Back to Dashboard</a>
+</div>
 
-<div id="notice"></div>
+<div id="message">Checking member login...</div>
 
-<div class="card">
- <div class="card-title">MY DOWNLOADS</div>
+<div id="mainContent" class="hidden">
 
- <div class="member">
-  Logged in as: <strong id="memberEmail">Loading...</strong>
- </div>
-
- <div class="item">
-  <div>
-   <h3>📘 Freedom Finance Whitepaper</h3>
-   <p>Official project whitepaper PDF</p>
+  <div class="card">
+    <h2>Member Details</h2>
+    <div id="memberDetails">Loading member details...</div>
   </div>
-  <a class="btn"
-     href="Assets/1542/1542/1552/Freedom_Finance_Whitepaper.pdf"
-     download>
-   DOWNLOAD WHITEPAPER
-  </a>
- </div>
 
- <div class="item">
-  <div>
-   <h3>📄 Complete Member Report</h3>
-   <p>One PDF containing your profile, plans, investments, payments, UTR, transactions and withdrawals.</p>
+  <div class="card">
+    <h2>1. Whitepaper</h2>
+    <p class="small">Download the official Freedom Finance whitepaper.</p>
+    <a class="btn"
+       href="Assets/1542/1542/1552/Freedom_Finance_Whitepaper.pdf"
+       target="_blank" rel="noopener">
+       DOWNLOAD WHITEPAPER
+    </a>
   </div>
-  <button class="btn" id="completePdfBtn" type="button" disabled>
-   DOWNLOAD COMPLETE MEMBER PDF
-  </button>
- </div>
 
- <p class="note">
-  Your complete report is prepared from records belonging to your logged-in member account.
-  Use Save as PDF in the print window to save the document.
- </p>
+  <div class="card">
+    <h2>2. Payment Undertaking / Agreement</h2>
+
+    <div class="notice">
+      If the Admin has paid an investment amount on your behalf from the
+      funding account, the undertaking details will appear here.
+      Please read the agreement carefully before accepting it.
+    </div>
+
+    <div id="undertakingList">
+      <p class="empty">Loading undertaking records...</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. Complete Member Report</h2>
+    <p class="small">
+      Your member details, investment records, payment history,
+      transactions and withdrawal history will be included.
+    </p>
+    <button id="completePdfBtn" onclick="downloadCompleteReport()" disabled>
+      DOWNLOAD COMPLETE MEMBER PDF
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>4. Payment History</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Plan</th>
+            <th>Amount</th>
+            <th>UTR / Reference</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="paymentRows">
+          <tr><td colspan="5" class="empty">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>5. Investment History</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>Amount</th>
+            <th>Profit</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Maturity</th>
+          </tr>
+        </thead>
+        <tbody id="investmentRows">
+          <tr><td colspan="6" class="empty">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>6. Transaction History</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody id="transactionRows">
+          <tr><td colspan="4" class="empty">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>7. Withdrawal History</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Reference</th>
+          </tr>
+        </thead>
+        <tbody id="withdrawalRows">
+          <tr><td colspan="4" class="empty">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
-
-
-<div class="card">
- <div class="card-title">MY PAYMENT RECORDS</div>
-
- <div class="table-wrap">
-  <table>
-   <thead>
-    <tr>
-     <th>Plan</th>
-     <th>Amount</th>
-     <th>UTR / Reference</th>
-     <th>Date</th>
-     <th>Status</th>
-    </tr>
-   </thead>
-   <tbody id="paymentBody">
-    <tr><td colspan="5" class="empty">Loading payment records...</td></tr>
-   </tbody>
-  </table>
- </div>
 </div>
-
-
-<div class="card">
- <div class="card-title">MY TRANSACTION HISTORY</div>
-
- <div class="table-wrap">
-  <table>
-   <thead>
-    <tr>
-     <th>Date</th>
-     <th>Type</th>
-     <th>Amount</th>
-     <th>Reference</th>
-     <th>Status</th>
-    </tr>
-   </thead>
-   <tbody id="transactionBody">
-    <tr><td colspan="5" class="empty">Loading transactions...</td></tr>
-   </tbody>
-  </table>
- </div>
-</div>
-
-
-<div class="card">
- <div class="card-title">MY WITHDRAWAL HISTORY</div>
-
- <div class="table-wrap">
-  <table>
-   <thead>
-    <tr>
-     <th>Date</th>
-     <th>Amount</th>
-     <th>Method</th>
-     <th>Reference</th>
-     <th>Status</th>
-    </tr>
-   </thead>
-   <tbody id="withdrawalBody">
-    <tr><td colspan="5" class="empty">Loading withdrawal records...</td></tr>
-   </tbody>
-  </table>
- </div>
-</div>
-
-</div>
-
 
 <script type="module">
-
-import {initializeApp}
-from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
 import {
- getAuth,
- onAuthStateChanged
+  getAuth,
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 import {
- getFirestore,
- doc,
- getDoc,
- collection,
- query,
- where,
- getDocs
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-
 const firebaseConfig = {
- apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
- authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
- projectId: "omvardhnaayefreedomfinan-efaf4",
- storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
- messagingSenderId: "552483514216",
- appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
- measurementId: "G-6MPELL55BD"
+  apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+  authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+  projectId: "omvardhnaayefreedomfinan-efaf4",
+  storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+  messagingSenderId: "552483514216",
+  appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+  measurementId: "G-6MPELL55BD"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const $ = id => document.getElementById(id);
-
 let currentUser = null;
 let memberData = {};
+let paymentData = [];
+let investmentData = [];
+let transactionData = [];
+let withdrawalData = [];
+let undertakingData = [];
 
-let paymentRecords = [];
-let transactionRecords = [];
-let investmentRecords = [];
-let withdrawalRecords = [];
+const message = document.getElementById("message");
 
-
-function showNotice(message,error=false){
-
- const box=$("notice");
-
- box.style.display="block";
- box.style.background=error?"#451a1a":"#142b20";
- box.style.color=error?"#fecaca":"#bbf7d0";
- box.textContent=message;
+function showMessage(text, error=false){
+  message.textContent = text;
+  message.style.background = error ? "#572020" : "#202020";
+  message.style.color = error ? "#ffbaba" : "#eee";
 }
 
-
-function money(value){
-
- const number=Number(value);
-
- if(!Number.isFinite(number))return "₹0.00";
-
- return "₹"+number.toLocaleString("en-IN",{
-  minimumFractionDigits:2,
-  maximumFractionDigits:2
- });
+function safe(value){
+  if(value === undefined || value === null || value === "") return "—";
+  return String(value);
 }
-
 
 function dateValue(value){
-
- if(!value)return "—";
-
- let date;
-
- if(typeof value.toDate==="function"){
-  date=value.toDate();
- }else if(value instanceof Date){
-  date=value;
- }else if(typeof value==="number"){
-  date=new Date(value);
- }else{
-  date=new Date(value);
- }
-
- if(isNaN(date.getTime()))return "—";
-
- return date.toLocaleDateString("en-IN");
+  if(!value) return "—";
+  if(value.toDate) return value.toDate().toLocaleDateString("en-IN");
+  const d = new Date(value);
+  return isNaN(d) ? String(value) : d.toLocaleDateString("en-IN");
 }
 
-
-function timestampValue(value){
-
- if(!value)return 0;
-
- if(typeof value.toDate==="function"){
-  return value.toDate().getTime();
- }
-
- const d=new Date(value);
-
- return isNaN(d.getTime())?0:d.getTime();
+function amount(value){
+  const n = Number(value);
+  return Number.isFinite(n) ? "₹" + n.toLocaleString("en-IN") : "—";
 }
 
-
-function escapeHTML(value){
-
- return String(value??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- })[c]);
+function escapeHtml(value){
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 }
 
-
-function valueOrDash(value){
-
- if(value===undefined || value===null || value===""){
-  return "—";
- }
-
- return String(value);
+async function getMemberCollection(collectionName){
+  const q = query(
+    collection(db, collectionName),
+    where("uid", "==", currentUser.uid)
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({id:d.id, ...d.data()}));
 }
 
+async function loadMember(){
+  const snap = await getDoc(doc(db, "members", currentUser.uid));
+  if(!snap.exists()) throw new Error("Member profile not found.");
+  memberData = snap.data();
 
-function sortedRecords(records,...dateFields){
-
- return [...records].sort((a,b)=>{
-
-  const getTime=item=>{
-
-   for(const field of dateFields){
-    if(item[field]){
-     return timestampValue(item[field]);
-    }
-   }
-
-   return 0;
-  };
-
-  return getTime(b)-getTime(a);
- });
+  document.getElementById("memberDetails").innerHTML = `
+    <p><b>Name:</b> ${escapeHtml(safe(memberData.name))}</p>
+    <p><b>Member ID:</b> ${escapeHtml(safe(memberData.memberId))}</p>
+    <p><b>Email:</b> ${escapeHtml(safe(currentUser.email))}</p>
+    <p><b>Mobile:</b> ${escapeHtml(safe(memberData.mobile))}</p>
+    <p><b>Account Status:</b>
+      <span class="status">${escapeHtml(safe(memberData.status))}</span>
+    </p>
+    <p><b>Investment:</b> ${amount(memberData.investment)}</p>
+    <p><b>Total Investment:</b> ${amount(memberData.totalInvestment)}</p>
+    <p><b>Available Balance:</b> ${amount(memberData.availableBalance)}</p>
+    <p><b>Joining Date:</b> ${dateValue(memberData.joinDate || memberData.createdAt)}</p>
+  `;
 }
-
-
-// Only authenticated member's own records are queried.
-async function getMemberRecords(collectionName){
-
- const q=query(
-  collection(db,collectionName),
-  where("uid","==",currentUser.uid)
- );
-
- const snap=await getDocs(q);
-
- return snap.docs.map(d=>({
-  id:d.id,
-  ...d.data()
- }));
-}
-
 
 function renderPayments(){
+  const body = document.getElementById("paymentRows");
+  if(!paymentData.length){
+    body.innerHTML = `<tr><td colspan="5" class="empty">No payment records found.</td></tr>`;
+    return;
+  }
 
- const body=$("paymentBody");
-
- const records=sortedRecords(
-  paymentRecords,
-  "submittedAt",
-  "createdAt",
-  "date"
- );
-
- if(!records.length){
-
-  body.innerHTML=
-   '<tr><td colspan="5" class="empty">No payment records found.</td></tr>';
-
-  return;
- }
-
- body.innerHTML=records.map(item=>`
-
-  <tr>
-   <td>${escapeHTML(valueOrDash(item.plan))}</td>
-   <td>${escapeHTML(money(item.amount))}</td>
-   <td>${escapeHTML(item.transactionReference||item.utr||"—")}</td>
-   <td>${escapeHTML(dateValue(item.submittedAt||item.createdAt||item.date))}</td>
-   <td>${escapeHTML(valueOrDash(item.status))}</td>
-  </tr>
-
- `).join("");
+  body.innerHTML = paymentData.map(p => `
+    <tr>
+      <td>${escapeHtml(dateValue(p.submittedAt || p.createdAt))}</td>
+      <td>${escapeHtml(safe(p.plan))}</td>
+      <td>${escapeHtml(amount(p.amount))}</td>
+      <td>${escapeHtml(safe(p.transactionReference))}</td>
+      <td>${escapeHtml(safe(p.status))}</td>
+    </tr>
+  `).join("");
 }
 
+function renderInvestments(){
+  const body = document.getElementById("investmentRows");
+  if(!investmentData.length){
+    body.innerHTML = `<tr><td colspan="6" class="empty">No investment records found.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = investmentData.map(p => `
+    <tr>
+      <td>${escapeHtml(safe(p.plan))}</td>
+      <td>${escapeHtml(amount(p.amount))}</td>
+      <td>${escapeHtml(amount(p.profit))}</td>
+      <td>${escapeHtml(amount(p.totalAmount))}</td>
+      <td>${escapeHtml(safe(p.status))}</td>
+      <td>${escapeHtml(dateValue(p.maturityDate))}</td>
+    </tr>
+  `).join("");
+}
 
 function renderTransactions(){
+  const body = document.getElementById("transactionRows");
+  if(!transactionData.length){
+    body.innerHTML = `<tr><td colspan="4" class="empty">No transaction records found.</td></tr>`;
+    return;
+  }
 
- const body=$("transactionBody");
-
- const records=sortedRecords(
-  transactionRecords,
-  "createdAt",
-  "date",
-  "submittedAt"
- );
-
- if(!records.length){
-
-  body.innerHTML=
-   '<tr><td colspan="5" class="empty">No transaction records found.</td></tr>';
-
-  return;
- }
-
- body.innerHTML=records.map(item=>`
-
-  <tr>
-   <td>${escapeHTML(dateValue(item.createdAt||item.date||item.submittedAt))}</td>
-   <td>${escapeHTML(item.type||item.transactionType||item.plan||"Transaction")}</td>
-   <td>${escapeHTML(money(item.amount))}</td>
-   <td>${escapeHTML(item.reference||item.transactionReference||item.utr||"—")}</td>
-   <td>${escapeHTML(item.status||"—")}</td>
-  </tr>
-
- `).join("");
+  body.innerHTML = transactionData.map(t => `
+    <tr>
+      <td>${escapeHtml(dateValue(t.createdAt || t.date))}</td>
+      <td>${escapeHtml(safe(t.type))}</td>
+      <td>${escapeHtml(amount(t.amount))}</td>
+      <td>${escapeHtml(safe(t.description || t.note))}</td>
+    </tr>
+  `).join("");
 }
-
 
 function renderWithdrawals(){
+  const body = document.getElementById("withdrawalRows");
+  if(!withdrawalData.length){
+    body.innerHTML = `<tr><td colspan="4" class="empty">No withdrawal records found.</td></tr>`;
+    return;
+  }
 
- const body=$("withdrawalBody");
-
- const records=sortedRecords(
-  withdrawalRecords,
-  "createdAt",
-  "submittedAt",
-  "date"
- );
-
- if(!records.length){
-
-  body.innerHTML=
-   '<tr><td colspan="5" class="empty">No withdrawal records found.</td></tr>';
-
-  return;
- }
-
- body.innerHTML=records.map(item=>`
-
-  <tr>
-   <td>${escapeHTML(dateValue(item.createdAt||item.submittedAt||item.date))}</td>
-   <td>${escapeHTML(money(item.amount))}</td>
-   <td>${escapeHTML(item.method||"—")}</td>
-   <td>${escapeHTML(item.reference||item.transactionReference||"—")}</td>
-   <td>${escapeHTML(item.status||"—")}</td>
-  </tr>
-
- `).join("");
+  body.innerHTML = withdrawalData.map(w => `
+    <tr>
+      <td>${escapeHtml(dateValue(w.createdAt || w.requestedAt))}</td>
+      <td>${escapeHtml(amount(w.amount))}</td>
+      <td>${escapeHtml(safe(w.status))}</td>
+      <td>${escapeHtml(safe(w.transactionReference || w.reference))}</td>
+    </tr>
+  `).join("");
 }
 
+/*
+  UNDERTAKING DOCUMENT EXPECTED FIELDS:
+  uid, memberId, memberName, fundingAmount, fundingDate,
+  fundingReference, repaymentMonths, dueDate, plan,
+  status, terms, createdAt
 
-function profileRows(){
+  status examples:
+  Pending Acceptance, Accepted, Paid, Cancelled
+*/
 
- const bank=memberData.bankDetails||{};
+function renderUndertakings(){
+  const box = document.getElementById("undertakingList");
 
- const fields=[
+  if(!undertakingData.length){
+    box.innerHTML = `<p class="empty">No payment undertaking has been issued for your account.</p>`;
+    return;
+  }
 
-  ["Member Name",memberData.name||memberData.fullName],
-  ["Member ID",memberData.memberId],
-  ["Email",currentUser.email],
-  ["Mobile",memberData.mobile],
-  ["Address",memberData.address],
-  ["Joining Date",dateValue(memberData.joinDate||memberData.createdAt)],
-  ["Account Status",memberData.status],
-  ["Email Verified",currentUser.emailVerified?"Yes":"No"],
+  box.innerHTML = undertakingData.map(u => {
+    const isAccepted = u.accepted === true || u.status === "Accepted";
+    const isPaid = u.status === "Paid";
+    const isCancelled = u.status === "Cancelled";
 
-  ["Plan",memberData.planName||memberData.plan],
-  ["Investment",money(memberData.investment)],
-  ["Total Investment",money(memberData.totalInvestment)],
-  ["Profit",money(memberData.profit)],
-  ["Available Balance",money(memberData.availableBalance)],
-  ["Total Withdrawal",money(memberData.totalWithdrawal)],
+    let statusText = u.status || "Pending Acceptance";
+    let action = "";
 
-  ["Referral ID",memberData.myReferralId],
-  ["Referred By",memberData.referredBy],
+    if(!isAccepted && !isPaid && !isCancelled){
+      action = `
+        <div class="notice">
+          <p><b>Member Declaration</b></p>
+          <p>
+            I confirm that I have read this payment undertaking.
+            I understand that the amount shown was paid on my behalf
+            by the Admin from the funding account. I agree to repay
+            the stated amount by the recorded due date.
+          </p>
+          <label>
+            <input type="checkbox" id="accept-${escapeHtml(u.id)}">
+            I have read and agree to this undertaking.
+          </label>
+          <br>
+          <button onclick="acceptUndertaking('${escapeHtml(u.id)}')">
+            ACCEPT UNDERTAKING
+          </button>
+        </div>
+      `;
+    } else if(isAccepted){
+      action = `<p class="status">Your acceptance has been recorded.</p>`;
+    } else if(isPaid){
+      action = `<p class="status">Payment marked as completed by Admin.</p>`;
+    } else if(isCancelled){
+      action = `<p class="status">This undertaking has been cancelled by Admin.</p>`;
+    }
 
-  ["Bank Account Holder",bank.accountHolder],
-  ["Bank Name",bank.bankName],
-  ["Bank Account Number",bank.accountNumber],
-  ["IFSC",bank.ifsc||bank.ifscCode],
-  ["Account Type",bank.accountType],
-  ["UPI ID",bank.upiId]
-
- ];
-
- return fields.map(([label,value])=>`
-
-  <tr>
-   <th>${escapeHTML(label)}</th>
-   <td>${escapeHTML(
-    value instanceof Date ? dateValue(value) : valueOrDash(value)
-   )}</td>
-  </tr>
-
- `).join("");
+    return `
+      <div class="card" style="background:#101010">
+        <h2>Payment Undertaking</h2>
+        <p><b>Agreement ID:</b> ${escapeHtml(u.id)}</p>
+        <p><b>Member:</b> ${escapeHtml(safe(u.memberName || memberData.name))}</p>
+        <p><b>Member ID:</b> ${escapeHtml(safe(u.memberId || memberData.memberId))}</p>
+        <p><b>Plan:</b> ${escapeHtml(safe(u.plan))}</p>
+        <p><b>Amount paid by Admin:</b> ${escapeHtml(amount(u.fundingAmount))}</p>
+        <p><b>Funding date:</b> ${escapeHtml(dateValue(u.fundingDate))}</p>
+        <p><b>Funding reference:</b> ${escapeHtml(safe(u.fundingReference))}</p>
+        <p><b>Repayment period:</b> ${escapeHtml(safe(u.repaymentMonths))} month(s)</p>
+        <p><b>Repayment deadline:</b> ${escapeHtml(dateValue(u.dueDate))}</p>
+        <p><b>Undertaking status:</b> <span class="status">${escapeHtml(statusText)}</span></p>
+        <hr>
+        <p><b>Agreement Terms</b></p>
+        <p style="white-space:pre-wrap">${escapeHtml(safe(u.terms))}</p>
+        ${action}
+        <button onclick="printUndertaking('${escapeHtml(u.id)}')">
+          DOWNLOAD UNDERTAKING PDF
+        </button>
+      </div>
+    `;
+  }).join("");
 }
 
+window.acceptUndertaking = async function(id){
+  const checkbox = document.getElementById("accept-" + id);
+  if(!checkbox || !checkbox.checked){
+    alert("Please read and accept the undertaking first.");
+    return;
+  }
 
-function paymentPDFRows(){
+  const item = undertakingData.find(x => x.id === id);
+  if(!item) return;
 
- const records=sortedRecords(
-  paymentRecords,
-  "submittedAt",
-  "createdAt",
-  "date"
- );
-
- if(!records.length){
-
-  return '<tr><td colspan="6">No payment records found</td></tr>';
- }
-
- return records.map(item=>`
-
-  <tr>
-   <td>${escapeHTML(item.plan||"—")}</td>
-   <td>${escapeHTML(money(item.amount))}</td>
-   <td>${escapeHTML(item.transactionReference||item.utr||"—")}</td>
-   <td>${escapeHTML(dateValue(item.submittedAt||item.createdAt||item.date))}</td>
-   <td>${escapeHTML(item.status||"—")}</td>
-   <td>${escapeHTML(item.id)}</td>
-  </tr>
-
- `).join("");
-}
-
-
-function investmentPDFRows(){
-
- const records=sortedRecords(
-  investmentRecords,
-  "startDate",
-  "investmentDate",
-  "createdAt"
- );
-
- if(!records.length){
-
-  return '<tr><td colspan="7">No investment records found</td></tr>';
- }
-
- return records.map(item=>`
-
-  <tr>
-   <td>${escapeHTML(item.plan||"—")}</td>
-   <td>${escapeHTML(money(item.amount))}</td>
-   <td>${escapeHTML(money(item.profit))}</td>
-   <td>${escapeHTML(money(
-    item.totalAmount??item.expectedTotal??
-    (Number(item.amount||0)+Number(item.profit||0))
-   ))}</td>
-   <td>${escapeHTML(dateValue(item.startDate||item.investmentDate||item.createdAt))}</td>
-   <td>${escapeHTML(dateValue(item.maturityDate))}</td>
-   <td>${escapeHTML(item.status||"—")}</td>
-  </tr>
-
- `).join("");
-}
-
-
-function transactionPDFRows(){
-
- const records=sortedRecords(
-  transactionRecords,
-  "createdAt",
-  "date",
-  "submittedAt"
- );
-
- if(!records.length){
-
-  return '<tr><td colspan="5">No transaction records found</td></tr>';
- }
-
- return records.map(item=>`
-
-  <tr>
-   <td>${escapeHTML(dateValue(item.createdAt||item.date||item.submittedAt))}</td>
-   <td>${escapeHTML(item.type||item.transactionType||item.plan||"Transaction")}</td>
-   <td>${escapeHTML(money(item.amount))}</td>
-   <td>${escapeHTML(item.reference||item.transactionReference||item.utr||"—")}</td>
-   <td>${escapeHTML(item.status||"—")}</td>
-  </tr>
-
- `).join("");
-}
-
-
-function withdrawalPDFRows(){
-
- const records=sortedRecords(
-  withdrawalRecords,
-  "createdAt",
-  "submittedAt",
-  "date"
- );
-
- if(!records.length){
-
-  return '<tr><td colspan="5">No withdrawal records found</td></tr>';
- }
-
- return records.map(item=>`
-
-  <tr>
-   <td>${escapeHTML(dateValue(item.createdAt||item.submittedAt||item.date))}</td>
-   <td>${escapeHTML(money(item.amount))}</td>
-   <td>${escapeHTML(item.method||"—")}</td>
-   <td>${escapeHTML(item.reference||item.transactionReference||"—")}</td>
-   <td>${escapeHTML(item.status||"—")}</td>
-  </tr>
-
- `).join("");
-}
-
-
-// Build one complete PDF containing all member records.
-function downloadCompletePDF(){
-
- if(!currentUser || !memberData){
-
-  showNotice("Member details are not loaded yet.",true);
-  return;
- }
-
- // Open the print window directly from the button click.
- const printWindow=window.open("","_blank");
-
- if(!printWindow){
-
-  showNotice(
-   "Please allow pop-ups for this website, then try again.",
-   true
+  const confirmAccept = confirm(
+    "Do you confirm that you have read and agree to this undertaking?"
   );
+  if(!confirmAccept) return;
 
-  return;
- }
+  try{
+    await updateDoc(doc(db, "paymentUndertakings", id), {
+      accepted: true,
+      status: "Accepted",
+      acceptedAt: serverTimestamp(),
+      acceptedBy: currentUser.uid,
+      acceptanceText:
+        "I have read and agree to this payment undertaking."
+    });
 
- const content=`
+    item.accepted = true;
+    item.status = "Accepted";
+    renderUndertakings();
+    alert("Your acceptance has been recorded.");
+  }catch(error){
+    console.error(error);
+    alert("Acceptance failed: " + error.message);
+  }
+};
 
-  <h2>1. MEMBER PROFILE AND ACCOUNT DETAILS</h2>
+function undertakingHtml(u){
+  return `
+  <html>
+  <head>
+    <title>Payment Undertaking</title>
+    <style>
+      body{font-family:Arial,sans-serif;color:#111;padding:35px;line-height:1.6}
+      h1,h2{text-align:center}
+      .line{margin-top:35px}
+      .sign{display:flex;justify-content:space-between;margin-top:70px}
+      .sign div{width:40%;border-top:1px solid #222;padding-top:8px}
+      .small{font-size:12px;color:#555}
+    </style>
+  </head>
+  <body>
+    <h1>FREEDOM FINANCE</h1>
+    <h2>PAYMENT UNDERTAKING</h2>
+    <hr>
+    <p><b>Agreement ID:</b> ${escapeHtml(u.id)}</p>
+    <p><b>Member Name:</b> ${escapeHtml(u.memberName || memberData.name)}</p>
+    <p><b>Member ID:</b> ${escapeHtml(u.memberId || memberData.memberId)}</p>
+    <p><b>Registered Email:</b> ${escapeHtml(currentUser.email)}</p>
+    <p><b>Investment Plan:</b> ${escapeHtml(safe(u.plan))}</p>
+    <p><b>Amount paid by Admin:</b> ${escapeHtml(amount(u.fundingAmount))}</p>
+    <p><b>Funding Date:</b> ${escapeHtml(dateValue(u.fundingDate))}</p>
+    <p><b>Funding Reference:</b> ${escapeHtml(safe(u.fundingReference))}</p>
+    <p><b>Repayment Period:</b> ${escapeHtml(safe(u.repaymentMonths))} month(s)</p>
+    <p><b>Repayment Deadline:</b> ${escapeHtml(dateValue(u.dueDate))}</p>
+    <h3>Terms and Conditions</h3>
+    <p style="white-space:pre-wrap">${escapeHtml(safe(u.terms))}</p>
+    <h3>Member Declaration</h3>
+    <p>
+      I confirm that I have read this undertaking and agree to repay
+      the amount recorded above by the stated deadline. I understand
+      that the investment account may remain paused until the full
+      required investment amount has been received and verified by Admin.
+      The investment plan period will begin only after such verification
+      and activation, subject to the applicable plan terms.
+    </p>
+    <p><b>Acceptance Status:</b> ${escapeHtml(safe(u.status))}</p>
+    <p><b>Accepted At:</b> ${escapeHtml(dateValue(u.acceptedAt))}</p>
+    <p><b>Accepted By UID:</b> ${escapeHtml(safe(u.acceptedBy))}</p>
+    <div class="sign">
+      <div>Member Signature / Digital Acceptance</div>
+      <div>For Freedom Finance / Admin</div>
+    </div>
+    <p class="small">
+      This document records the undertaking details and electronic
+      acceptance stored by the platform. Legal enforceability, stamp
+      duty and signature requirements should be reviewed by an advocate.
+    </p>
+  </body>
+  </html>`;
+}
 
-  <table>
-   ${profileRows()}
-  </table>
+window.printUndertaking = function(id){
+  const u = undertakingData.find(x => x.id === id);
+  if(!u) return;
 
+  const win = window.open("", "_blank");
+  if(!win){
+    alert("Please allow pop-ups to download the PDF.");
+    return;
+  }
+  win.document.open();
+  win.document.write(undertakingHtml(u));
+  win.document.close();
+  win.onload = () => {
+    win.focus();
+    win.print();
+  };
+};
 
-  <h2>2. INVESTMENT AND PLAN RECORDS</h2>
+window.downloadCompleteReport = function(){
+  const win = window.open("", "_blank");
+  if(!win){
+    alert("Please allow pop-ups to download the PDF.");
+    return;
+  }
 
-  <table>
-   <tr>
-    <th>Plan</th>
-    <th>Investment</th>
-    <th>Profit</th>
-    <th>Total</th>
-    <th>Start Date</th>
-    <th>Maturity Date</th>
-    <th>Status</th>
-   </tr>
-   ${investmentPDFRows()}
-  </table>
+  const rows = (items, fields) => {
+    if(!items.length) return "<tr><td colspan='6'>No records</td></tr>";
+    return items.map(item => "<tr>" + fields.map(f =>
+      "<td>" + escapeHtml(f(item)) + "</td>"
+    ).join("") + "</tr>").join("");
+  };
 
-
-  <h2>3. PAYMENT RECORDS AND UTR DETAILS</h2>
-
-  <table>
-   <tr>
-    <th>Plan</th>
-    <th>Amount</th>
-    <th>UTR / Reference</th>
-    <th>Date</th>
-    <th>Status</th>
-    <th>Request ID</th>
-   </tr>
-   ${paymentPDFRows()}
-  </table>
-
-
-  <h2>4. COMPLETE TRANSACTION HISTORY</h2>
-
-  <table>
-   <tr>
-    <th>Date</th>
-    <th>Type</th>
-    <th>Amount</th>
-    <th>Reference</th>
-    <th>Status</th>
-   </tr>
-   ${transactionPDFRows()}
-  </table>
-
-
-  <h2>5. WITHDRAWAL HISTORY</h2>
-
-  <table>
-   <tr>
-    <th>Date</th>
-    <th>Amount</th>
-    <th>Method</th>
-    <th>Reference</th>
-    <th>Status</th>
-   </tr>
-   ${withdrawalPDFRows()}
-  </table>
-
-
-  <p class="disclaimer">
-   This report is generated from the records available in the
-   Freedom Finance member account at the time of generation.
-   Figures and statuses are shown as recorded in the account.
-   This report is not a tax invoice or bank-issued statement.
-  </p>
-
- `;
-
-
- printWindow.document.open();
-
- printWindow.document.write(`
-
- <!DOCTYPE html>
- <html>
- <head>
-  <title>Freedom Finance - Complete Member Report</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  const html = `
+  <html><head><title>Freedom Finance Member Report</title>
   <style>
+    body{font-family:Arial;padding:20px;color:#111}
+    h1,h2{text-align:center}
+    table{width:100%;border-collapse:collapse;margin:12px 0 25px}
+    th,td{border:1px solid #777;padding:7px;font-size:11px;text-align:left}
+    th{background:#eee}
+    p{font-size:12px}
+  </style></head><body>
+    <h1>FREEDOM FINANCE</h1>
+    <h2>COMPLETE MEMBER REPORT</h2>
+    <h3>Member Profile</h3>
+    <p><b>Name:</b> ${escapeHtml(safe(memberData.name))}</p>
+    <p><b>Member ID:</b> ${escapeHtml(safe(memberData.memberId))}</p>
+    <p><b>Email:</b> ${escapeHtml(safe(currentUser.email))}</p>
+    <p><b>Mobile:</b> ${escapeHtml(safe(memberData.mobile))}</p>
+    <p><b>Address:</b> ${escapeHtml(safe(memberData.address))}</p>
+    <p><b>Status:</b> ${escapeHtml(safe(memberData.status))}</p>
+    <p><b>Plan:</b> ${escapeHtml(safe(memberData.planName || memberData.plan))}</p>
+    <p><b>Investment:</b> ${escapeHtml(amount(memberData.investment))}</p>
+    <p><b>Total Investment:</b> ${escapeHtml(amount(memberData.totalInvestment))}</p>
+    <p><b>Profit:</b> ${escapeHtml(amount(memberData.profit))}</p>
+    <p><b>Available Balance:</b> ${escapeHtml(amount(memberData.availableBalance))}</p>
+    <p><b>Total Withdrawal:</b> ${escapeHtml(amount(memberData.totalWithdrawal))}</p>
+    <p><b>Referral ID:</b> ${escapeHtml(safe(memberData.myReferralId))}</p>
+    <p><b>Referred By:</b> ${escapeHtml(safe(memberData.referredBy))}</p>
 
-   *{box-sizing:border-box}
+    <h3>Payment History</h3>
+    <table><tr><th>Date</th><th>Plan</th><th>Amount</th><th>Reference</th><th>Status</th></tr>
+    ${rows(paymentData,[
+      x=>dateValue(x.submittedAt || x.createdAt),
+      x=>safe(x.plan),x=>amount(x.amount),
+      x=>safe(x.transactionReference),x=>safe(x.status)
+    ])}</table>
 
-   body{
-    font-family:Arial,sans-serif;
-    color:#222;
-    padding:25px;
-    font-size:12px;
-   }
+    <h3>Investment History</h3>
+    <table><tr><th>Plan</th><th>Amount</th><th>Profit</th><th>Total</th><th>Status</th><th>Maturity</th></tr>
+    ${rows(investmentData,[
+      x=>safe(x.plan),x=>amount(x.amount),x=>amount(x.profit),
+      x=>amount(x.totalAmount),x=>safe(x.status),x=>dateValue(x.maturityDate)
+    ])}</table>
 
-   h1{
-    color:#9a6900;
-    font-size:24px;
-    margin-bottom:5px;
-   }
+    <h3>Transaction History</h3>
+    <table><tr><th>Date</th><th>Type</th><th>Amount</th><th>Description</th></tr>
+    ${rows(transactionData,[
+      x=>dateValue(x.createdAt || x.date),x=>safe(x.type),
+      x=>amount(x.amount),x=>safe(x.description || x.note)
+    ])}</table>
 
-   .subtitle{
-    color:#555;
-    margin-bottom:20px;
-   }
+    <h3>Withdrawal History</h3>
+    <table><tr><th>Date</th><th>Amount</th><th>Status</th><th>Reference</th></tr>
+    ${rows(withdrawalData,[
+      x=>dateValue(x.createdAt || x.requestedAt),x=>amount(x.amount),
+      x=>safe(x.status),x=>safe(x.transactionReference || x.reference)
+    ])}</table>
 
-   h2{
-    font-size:15px;
-    margin:25px 0 10px;
-    color:#805900;
-    page-break-after:avoid;
-   }
+    <h3>Payment Undertakings</h3>
+    <table><tr><th>Agreement ID</th><th>Amount</th><th>Due Date</th><th>Status</th></tr>
+    ${rows(undertakingData,[
+      x=>x.id,x=>amount(x.fundingAmount),x=>dateValue(x.dueDate),x=>safe(x.status)
+    ])}</table>
 
-   table{
-    width:100%;
-    border-collapse:collapse;
-    margin-bottom:18px;
-    page-break-inside:auto;
-   }
+    <p>Generated for member UID: ${escapeHtml(currentUser.uid)}</p>
+  </body></html>`;
 
-   tr{
-    page-break-inside:avoid;
-   }
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  win.onload = () => {
+    win.focus();
+    win.print();
+  };
+};
 
-   th,td{
-    border:1px solid #ccc;
-    padding:8px;
-    text-align:left;
-    font-size:10px;
-    overflow-wrap:anywhere;
-   }
-
-   th{
-    background:#eee;
-   }
-
-   .disclaimer{
-    margin-top:25px;
-    line-height:1.6;
-    color:#555;
-   }
-
-   .footer{
-    margin-top:30px;
-    padding-top:10px;
-    border-top:1px solid #ccc;
-    font-size:10px;
-    color:#666;
-   }
-
-   @page{
-    size:A4;
-    margin:12mm;
-   }
-
-   @media print{
-    body{padding:0}
-   }
-
-  </style>
- </head>
-
- <body>
-
-  <h1>FREEDOM FINANCE</h1>
-
-  <p class="subtitle">
-   COMPLETE MEMBER ACCOUNT REPORT
-  </p>
-
-  <p>
-   <strong>Generated:</strong>
-   ${escapeHTML(new Date().toLocaleString("en-IN"))}
-  </p>
-
-  ${content}
-
-  <div class="footer">
-   Freedom Finance | Complete Member Report<br>
-   Member UID: ${escapeHTML(currentUser.uid)}
-  </div>
-
-  <script>
-   window.onload=function(){
-    setTimeout(function(){
-     window.focus();
-     window.print();
-    },700);
-   };
-  <\/script>
-
- </body>
- </html>
-
- `);
-
- printWindow.document.close();
-
- showNotice(
-  "Complete member report opened. Select Save as PDF in the print window."
- );
-}
-
-
-// Load all records for the logged-in member.
-async function loadDownloads(user){
-
- try{
-
-  if(!user.emailVerified){
-
-   showNotice(
-    "Please verify your email before accessing Downloads.",
-    true
-   );
-
-   return;
-  }
-
-  $("memberEmail").textContent=user.email||"—";
-
-  const memberSnap=await getDoc(
-   doc(db,"members",user.uid)
-  );
-
-  if(!memberSnap.exists()){
-
-   showNotice("Member profile not found.",true);
-   return;
-  }
-
-  memberData=memberSnap.data();
-
-  const results=await Promise.all([
-
-   getMemberRecords("paymentRequests"),
-
-   getMemberRecords("transactions"),
-
-   getMemberRecords("investments"),
-
-   getMemberRecords("withdrawalRequests")
-
+async function loadAllData(){
+  const results = await Promise.all([
+    getMemberCollection("paymentRequests"),
+    getMemberCollection("investments"),
+    getMemberCollection("transactions"),
+    getMemberCollection("withdrawalRequests"),
+    getMemberCollection("paymentUndertakings")
   ]);
 
-  paymentRecords=results[0];
-  transactionRecords=results[1];
-  investmentRecords=results[2];
-  withdrawalRecords=results[3];
+  [paymentData,investmentData,transactionData,withdrawalData,undertakingData] = results;
 
   renderPayments();
+  renderInvestments();
   renderTransactions();
   renderWithdrawals();
+  renderUndertakings();
 
-  $("completePdfBtn").disabled=false;
-
-  showNotice(
-   "Your complete member records are ready."
-  );
-
- }catch(error){
-
-  console.error("Downloads error:",error);
-
-  $("completePdfBtn").disabled=true;
-
-  if(error.code==="permission-denied"){
-
-   showNotice(
-    "Permission denied. Check Firestore read rules for paymentRequests, transactions, investments and withdrawalRequests.",
-    true
-   );
-
-  }else{
-
-   showNotice(
-    "Unable to load member records: "+error.message,
-    true
-   );
-
-  }
- }
+  document.getElementById("completePdfBtn").disabled = false;
 }
 
+onAuthStateChanged(auth, async user => {
+  if(!user){
+    window.location.href = "./member-login.html";
+    return;
+  }
 
-$("completePdfBtn").addEventListener(
- "click",
- downloadCompletePDF
-);
+  currentUser = user;
 
+  if(!user.emailVerified){
+    showMessage("Please verify your email before accessing Downloads.", true);
+    await signOut(auth);
+    window.location.href = "./member-login.html";
+    return;
+  }
 
-onAuthStateChanged(auth,user=>{
+  try{
+    await loadMember();
+    await loadAllData();
 
- if(!user){
-
-  window.location.replace("member-login.html");
-  return;
- }
-
- currentUser=user;
- loadDownloads(user);
-
+    document.getElementById("mainContent").classList.remove("hidden");
+    showMessage("Downloads loaded successfully.");
+  }catch(error){
+    console.error(error);
+    showMessage(
+      "Unable to load Downloads. Please check Firestore permissions. " +
+      error.message,
+      true
+    );
+  }
 });
-
 </script>
-
 </body>
-              </html>
- 
+</html>
