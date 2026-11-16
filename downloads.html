@@ -1,0 +1,568 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Downloads - Freedom Finance</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#080808;color:#fff;min-height:100vh}
+.header{background:#111;border-bottom:1px solid #333;padding:18px 15px;text-align:center}
+.header h1{color:#f5b400;font-size:25px}
+.header p{color:#aaa;font-size:13px;margin-top:5px}
+.container{width:94%;max-width:950px;margin:25px auto}
+.card{background:#111;border:1px solid #333;border-radius:14px;padding:20px;margin-bottom:20px}
+.card-title{color:#f5b400;font-size:19px;font-weight:bold;margin-bottom:16px}
+.member{color:#aaa;font-size:13px;margin-bottom:18px}
+.item{background:#181818;border:1px solid #333;border-radius:10px;padding:15px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.item h3{font-size:15px;color:#fff;margin-bottom:5px}
+.item p{font-size:12px;color:#999;line-height:1.5}
+.btn{display:inline-block;border:0;border-radius:7px;padding:11px 14px;background:#f5b400;color:#000;font-weight:bold;text-decoration:none;cursor:pointer;font-size:12px;white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.dark{background:#222;color:#fff;border:1px solid #444}
+.back{display:inline-block;color:#f5b400;text-decoration:none;margin-bottom:16px;font-size:13px}
+#notice{display:none;padding:12px;border-radius:8px;margin-bottom:15px;font-size:13px;overflow-wrap:anywhere}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th,td{padding:12px 9px;border-bottom:1px solid #333;text-align:left;font-size:12px}
+th{color:#f5b400;background:#181818}
+td{color:#ddd}
+.empty{text-align:center;color:#999;padding:20px}
+.status{color:#86efac}
+.note{color:#888;font-size:12px;line-height:1.6;margin-top:12px}
+@media(max-width:550px){
+.container{margin:15px auto}
+.card{padding:15px}
+.item{align-items:flex-start;flex-direction:column}
+.btn{width:100%;text-align:center}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>FREEDOM FINANCE</h1>
+<p>MEMBER DOWNLOAD CENTER</p>
+</div>
+
+<div class="container">
+
+<a href="member-dashboard.html" class="back">← Back to Dashboard</a>
+
+<div id="notice"></div>
+
+<div class="card">
+<div class="card-title">MY DOWNLOADS</div>
+<div class="member">
+Logged in as: <strong id="memberEmail">Loading...</strong>
+</div>
+
+<div class="item">
+<div>
+<h3>📘 Freedom Finance Whitepaper</h3>
+<p>Official project whitepaper PDF</p>
+</div>
+<a class="btn"
+href="Assets/1542/1542/1552/Freedom_Finance_Whitepaper.pdf"
+download>
+DOWNLOAD PDF
+</a>
+</div>
+
+<div class="item">
+<div>
+<h3>📄 Plan Details</h3>
+<p>Download your investment plan details as PDF</p>
+</div>
+<button class="btn" id="planBtn" type="button">
+DOWNLOAD PDF
+</button>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">MY PAYMENT RECEIPTS</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Plan</th>
+<th>Amount</th>
+<th>UTR / Reference</th>
+<th>Date</th>
+<th>Status</th>
+<th>Receipt</th>
+</tr>
+</thead>
+<tbody id="paymentBody">
+<tr><td colspan="6" class="empty">Loading payment records...</td></tr>
+</tbody>
+</table>
+</div>
+
+<p class="note">
+Only payment requests marked Approved will be available as receipts.
+These are payment record copies, not tax invoices.
+</p>
+</div>
+
+<div class="card">
+<div class="card-title">MY TRANSACTION STATEMENT</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>Amount</th>
+<th>Reference</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="transactionBody">
+<tr><td colspan="5" class="empty">Loading transactions...</td></tr>
+</tbody>
+</table>
+</div>
+
+<button class="btn" id="statementBtn" type="button" style="margin-top:15px">
+DOWNLOAD STATEMENT PDF
+</button>
+
+<p class="note">
+Statement includes your available transaction records. It does not change
+your account balance or Firebase records.
+</p>
+</div>
+
+</div>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+import {
+ getAuth,
+ onAuthStateChanged,
+ signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+import {
+ getFirestore,
+ doc,
+ getDoc,
+ collection,
+ query,
+ where,
+ getDocs
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+ apiKey: "AIzaSyBcmNDQz0BjeX0d1Zx5LJyUZmGofu_wRHA",
+ authDomain: "omvardhnaayefreedomfinan-efaf4.firebaseapp.com",
+ projectId: "omvardhnaayefreedomfinan-efaf4",
+ storageBucket: "omvardhnaayefreedomfinan-efaf4.firebasestorage.app",
+ messagingSenderId: "552483514216",
+ appId: "1:552483514216:web:3f6bfa2c10e74a97ba18dd",
+ measurementId: "G-6MPELL55BD"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+let memberData = {};
+let paymentRecords = [];
+let transactionRecords = [];
+let investmentRecords = [];
+
+
+function showNotice(message,error=false){
+ const box=$("notice");
+ box.style.display="block";
+ box.style.background=error?"#451a1a":"#142b20";
+ box.style.color=error?"#fecaca":"#bbf7d0";
+ box.textContent=message;
+}
+
+function money(value){
+ return "₹"+Number(value||0).toLocaleString("en-IN",{
+  maximumFractionDigits:2
+ });
+}
+
+function dateValue(value){
+ if(!value)return "—";
+
+ let date;
+
+ if(typeof value.toDate==="function"){
+  date=value.toDate();
+ }else{
+  date=new Date(value);
+ }
+
+ if(isNaN(date.getTime()))return "—";
+
+ return date.toLocaleDateString("en-IN");
+}
+
+function timestampValue(value){
+ if(!value)return 0;
+
+ if(typeof value.toDate==="function"){
+  return value.toDate().getTime();
+ }
+
+ const d=new Date(value);
+ return isNaN(d.getTime())?0:d.getTime();
+}
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ })[c]);
+}
+
+function isApproved(status){
+ return String(status||"").trim().toLowerCase()==="approved";
+}
+
+
+// Load only records belonging to the authenticated member.
+async function getMemberRecords(collectionName){
+
+ const q=query(
+  collection(db,collectionName),
+  where("uid","==",currentUser.uid)
+ );
+
+ const snap=await getDocs(q);
+
+ return snap.docs.map(d=>({
+  id:d.id,
+  ...d.data()
+ }));
+}
+
+
+function renderPayments(){
+
+ const body=$("paymentBody");
+
+ const approved=paymentRecords.filter(item=>
+  isApproved(item.status)
+ );
+
+ if(!approved.length){
+  body.innerHTML=
+   '<tr><td colspan="6" class="empty">No approved payment receipts found.</td></tr>';
+  return;
+ }
+
+ body.innerHTML=approved.map((item,index)=>`
+
+  <tr>
+   <td>${escapeHTML(item.plan||"—")}</td>
+   <td>${money(item.amount)}</td>
+   <td>${escapeHTML(item.transactionReference||"—")}</td>
+   <td>${escapeHTML(dateValue(item.submittedAt))}</td>
+   <td class="status">${escapeHTML(item.status)}</td>
+   <td>
+    <button class="btn receiptBtn" data-index="${index}" type="button">
+     PDF
+    </button>
+   </td>
+  </tr>
+
+ `).join("");
+
+ body.querySelectorAll(".receiptBtn").forEach(button=>{
+  button.addEventListener("click",()=>{
+   const item=approved[Number(button.dataset.index)];
+   downloadReceipt(item);
+  });
+ });
+
+
+ // Keep the exact approved records for receipt generation.
+ window.approvedPaymentRecords=approved;
+}
+
+
+function renderTransactions(){
+
+ const body=$("transactionBody");
+
+ transactionRecords.sort((a,b)=>
+  timestampValue(b.createdAt||b.date||b.submittedAt)-
+  timestampValue(a.createdAt||a.date||a.submittedAt)
+ );
+
+ if(!transactionRecords.length){
+  body.innerHTML=
+   '<tr><td colspan="5" class="empty">No transaction records found.</td></tr>';
+  return;
+ }
+
+ body.innerHTML=transactionRecords.map(item=>`
+
+  <tr>
+   <td>${escapeHTML(dateValue(item.createdAt||item.date||item.submittedAt))}</td>
+   <td>${escapeHTML(item.type||item.transactionType||item.plan||"Transaction")}</td>
+   <td>${money(item.amount)}</td>
+   <td>${escapeHTML(item.reference||item.transactionReference||item.utr||"—")}</td>
+   <td>${escapeHTML(item.status||"—")}</td>
+  </tr>
+
+ `).join("");
+}
+
+
+function openPrintPDF(title,content){
+
+ const printWindow=window.open("","_blank");
+
+ if(!printWindow){
+  showNotice("Please allow pop-ups in your browser to create PDF.",true);
+  return;
+ }
+
+ printWindow.document.open();
+
+ printWindow.document.write(`
+ <!DOCTYPE html>
+ <html>
+ <head>
+ <title>${escapeHTML(title)}</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <style>
+ body{font-family:Arial,sans-serif;padding:30px;color:#222}
+ h1{color:#9a6900;margin-bottom:8px}
+ h2{margin:20px 0 12px}
+ p{margin:9px 0;font-size:14px}
+ table{width:100%;border-collapse:collapse;margin-top:15px}
+ th,td{border:1px solid #ccc;padding:10px;text-align:left;font-size:13px}
+ th{background:#eee}
+ .footer{margin-top:35px;font-size:12px;color:#666}
+ @media print{button{display:none}}
+ </style>
+ </head>
+ <body>
+ <h1>FREEDOM FINANCE</h1>
+ <h2>${escapeHTML(title)}</h2>
+ ${content}
+ <div class="footer">
+ Freedom Finance · Member Document<br>
+ Generated on ${escapeHTML(new Date().toLocaleString("en-IN"))}
+ </div>
+ <script>
+ window.onload=function(){
+  setTimeout(function(){window.print()},500);
+ };
+ <\/script>
+ </body>
+ </html>
+ `);
+
+ printWindow.document.close();
+}
+
+
+function downloadReceipt(item){
+
+ const rows=[
+  ["Member Name",memberData.name||memberData.fullName||"Member"],
+  ["Member ID",memberData.memberId||"—"],
+  ["Email",currentUser.email||"—"],
+  ["Plan",item.plan||"—"],
+  ["Payment Amount",money(item.amount)],
+  ["UTR / Transaction Reference",item.transactionReference||"—"],
+  ["Request ID",item.id],
+  ["Payment Status",item.status||"Approved"],
+  ["Submission Date",dateValue(item.submittedAt)]
+ ];
+
+ const content=`
+ <p>This document records the payment request approved in your
+ Freedom Finance member account.</p>
+ <table>
+ ${rows.map(row=>`
+  <tr>
+   <th>${escapeHTML(row[0])}</th>
+   <td>${escapeHTML(row[1])}</td>
+  </tr>
+ `).join("")}
+ </table>
+ `;
+
+ openPrintPDF("Payment Receipt",content);
+}
+
+
+function downloadPlanDetails(){
+
+ if(!investmentRecords.length){
+  showNotice("No investment plan records are available.",true);
+  return;
+ }
+
+ const rows=investmentRecords.map(item=>`
+ <tr>
+  <td>${escapeHTML(item.plan||"—")}</td>
+  <td>${escapeHTML(money(item.amount))}</td>
+  <td>${escapeHTML(money(item.profit))}</td>
+  <td>${escapeHTML(money(item.expectedTotal??(Number(item.amount||0)+Number(item.profit||0))))}</td>
+  <td>${escapeHTML(dateValue(item.investmentDate))}</td>
+  <td>${escapeHTML(dateValue(item.maturityDate))}</td>
+  <td>${escapeHTML(item.status||"—")}</td>
+ </tr>
+ `).join("");
+
+ const content=`
+ <p>Member Name: ${escapeHTML(memberData.name||memberData.fullName||"Member")}</p>
+ <p>Member ID: ${escapeHTML(memberData.memberId||"—")}</p>
+ <p>Email: ${escapeHTML(currentUser.email||"—")}</p>
+ <table>
+ <tr>
+  <th>Plan</th>
+  <th>Investment</th>
+  <th>Estimated Profit</th>
+  <th>Expected Total</th>
+  <th>Investment Date</th>
+  <th>Maturity Date</th>
+  <th>Status</th>
+ </tr>
+ ${rows}
+ </table>
+ <p>Figures are displayed as recorded in your member account.</p>
+ `;
+
+ openPrintPDF("My Plan Details",content);
+}
+
+
+function downloadStatement(){
+
+ if(!transactionRecords.length){
+  showNotice("No transaction records are available to download.",true);
+  return;
+ }
+
+ const rows=transactionRecords.map(item=>`
+ <tr>
+  <td>${escapeHTML(dateValue(item.createdAt||item.date||item.submittedAt))}</td>
+  <td>${escapeHTML(item.type||item.transactionType||item.plan||"Transaction")}</td>
+  <td>${escapeHTML(money(item.amount))}</td>
+  <td>${escapeHTML(item.reference||item.transactionReference||item.utr||"—")}</td>
+  <td>${escapeHTML(item.status||"—")}</td>
+ </tr>
+ `).join("");
+
+ const content=`
+ <p>Member Name: ${escapeHTML(memberData.name||memberData.fullName||"Member")}</p>
+ <p>Member ID: ${escapeHTML(memberData.memberId||"—")}</p>
+ <p>Email: ${escapeHTML(currentUser.email||"—")}</p>
+ <table>
+ <tr>
+  <th>Date</th>
+  <th>Type</th>
+  <th>Amount</th>
+  <th>Reference</th>
+  <th>Status</th>
+ </tr>
+ ${rows}
+ </table>
+ `;
+
+ openPrintPDF("Transaction Statement",content);
+}
+
+
+async function loadDownloads(user){
+
+ try{
+
+  if(!user.emailVerified){
+   showNotice("Please verify your email before accessing Downloads.",true);
+   await signOut(auth);
+   window.location.replace("member-login.html");
+   return;
+  }
+
+  $("memberEmail").textContent=user.email||"—";
+
+  const memberSnap=await getDoc(doc(db,"members",user.uid));
+
+  if(!memberSnap.exists()){
+   showNotice("Member profile not found.",true);
+   return;
+  }
+
+  memberData=memberSnap.data();
+
+  const results=await Promise.all([
+   getMemberRecords("paymentRequests"),
+   getMemberRecords("transactions"),
+   getMemberRecords("investments")
+  ]);
+
+  paymentRecords=results[0];
+  transactionRecords=results[1];
+  investmentRecords=results[2];
+
+  renderPayments();
+  renderTransactions();
+
+  showNotice("Your personal download records are ready.");
+
+ }catch(error){
+
+  console.error("Downloads error:",error);
+
+  if(error.code==="permission-denied"){
+   showNotice(
+    "Firestore permission denied. Please check member read rules for paymentRequests, transactions and investments.",
+    true
+   );
+  }else{
+   showNotice("Unable to load downloads: "+error.message,true);
+  }
+ }
+}
+
+
+$("planBtn").addEventListener("click",downloadPlanDetails);
+$("statementBtn").addEventListener("click",downloadStatement);
+
+
+onAuthStateChanged(auth,user=>{
+
+ if(!user){
+  window.location.replace("member-login.html");
+  return;
+ }
+
+ currentUser=user;
+ loadDownloads(user);
+
+});
+
+</script>
+
+</body>
+</html>
