@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,15 +20,22 @@ body{background:#080b12;color:#fff}
 .stat,.section{background:#111827;border:1px solid #273244;border-radius:12px;padding:16px}
 .stat-title{color:#9ca3af;font-size:12px}
 .stat-value{font-size:23px;font-weight:bold;margin-top:9px;color:#f5b942}
-.menu{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:20px}
+.menu{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:20px}
 .menu button{background:#111827;color:#fff;border:1px solid #273244;padding:12px 5px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:12px}
 .menu button.active,.menu button:hover{border-color:#f5b942;color:#f5b942}
 .section{margin-bottom:18px}
 .section h2{font-size:19px;margin-bottom:15px;color:#f5b942}
-.search{width:100%;padding:12px;background:#080b12;color:#fff;border:1px solid #273244;border-radius:7px;margin-bottom:12px}
+.search,.field{width:100%;padding:12px;background:#080b12;color:#fff;border:1px solid #273244;border-radius:7px;margin-bottom:12px}
+.field:focus,.search:focus{outline:1px solid #f5b942}
+.field-label{display:block;color:#cbd5e1;font-size:12px;margin:4px 0 7px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.form-group{min-width:0}
+.form-group .field{margin-bottom:4px}
+.full-width{grid-column:1/-1}
+textarea.field{min-height:130px;resize:vertical;line-height:1.5}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:700px}
-th,td{padding:11px 9px;border-bottom:1px solid #273244;text-align:left;font-size:12px}
+th,td{padding:11px 9px;border-bottom:1px solid #273244;text-align:left;font-size:12px;vertical-align:top}
 th{color:#f5b942;background:#0d1420}
 td{color:#e5e7eb}
 .empty{text-align:center;color:#9ca3af;padding:22px}
@@ -41,14 +47,18 @@ td{color:#e5e7eb}
 .refresh{background:#2563eb;color:#fff;margin-bottom:12px}
 .approve-btn{background:#15803d;color:#fff}
 .reject-btn{background:#b91c1c;color:#fff}
+.create-btn{background:#b88621;color:#080b12;border:0;padding:12px 18px;border-radius:7px;cursor:pointer;font-weight:bold}
 button:disabled{opacity:.5;cursor:not-allowed}
 #notice{padding:11px;margin-bottom:15px;border-radius:7px;font-size:13px;display:none;overflow-wrap:anywhere}
+.help-text{font-size:12px;color:#9ca3af;line-height:1.6;margin:0 0 14px}
 [hidden]{display:none!important}
+@media(max-width:900px){
+.menu{grid-template-columns:repeat(4,1fr)}
+}
 @media(max-width:800px){
 .stats{grid-template-columns:repeat(2,1fr)}
-.menu{grid-template-columns:repeat(3,1fr)}
 }
-@media(max-width:500px){
+@media(max-width:600px){
 .container{padding:12px}
 .header{padding:13px}
 .logo{font-size:17px}
@@ -57,6 +67,8 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .menu{grid-template-columns:repeat(2,1fr)}
 .menu button{font-size:11px}
 .title h1{font-size:22px}
+.form-grid{grid-template-columns:1fr}
+.full-width{grid-column:auto}
 }
 </style>
 </head>
@@ -75,7 +87,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
   <div class="title">
     <h1>Admin Dashboard</h1>
-    <p>Manage members, investments, payments, withdrawals and referrals.</p>
+    <p>Manage members, investments, payments, withdrawals, referrals and undertakings.</p>
   </div>
 
   <div id="notice"></div>
@@ -105,6 +117,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <button data-section="paymentSection" type="button">PAYMENTS</button>
     <button data-section="withdrawalSection" type="button">WITHDRAWALS</button>
     <button data-section="referralSection" type="button">REFERRALS</button>
+    <button data-section="affidavitSection" type="button">AFFIDAVITS</button>
     <button data-section="transactionSection" type="button">TRANSACTIONS</button>
   </div>
 
@@ -142,7 +155,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
   <section class="section" id="paymentSection" hidden>
     <h2>Payment Requests</h2>
-    <p style="color:#aaa;font-size:12px;margin-bottom:12px">
+    <p class="help-text">
       Approve only after confirming actual bank credit. UTR submission alone is not payment confirmation.
     </p>
     <div class="table-wrap">
@@ -159,28 +172,29 @@ button:disabled{opacity:.5;cursor:not-allowed}
   </section>
 
   <section class="section" id="withdrawalSection" hidden>
-  <h2>Withdrawal Requests</h2>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Reference</th>
-          <th>Member Name</th>
-          <th>Member ID</th>
-          <th>Amount</th>
-          <th>Method</th>
-          <th>Bank Details</th>
-          <th>Date</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="withdrawalBody">
-        <tr><td colspan="9">Loading...</td></tr>
-      </tbody>
-    </table>
-  </div>
-          </section>
+    <h2>Withdrawal Requests</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Member Name</th>
+            <th>Member ID</th>
+            <th>Amount</th>
+            <th>Method</th>
+            <th>Bank Details</th>
+            <th>Maturity Date</th>
+            <th>Request Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="withdrawalBody">
+          <tr><td colspan="10" class="empty">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
   <section class="section" id="referralSection" hidden>
     <h2>Referrals</h2>
@@ -193,6 +207,108 @@ button:disabled{opacity:.5;cursor:not-allowed}
           </tr>
         </thead>
         <tbody id="referralBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PAYMENT UNDERTAKING / AFFIDAVIT -->
+  <section class="section" id="affidavitSection" hidden>
+    <h2>Create Payment Undertaking / Affidavit</h2>
+
+    <p class="help-text">
+      Create an undertaking when the project has advanced/funded an amount on behalf of a member.
+      The member will be able to view and accept this undertaking from their Downloads page.
+      Creating this record pauses the member account. It does not itself confirm repayment or activate an investment.
+    </p>
+
+    <form id="affidavitForm">
+      <div class="form-grid">
+
+        <div class="form-group full-width">
+          <label class="field-label" for="affMember">Select Member</label>
+          <select class="field" id="affMember" required>
+            <option value="">Loading members...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="affPlan">Selected Plan</label>
+          <input class="field" id="affPlan" type="text" placeholder="Plan name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="affAmount">Funding Amount (₹)</label>
+          <input class="field" id="affAmount" type="number" min="1" step="0.01" placeholder="Enter amount" required>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="affDate">Funding Date</label>
+          <input class="field" id="affDate" type="date" required>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="affReference">Funding Reference / Details</label>
+          <input class="field" id="affReference" type="text" maxlength="150" placeholder="Enter reference or details" required>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="affMonths">Repayment Period</label>
+          <select class="field" id="affMonths" required>
+            <option value="1">1 Month</option>
+            <option value="2">2 Months</option>
+            <option value="3">3 Months</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="field-label" for="affDueDate">Repayment Due Date (Auto Calculated)</label>
+          <input class="field" id="affDueDate" type="date" readonly required>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="field-label" for="affTerms">Undertaking Terms</label>
+          <textarea class="field" id="affTerms" required>PAYMENT UNDERTAKING
+
+I acknowledge that the funding amount stated in this undertaking has been advanced on my behalf by Freedom Finance.
+
+I agree to repay the full funding amount on or before the repayment due date mentioned in this undertaking.
+
+I understand that my account will remain paused while the outstanding funding amount is unpaid. During this paused period, no investment return or investment maturity period will begin.
+
+I understand that my selected investment plan will begin only after the full required amount has been received, verified and the account has been activated by the administrator.
+
+I confirm that the information provided by me is accurate and that I have read and understood these terms.
+
+Member acceptance date and time will be recorded electronically when I accept this undertaking.</textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <button class="create-btn" id="createAffBtn" type="submit">
+            CREATE UNDERTAKING
+          </button>
+        </div>
+
+      </div>
+    </form>
+
+    <hr style="border:0;border-top:1px solid #273244;margin:22px 0">
+
+    <h2>Undertaking Records</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Member ID</th>
+            <th>Member Name</th>
+            <th>Funding Amount</th>
+            <th>Funding Date</th>
+            <th>Due Date</th>
+            <th>Plan</th>
+            <th>Acceptance</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="affidavitBody"></tbody>
       </table>
     </div>
   </section>
@@ -228,6 +344,7 @@ import {
   getFirestore,
   collection,
   getDocs,
+  getDoc,
   doc,
   runTransaction,
   increment,
@@ -259,6 +376,8 @@ let paymentRequests = [];
 let investmentRecords = [];
 let withdrawals = [];
 let transactions = [];
+let affidavits = [];
+
 let adminReady = false;
 let loading = false;
 
@@ -314,14 +433,45 @@ function dateText(value) {
   return d ? d.toLocaleDateString("en-IN") : "-";
 }
 
+function dateInputText(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function dateFromInput(value) {
+  if (!value) return null;
+  const parts = value.split("-").map(Number);
+  if (parts.length !== 3 || parts.some(n => !Number.isFinite(n))) return null;
+  return new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0);
+}
+
+function addMonthsClamped(date, months) {
+  const result = new Date(date);
+  const originalDay = result.getDate();
+
+  result.setDate(1);
+  result.setMonth(result.getMonth() + months);
+
+  const lastDay = new Date(
+    result.getFullYear(),
+    result.getMonth() + 1,
+    0
+  ).getDate();
+
+  result.setDate(Math.min(originalDay, lastDay));
+  return result;
+}
+
 function badge(status) {
   const s = String(status || "Pending");
   const v = s.toLowerCase();
 
   const cls =
-    v.includes("approv") || v === "active" || v === "matured"
+    v.includes("approv") || v === "active" || v === "matured" || v === "accepted"
       ? "approved"
-      : v.includes("reject")
+      : v.includes("reject") || v.includes("cancel")
       ? "rejected"
       : "pending";
 
@@ -528,9 +678,10 @@ function renderWithdrawals() {
         `;
       }).join("")
     : emptyRow(10, "No withdrawal requests found.");
-  }
+}
 
-/* REFERRALS */
+
+/* REFERRALS - EXISTING LOGIC PRESERVED */
 
 function renderReferrals() {
   const list = members.filter(m =>
@@ -574,6 +725,210 @@ function renderTransactions() {
 }
 
 
+/* AFFIDAVIT / UNDERTAKING */
+
+function populateAffidavitMembers() {
+  const select = $("affMember");
+  const previousValue = select.value;
+
+  const options = members.map(member => {
+    const name = member.name || member.fullName || member.email || "Member";
+    const label = `${name} (${member.memberId || member.id})`;
+
+    return `
+      <option value="${escapeHTML(member.id)}">
+        ${escapeHTML(label)}
+      </option>
+    `;
+  }).join("");
+
+  select.innerHTML =
+    `<option value="">Select Member</option>` + options;
+
+  if (members.some(m => m.id === previousValue)) {
+    select.value = previousValue;
+  }
+}
+
+function updateAffidavitDueDate() {
+  const fundingDate = dateFromInput($("affDate").value);
+  const months = Number($("affMonths").value);
+
+  if (!fundingDate || ![1, 2, 3].includes(months)) {
+    $("affDueDate").value = "";
+    return;
+  }
+
+  $("affDueDate").value = dateInputText(
+    addMonthsClamped(fundingDate, months)
+  );
+}
+
+$("affDate").addEventListener("change", updateAffidavitDueDate);
+$("affMonths").addEventListener("change", updateAffidavitDueDate);
+
+$("affMember").addEventListener("change", () => {
+  const member = members.find(m => m.id === $("affMember").value);
+  if (!member) {
+    $("affPlan").value = "";
+    return;
+  }
+
+  $("affPlan").value = member.plan || member.selectedPlan || "";
+});
+
+function renderAffidavits() {
+  $("affidavitBody").innerHTML = affidavits.length
+    ? affidavits.map(a => `
+      <tr>
+        <td>${escapeHTML(a.memberId || "-")}</td>
+        <td>${escapeHTML(a.memberName || "-")}</td>
+        <td>${money(a.fundingAmount)}</td>
+        <td>${escapeHTML(dateText(a.fundingDate))}</td>
+        <td>${escapeHTML(dateText(a.dueDate))}</td>
+        <td>${escapeHTML(a.plan || "-")}</td>
+        <td>${badge(a.accepted ? "Accepted" : "Not Accepted")}</td>
+        <td>${badge(a.status || "Pending Acceptance")}</td>
+      </tr>
+    `).join("")
+    : emptyRow(8, "No undertaking records found.");
+}
+
+$("affidavitForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!adminReady) {
+    showNotice("Admin authentication is not ready.", true);
+    return;
+  }
+
+  const button = $("createAffBtn");
+  const uid = $("affMember").value;
+  const fundingAmount = Number($("affAmount").value);
+  const fundingDate = dateFromInput($("affDate").value);
+  const dueDate = dateFromInput($("affDueDate").value);
+  const repaymentMonths = Number($("affMonths").value);
+  const fundingReference = $("affReference").value.trim();
+  const plan = $("affPlan").value.trim();
+  const terms = $("affTerms").value.trim();
+
+  if (!uid) {
+    showNotice("Please select a member.", true);
+    return;
+  }
+
+  if (!Number.isFinite(fundingAmount) || fundingAmount <= 0) {
+    showNotice("Enter a valid funding amount.", true);
+    return;
+  }
+
+  if (!fundingDate || !dueDate) {
+    showNotice("Please select funding date and repayment period.", true);
+    return;
+  }
+
+  if (![1, 2, 3].includes(repaymentMonths)) {
+    showNotice("Repayment period must be 1, 2 or 3 months.", true);
+    return;
+  }
+
+  if (!fundingReference || !plan || !terms) {
+    showNotice("Please fill all undertaking details.", true);
+    return;
+  }
+
+  if (dueDate <= fundingDate) {
+    showNotice("Repayment due date must be after funding date.", true);
+    return;
+  }
+
+  const member = members.find(m => m.id === uid);
+
+  if (!member) {
+    showNotice("Selected member was not found. Refresh the dashboard.", true);
+    return;
+  }
+
+  const alreadyPending = affidavits.some(a =>
+    a.uid === uid &&
+    !a.accepted &&
+    String(a.status || "").toLowerCase() === "pending acceptance"
+  );
+
+  if (alreadyPending) {
+    showNotice("This member already has a pending undertaking.", true);
+    return;
+  }
+
+  if (!confirm(
+    "Create this undertaking and pause the selected member account?"
+  )) return;
+
+  button.disabled = true;
+  button.textContent = "CREATING...";
+
+  try {
+    const memberRef = doc(db, "members", uid);
+    const undertakingRef = doc(collection(db, "paymentUndertakings"));
+
+    await runTransaction(db, async transaction => {
+      const memberSnap = await transaction.get(memberRef);
+
+      if (!memberSnap.exists()) {
+        throw new Error("Member account not found.");
+      }
+
+      const currentMember = memberSnap.data();
+
+      if (String(currentMember.status || "").toLowerCase() === "paused – payment pending") {
+        throw new Error("This member account is already paused for pending payment.");
+      }
+
+      transaction.set(undertakingRef, {
+        uid: uid,
+        memberId: currentMember.memberId || member.memberId || "",
+        memberName: currentMember.name ||
+          currentMember.fullName ||
+          member.name ||
+          member.fullName ||
+          "",
+        fundingAmount: fundingAmount,
+        fundingDate: Timestamp.fromDate(fundingDate),
+        fundingReference: fundingReference,
+        repaymentMonths: repaymentMonths,
+        dueDate: Timestamp.fromDate(dueDate),
+        plan: plan,
+        status: "Pending Acceptance",
+        accepted: false,
+        terms: terms,
+        createdAt: serverTimestamp(),
+        createdBy: auth.currentUser.uid
+      });
+
+      transaction.update(memberRef, {
+        status: "Paused – Payment Pending",
+        updatedAt: serverTimestamp()
+      });
+    });
+
+    $("affidavitForm").reset();
+    $("affMonths").value = "1";
+    $("affDueDate").value = "";
+
+    showNotice("Undertaking created. Member account is now paused.");
+
+    await loadDashboard();
+
+  } catch (error) {
+    console.error("Undertaking creation error:", error);
+    showNotice("Could not create undertaking: " + error.message, true);
+  } finally {
+    button.disabled = false;
+    button.textContent = "CREATE UNDERTAKING";
+  }
+});
+
+
 /* FIRESTORE READ */
 
 async function readCollection(name) {
@@ -589,7 +944,6 @@ async function readCollection(name) {
 /* DASHBOARD LOAD */
 
 async function loadDashboard() {
-
   if (!adminReady) {
     showNotice("Admin authentication is not ready yet.", true);
     return;
@@ -607,13 +961,13 @@ async function loadDashboard() {
   }
 
   try {
-
     const collectionNames = [
       "members",
       "paymentRequests",
       "withdrawalRequests",
       "transactions",
-      "investments"
+      "investments",
+      "paymentUndertakings"
     ];
 
     const results = await Promise.allSettled(
@@ -623,7 +977,6 @@ async function loadDashboard() {
     const failedCollections = [];
 
     const data = results.map((result, index) => {
-
       if (result.status === "fulfilled") {
         return result.value;
       }
@@ -644,6 +997,7 @@ async function loadDashboard() {
     withdrawals = data[2];
     transactions = data[3];
     investmentRecords = data[4];
+    affidavits = data[5];
 
     $("totalMembers").textContent = members.length;
 
@@ -675,40 +1029,34 @@ async function loadDashboard() {
     renderReferrals();
     renderTransactions();
 
-    if (failedCollections.length > 0) {
+    populateAffidavitMembers();
+    renderAffidavits();
 
+    if (failedCollections.length > 0) {
       showNotice(
-        "Some data could not load: " +
-        failedCollections.join(", "),
+        "Some data could not load: " + failedCollections.join(", "),
         true
       );
-
     } else {
-
       showNotice("Dashboard refreshed successfully.");
-
     }
 
   } catch (error) {
-
     console.error("Dashboard load error:", error);
-
     showNotice(
       "Dashboard error: " + (error.message || "Unknown error"),
       true
     );
-
   } finally {
-
     loading = false;
 
     if (refresh) {
       refresh.disabled = false;
       refresh.textContent = "↻ Refresh Data";
     }
+  }
+}
 
-  }
-  }
 $("refreshBtn").addEventListener("click", loadDashboard);
 
 
@@ -803,6 +1151,17 @@ $("paymentBody").addEventListener("click", async event => {
         throw new Error("Member account not found.");
       }
 
+      const memberData = memberSnap.data();
+
+      if (
+        String(memberData.status || "").toLowerCase() ===
+        "paused – payment pending"
+      ) {
+        throw new Error(
+          "This member has a pending payment undertaking. Do not activate the investment through normal payment approval. Verify and settle the undertaking first."
+        );
+      }
+
       if (investmentSnap.exists()) {
         throw new Error("Investment already exists.");
       }
@@ -858,303 +1217,300 @@ $("paymentBody").addEventListener("click", async event => {
     button.textContent = action === "approve" ? "Approve" : "Reject";
   }
 });
-  // WITHDRAWAL APPROVE / REJECT HANDLER
 
-const withdrawalBody = document.getElementById("withdrawalBody");
 
-if (withdrawalBody) {
-    withdrawalBody.addEventListener("click", async function(e) {
+/* WITHDRAWAL APPROVE / REJECT / EDIT HANDLER */
 
-        const button = e.target.closest("[data-withdraw-action]");
-        if (!button) return;
+const withdrawalBody = $("withdrawalBody");
 
-        const action = button.dataset.withdrawAction;
-        const requestId = button.dataset.id;
+withdrawalBody.addEventListener("click", async function(e) {
+  const button = e.target.closest("[data-withdraw-action]");
+  if (!button) return;
 
-        if (!requestId) {
-            alert("Withdrawal request ID missing.");
-            return;
-        }
+  const action = button.dataset.withdrawAction;
+  const requestId = button.dataset.id;
 
-        const requestRef = doc(db, "withdrawalRequests", requestId);
-
-        try {
-            button.disabled = true;
-
-            // EDIT BANK DETAILS
-            if (action === "edit-bank") {
-
-                const requestSnap = await getDoc(requestRef);
-
-                if (!requestSnap.exists()) {
-                    throw new Error("Withdrawal request not found.");
-                }
-
-                const request = requestSnap.data();
-
-                const accountHolder = prompt(
-                    "Enter Account Holder Name:",
-                    request.accountHolder || ""
-                );
-                if (accountHolder === null) return;
-
-                const bankName = prompt(
-                    "Enter Bank Name:",
-                    request.bankName || ""
-                );
-                if (bankName === null) return;
-
-                const accountNumber = prompt(
-                    "Enter Account Number:",
-                    request.accountNumber || ""
-                );
-                if (accountNumber === null) return;
-
-                const ifsc = prompt(
-                    "Enter IFSC Code:",
-                    request.ifsc || ""
-                );
-                if (ifsc === null) return;
-
-                const upiId = prompt(
-                    "Enter UPI ID:",
-                    request.upiId || ""
-                );
-                if (upiId === null) return;
-
-                const bankData = {
-                    accountHolder: accountHolder.trim(),
-                    bankName: bankName.trim(),
-                    accountNumber: accountNumber.trim(),
-                    ifsc: ifsc.trim(),
-                    upiId: upiId.trim()
-                };
-
-                await runTransaction(db, async (transaction) => {
-
-                    const latestSnap = await transaction.get(requestRef);
-
-                    if (!latestSnap.exists()) {
-                        throw new Error("Withdrawal request not found.");
-                    }
-
-                    const latest = latestSnap.data();
-
-                    if (!String(latest.status || "Pending").toLowerCase().includes("pending")) {
-                        throw new Error("Processed withdrawal cannot be edited.");
-                    }
-
-                    transaction.update(requestRef, {
-                        ...bankData,
-                        bankDetails: bankData,
-                        updatedAt: serverTimestamp()
-                    });
-
-                    if (latest.uid) {
-                        const memberRef = doc(db, "members", latest.uid);
-                        const memberSnap = await transaction.get(memberRef);
-
-                        if (memberSnap.exists()) {
-                            transaction.update(memberRef, {
-                                ...bankData,
-                                bankDetails: bankData,
-                                updatedAt: serverTimestamp()
-                            });
-                        }
-                    }
-                });
-
-                alert("Bank details updated successfully.");
-            }
-
-            // EDIT MATURITY DATE
-            else if (action === "edit-maturity") {
-
-                const requestSnap = await getDoc(requestRef);
-
-                if (!requestSnap.exists()) {
-                    throw new Error("Withdrawal request not found.");
-                }
-
-                const request = requestSnap.data();
-
-                const maturityDate = prompt(
-                    "Enter Maturity Date (YYYY-MM-DD):",
-                    request.maturityDate || ""
-                );
-
-                if (maturityDate === null) return;
-
-                if (!/^\d{4}-\d{2}-\d{2}$/.test(maturityDate.trim())) {
-                    throw new Error("Please enter date in YYYY-MM-DD format.");
-                }
-
-                const dateCheck = new Date(maturityDate + "T00:00:00");
-
-                if (isNaN(dateCheck.getTime()) ||
-                    dateCheck.toISOString().slice(0, 10) !== maturityDate.trim()) {
-                    throw new Error("Invalid maturity date.");
-                }
-
-                await runTransaction(db, async (transaction) => {
-
-                    const latestSnap = await transaction.get(requestRef);
-
-                    if (!latestSnap.exists()) {
-                        throw new Error("Withdrawal request not found.");
-                    }
-
-                    const latest = latestSnap.data();
-
-                    if (!String(latest.status || "Pending").toLowerCase().includes("pending")) {
-                        throw new Error("Processed withdrawal cannot be edited.");
-                    }
-
-                    transaction.update(requestRef, {
-                        maturityDate: maturityDate.trim(),
-                        updatedAt: serverTimestamp()
-                    });
-
-                    if (latest.uid) {
-                        const memberRef = doc(db, "members", latest.uid);
-                        const memberSnap = await transaction.get(memberRef);
-
-                        if (memberSnap.exists()) {
-                            transaction.update(memberRef, {
-                                maturityDate: maturityDate.trim(),
-                                updatedAt: serverTimestamp()
-                            });
-                        }
-                    }
-                });
-
-                alert("Maturity date updated successfully.");
-            }
-
-            // REJECT WITHDRAWAL
-            else if (action === "reject") {
-
-                if (!confirm("Are you sure you want to reject this withdrawal?")) {
-                    return;
-                }
-
-                await runTransaction(db, async (transaction) => {
-
-                    const requestSnap = await transaction.get(requestRef);
-
-                    if (!requestSnap.exists()) {
-                        throw new Error("Withdrawal request not found.");
-                    }
-
-                    const request = requestSnap.data();
-                    const status = String(request.status || "Pending").toLowerCase();
-
-                    if (!status.includes("pending")) {
-                        throw new Error("This request is already processed.");
-                    }
-
-                    transaction.update(requestRef, {
-                        status: "Rejected",
-                        reviewedAt: serverTimestamp()
-                    });
-                });
-
-                alert("Withdrawal request rejected successfully.");
-            }
-
-            // APPROVE WITHDRAWAL
-            else if (action === "approve") {
-
-                if (!confirm(
-                    "Confirm that the actual bank/UPI payment has been completed. Approve this withdrawal?"
-                )) {
-                    return;
-                }
-
-                const transactionRef = doc(collection(db, "transactions"));
-
-                await runTransaction(db, async (transaction) => {
-
-                    const requestSnap = await transaction.get(requestRef);
-
-                    if (!requestSnap.exists()) {
-                        throw new Error("Withdrawal request not found.");
-                    }
-
-                    const request = requestSnap.data();
-                    const status = String(request.status || "Pending").toLowerCase();
-
-                    if (!status.includes("pending")) {
-                        throw new Error("This request is already processed.");
-                    }
-
-                    if (!request.uid) {
-                        throw new Error("Member UID is missing.");
-                    }
-
-                    const amount = Number(request.amount);
-
-                    if (!Number.isFinite(amount) || amount <= 0) {
-                        throw new Error("Invalid withdrawal amount.");
-                    }
-
-                    const memberRef = doc(db, "members", request.uid);
-                    const memberSnap = await transaction.get(memberRef);
-
-                    if (!memberSnap.exists()) {
-                        throw new Error("Member record not found.");
-                    }
-
-                    const member = memberSnap.data();
-                    const balance = Number(member.availableBalance || 0);
-
-                    if (balance < amount) {
-                        throw new Error("Insufficient available balance.");
-                    }
-
-                    transaction.update(memberRef, {
-                        availableBalance: increment(-amount),
-                        totalWithdrawal: increment(amount)
-                    });
-
-                    transaction.update(requestRef, {
-                        status: "Approved",
-                        reviewedAt: serverTimestamp(),
-                        approvedAt: serverTimestamp()
-                    });
-
-                    transaction.set(transactionRef, {
-                        uid: request.uid,
-                        memberId: request.memberId || member.memberId || "",
-                        memberName: request.memberName ||
-                            member.name || member.fullName || "",
-                        type: "Withdrawal",
-                        amount: amount,
-                        reference: request.reference || requestId,
-                        status: "Approved",
-                        createdAt: serverTimestamp()
-                    });
-                });
-
-                alert("Withdrawal approved successfully.");
-            }
-
-            else {
-                throw new Error("Unknown withdrawal action: " + action);
-            }
-
-            await loadDashboard();
-
-        } catch (error) {
-            console.error("Withdrawal Error:", error);
-            alert("Withdrawal Error: " + error.message);
-
-        } finally {
-            button.disabled = false;
-        }
-
-    });
+  if (!requestId) {
+    showNotice("Withdrawal request ID missing.", true);
+    return;
   }
+
+  const requestRef = doc(db, "withdrawalRequests", requestId);
+
+  try {
+    button.disabled = true;
+
+    /* EDIT BANK DETAILS */
+    if (action === "edit-bank") {
+      const requestSnap = await getDoc(requestRef);
+
+      if (!requestSnap.exists()) {
+        throw new Error("Withdrawal request not found.");
+      }
+
+      const request = requestSnap.data();
+      const existingBank = request.bankDetails || {};
+
+      const accountHolder = prompt(
+        "Enter Account Holder Name:",
+        request.accountHolder || existingBank.accountHolder || ""
+      );
+      if (accountHolder === null) return;
+
+      const bankName = prompt(
+        "Enter Bank Name:",
+        request.bankName || existingBank.bankName || ""
+      );
+      if (bankName === null) return;
+
+      const accountNumber = prompt(
+        "Enter Account Number:",
+        request.accountNumber || existingBank.accountNumber || ""
+      );
+      if (accountNumber === null) return;
+
+      const ifsc = prompt(
+        "Enter IFSC Code:",
+        request.ifsc || existingBank.ifsc || ""
+      );
+      if (ifsc === null) return;
+
+      const upiId = prompt(
+        "Enter UPI ID:",
+        request.upiId || existingBank.upiId || ""
+      );
+      if (upiId === null) return;
+
+      const bankData = {
+        accountHolder: accountHolder.trim(),
+        bankName: bankName.trim(),
+        accountNumber: accountNumber.trim(),
+        ifsc: ifsc.trim(),
+        upiId: upiId.trim()
+      };
+
+      await runTransaction(db, async transaction => {
+        const latestSnap = await transaction.get(requestRef);
+
+        if (!latestSnap.exists()) {
+          throw new Error("Withdrawal request not found.");
+        }
+
+        const latest = latestSnap.data();
+
+        if (!String(latest.status || "Pending").toLowerCase().includes("pending")) {
+          throw new Error("Processed withdrawal cannot be edited.");
+        }
+
+        transaction.update(requestRef, {
+          ...bankData,
+          bankDetails: bankData,
+          updatedAt: serverTimestamp()
+        });
+
+        if (latest.uid) {
+          const memberRef = doc(db, "members", latest.uid);
+          const memberSnap = await transaction.get(memberRef);
+
+          if (memberSnap.exists()) {
+            transaction.update(memberRef, {
+              ...bankData,
+              bankDetails: bankData,
+              updatedAt: serverTimestamp()
+            });
+          }
+        }
+      });
+
+      showNotice("Bank details updated successfully.");
+    }
+
+    /* EDIT MATURITY DATE */
+    else if (action === "edit-maturity") {
+      const requestSnap = await getDoc(requestRef);
+
+      if (!requestSnap.exists()) {
+        throw new Error("Withdrawal request not found.");
+      }
+
+      const request = requestSnap.data();
+
+      const maturityDate = prompt(
+        "Enter Maturity Date (YYYY-MM-DD):",
+        typeof request.maturityDate === "string"
+          ? request.maturityDate
+          : ""
+      );
+
+      if (maturityDate === null) return;
+
+      const cleanDate = maturityDate.trim();
+
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) {
+        throw new Error("Please enter date in YYYY-MM-DD format.");
+      }
+
+      const dateCheck = new Date(cleanDate + "T00:00:00");
+
+      if (
+        isNaN(dateCheck.getTime()) ||
+        dateCheck.toISOString().slice(0, 10) !== cleanDate
+      ) {
+        throw new Error("Invalid maturity date.");
+      }
+
+      await runTransaction(db, async transaction => {
+        const latestSnap = await transaction.get(requestRef);
+
+        if (!latestSnap.exists()) {
+          throw new Error("Withdrawal request not found.");
+        }
+
+        const latest = latestSnap.data();
+
+        if (!String(latest.status || "Pending").toLowerCase().includes("pending")) {
+          throw new Error("Processed withdrawal cannot be edited.");
+        }
+
+        transaction.update(requestRef, {
+          maturityDate: cleanDate,
+          updatedAt: serverTimestamp()
+        });
+
+        if (latest.uid) {
+          const memberRef = doc(db, "members", latest.uid);
+          const memberSnap = await transaction.get(memberRef);
+
+          if (memberSnap.exists()) {
+            transaction.update(memberRef, {
+              maturityDate: cleanDate,
+              updatedAt: serverTimestamp()
+            });
+          }
+        }
+      });
+
+      showNotice("Maturity date updated successfully.");
+    }
+
+    /* REJECT WITHDRAWAL */
+    else if (action === "reject") {
+      if (!confirm("Are you sure you want to reject this withdrawal?")) {
+        return;
+      }
+
+      await runTransaction(db, async transaction => {
+        const requestSnap = await transaction.get(requestRef);
+
+        if (!requestSnap.exists()) {
+          throw new Error("Withdrawal request not found.");
+        }
+
+        const request = requestSnap.data();
+        const status = String(request.status || "Pending").toLowerCase();
+
+        if (!status.includes("pending")) {
+          throw new Error("This request is already processed.");
+        }
+
+        transaction.update(requestRef, {
+          status: "Rejected",
+          reviewedAt: serverTimestamp()
+        });
+      });
+
+      showNotice("Withdrawal request rejected successfully.");
+    }
+
+    /* APPROVE WITHDRAWAL */
+    else if (action === "approve") {
+      if (!confirm(
+        "Confirm that the actual bank/UPI payment has been completed. Approve this withdrawal?"
+      )) {
+        return;
+      }
+
+      const transactionRef = doc(collection(db, "transactions"));
+
+      await runTransaction(db, async transaction => {
+        const requestSnap = await transaction.get(requestRef);
+
+        if (!requestSnap.exists()) {
+          throw new Error("Withdrawal request not found.");
+        }
+
+        const request = requestSnap.data();
+        const status = String(request.status || "Pending").toLowerCase();
+
+        if (!status.includes("pending")) {
+          throw new Error("This request is already processed.");
+        }
+
+        if (!request.uid) {
+          throw new Error("Member UID is missing.");
+        }
+
+        const amount = Number(request.amount);
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+          throw new Error("Invalid withdrawal amount.");
+        }
+
+        const memberRef = doc(db, "members", request.uid);
+        const memberSnap = await transaction.get(memberRef);
+
+        if (!memberSnap.exists()) {
+          throw new Error("Member record not found.");
+        }
+
+        const member = memberSnap.data();
+        const balance = Number(member.availableBalance || 0);
+
+        if (balance < amount) {
+          throw new Error("Insufficient available balance.");
+        }
+
+        transaction.update(memberRef, {
+          availableBalance: increment(-amount),
+          totalWithdrawal: increment(amount)
+        });
+
+        transaction.update(requestRef, {
+          status: "Approved",
+          reviewedAt: serverTimestamp(),
+          approvedAt: serverTimestamp()
+        });
+
+        transaction.set(transactionRef, {
+          uid: request.uid,
+          memberId: request.memberId || member.memberId || "",
+          memberName: request.memberName ||
+            member.name || member.fullName || "",
+          type: "Withdrawal",
+          amount: amount,
+          reference: request.reference || requestId,
+          status: "Approved",
+          createdAt: serverTimestamp()
+        });
+      });
+
+      showNotice("Withdrawal approved successfully.");
+    }
+
+    else {
+      throw new Error("Unknown withdrawal action: " + action);
+    }
+
+    await loadDashboard();
+
+  } catch (error) {
+    console.error("Withdrawal Error:", error);
+    showNotice("Withdrawal Error: " + error.message, true);
+  } finally {
+    button.disabled = false;
+  }
+});
+
 
 /* ADMIN AUTHENTICATION */
 
